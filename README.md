@@ -32,4 +32,4 @@
 - Correct Format?
 
 ## Milestone 1: Oral Presentation - 12 March
--Correct Format?
+- Correct Format?
