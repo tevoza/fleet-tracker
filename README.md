@@ -1,5 +1,5 @@
 # Final Year Project.  
-
+![Project Description](https://github.com/tevoza/FinalProject/blob/main/docs/desc.png)
 ## Requirements  
 ### Android App
  - Sensor Interface to get  
@@ -27,3 +27,9 @@
 `Why must we use this ide?`      
 `Do you mean .NET?`  
 `If so, Must everything be written with the .NET framework?`  
+
+## Milestone 0: Written Proposal - 8 March
+- Correct Format?
+
+## Milestone 1: Oral Presentation - 12 March
+-Correct Format?
