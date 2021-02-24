@@ -7,15 +7,15 @@
     1. GPS co-ordinates
     2. Speed
     3. Acceleration
-    4. Altitude(optional)
+    4. Altitude(optional) - typically available from GPS system.
  - Log sensor data every 2 minutes.
  - Upload to server immediately or on request.
  - Identity Control?
  
  ### Server
- - Store logged information
  - Send and receieve requests to/from App and Web Application
- - Data Analysis i.e track stopping times
+ - Store logged information
+ - Data Processing (tracking time stopped at some location)
  
  ### WebApp  
  - Display logging info
