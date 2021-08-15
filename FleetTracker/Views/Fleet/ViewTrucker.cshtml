@@ -1,0 +1,32 @@
+@model IQueryable<TruckerLog>
+@{
+    ViewData["Title"] = "View Trucker";
+}
+
+<partial name="_Fleet" />
+
+<div class="text-center">
+    <h1>View Trucker</h1>
+    <table style="width: 50%;">
+        <tr>
+            <th>LogID</th>
+            <th>Trucker</th>
+            <th>Time</th>
+            <th>Longitude</th>
+            <th>Latitude</th>
+            <th>Speed</th>
+            <th>Acceleration</th>
+        </tr>
+    @foreach (var m in @Model)
+    {
+        <tr>
+            <td>@m.ID  </td>
+            <td>@m.TimeStamp  </td>
+            <td>@m.Longitude  </td>
+            <td>@m.Latitude  </td>
+            <td>@m.Speed  </td>
+            <td>@m.Acceleration  </td>
+        </tr>
+    }
+    </table>
+</div>

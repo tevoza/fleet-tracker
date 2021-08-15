@@ -1,0 +1,27 @@
+@model IQueryable<Trucker>
+@{
+    ViewData["Title"] = "My Fleet";
+}
+
+<partial name="_Fleet" />
+
+<div class="text-center">
+    <h1>My Fleet</h1>
+    <table style="width: 50%;">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Vehicle Number</th>
+        </tr>
+    @foreach (var m in @Model)
+    {
+        <tr>
+            <td>@m.ID  </td>
+            <td>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Fleet" asp-action="ViewTrucker" asp-route-id=@m.ID>@m.Name</a>
+            </td>
+            <td>@m.VehicleNumber</td>
+        </tr>
+    }
+    </table>
+</div>
