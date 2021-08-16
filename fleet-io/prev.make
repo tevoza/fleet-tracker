@@ -1,7 +1,6 @@
 CC=g++
-CFLAGS=-c -Wall -g -I/usr/include/mysql -I/usr/include/mysql++ 
-LDFLAGS = -lboost_regex -lboost_iostreams -lpthread -lboost_system -lcrypto -lssl -std=c++11 -L/usr/lib
-LDLIBS := -lmysqlpp -lmysqlclient
+CFLAGS=-c -Wall -g
+LDFLAGS = -lboost_regex -lboost_iostreams -lpthread -lboost_system -lcrypto -lssl -std=c++11
 
 all: ssl_server ssl_client
 

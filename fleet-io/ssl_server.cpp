@@ -4,6 +4,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 #include <mysql++.h>
+#include <nlohmann/json.hpp>
 
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 
@@ -52,7 +53,28 @@ public:
             std::cout<<"handle_read: success\n";
             std::cout << "received : ";
             std::cout.write(data_, bytes_transferred);
-            std::cout << std::endl;
+            std::cout << "parsing..." << std::endl;
+            try {
+                auto rec = nlohmann::json::parse(data_);
+                std::cout << rec <<std::endl;
+                std::cout << "done." <<std::endl;
+
+                mysqlpp::Connection conn(false);
+                if (!conn.connect("FleetDB", "127.0.0.1", "root", "pass"))
+                {
+                    std::cout << "db -> failed\n";
+                } else
+                {
+                    mysqlpp::Query 
+
+
+                }
+            }
+            catch (std::exception& e)
+            {
+                std::cerr << "Yikes: " << e.what() << "\n";
+                delete this;
+            }
             /*  
             boost::asio::async_write(socket_,
                 boost::asio::buffer(data_, bytes_transferred),
@@ -92,9 +114,7 @@ class server
 {
 public:
     server(boost::asio::io_context& io_context, unsigned short port, char* pk_file,
-            char* pem_file)
-        : io_context_(io_context),
-            acceptor_(io_context,
+            char* pem_file) : io_context_(io_context), acceptor_(io_context,
             boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)),
             context_(boost::asio::ssl::context::sslv23)
     {
@@ -103,7 +123,7 @@ public:
             | boost::asio::ssl::context::no_sslv2
             | boost::asio::ssl::context::sslv23
             | boost::asio::ssl::context::single_dh_use);
-        context_.set_password_callback(boost::bind(&server::get_password, this));
+        //context_.set_password_callback(boost::bind(&server::get_password, this));
         context_.use_certificate_chain_file(pem_file);
         context_.use_private_key_file(pk_file, boost::asio::ssl::context::pem);
 

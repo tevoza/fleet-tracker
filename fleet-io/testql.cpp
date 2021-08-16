@@ -1,9 +1,8 @@
-#include <mysql++.h>
+#include <mysqlx/xdevapi.h>
 #include <iostream>
 #include <iomanip>
 
 int main ()
 {
-    mysqlpp::Connection conn(false);
 
 }
