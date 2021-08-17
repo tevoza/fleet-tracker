@@ -54,8 +54,8 @@ namespace FleetTracker.Controllers
         // GET: /Fleet/ViewTrucker/
         public IActionResult ViewTrucker(string id)
         {
-            var truckers = _db.TruckerLog.FromSqlRaw($"SELECT * FROM TruckerLog WHERE TruckerID = '{id}'");
-            return View(truckers);
+            var truckerLogs = _db.TruckerLog.FromSqlRaw($"SELECT * FROM TruckerLog WHERE TruckerID = '{id}'");
+            return View(truckerLogs);
         }
     }
 }

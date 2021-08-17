@@ -7,13 +7,12 @@
 
 <div class="text-center">
     <h1>View Trucker</h1>
-    <table style="width: 50%;">
+    <table style="width: 70%;">
         <tr>
             <th>LogID</th>
-            <th>Trucker</th>
             <th>Time</th>
-            <th>Longitude</th>
             <th>Latitude</th>
+            <th>Longitude</th>
             <th>Speed</th>
             <th>Acceleration</th>
         </tr>
@@ -21,10 +20,10 @@
     {
         <tr>
             <td>@m.ID  </td>
-            <td>@m.TimeStamp  </td>
-            <td>@m.Longitude  </td>
+            <td>@DateTimeOffset.FromUnixTimeSeconds(m.TimeStamp).LocalDateTime</td>
             <td>@m.Latitude  </td>
-            <td>@m.Speed  </td>
+            <td>@m.Longitude  </td>
+            <td>@m.Speed.ToString("0.##")  </td>
             <td>@m.Acceleration  </td>
         </tr>
     }

@@ -1,9 +1,9 @@
 #include <cstdlib>
+#include <mysql++.h>
 #include <iostream>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
-#include <mysql++.h>
 #include <nlohmann/json.hpp>
 
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
@@ -63,11 +63,29 @@ public:
                 if (!conn.connect("FleetDB", "127.0.0.1", "root", "pass"))
                 {
                     std::cout << "db -> failed\n";
-                } else
+                } 
+                else
                 {
-                    mysqlpp::Query 
-
-
+                    mysqlpp::Query qry = conn.query();
+                    qry << "INSERT INTO TruckerLog " 
+                        << "(TruckerID, Timestamp, Longitude, Latitude, Speed, Acceleration) "
+                        << "VALUES ("
+                        << rec["id"] << ", "
+                        << rec["time"] << ", "
+                        << rec["long"] << ", "
+                        << rec["lat"] << ", "
+                        << rec["speed"] << ", "
+                        << rec["accel"] << ");";
+                    qry.execute();
+                    
+                    if (mysqlpp::StoreQueryResult res = qry.store())
+                    {
+                        std::cout << "added record";
+                    }
+                    else
+                    {
+                        std::cerr << "add record failed: " << qry.error() << std::endl;
+                    }
                 }
             }
             catch (std::exception& e)
