@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace FleetTracker.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreateIdentitySchema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -159,11 +159,13 @@ namespace FleetTracker.Migrations
                 name: "Trucker",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int unsigned", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ManagerId = table.Column<string>(type: "varchar(767)", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    VehicleNumber = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "varchar(127)", maxLength: 127, nullable: false),
+                    VehicleNumber = table.Column<string>(type: "text", nullable: true),
+                    Verified = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -180,14 +182,14 @@ namespace FleetTracker.Migrations
                 name: "TruckerLog",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int unsigned", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    TruckerID = table.Column<int>(type: "int", nullable: true),
-                    TimeStamp = table.Column<int>(type: "int", nullable: false),
-                    Longitude = table.Column<double>(type: "double", nullable: false),
-                    Latitude = table.Column<double>(type: "double", nullable: false),
-                    Speed = table.Column<double>(type: "double", nullable: false),
-                    Acceleration = table.Column<double>(type: "double", nullable: false)
+                    TruckerID = table.Column<int>(type: "int unsigned", nullable: true),
+                    TimeStamp = table.Column<int>(type: "int unsigned", nullable: false),
+                    Latitude = table.Column<float>(type: "float", nullable: false),
+                    Longitude = table.Column<float>(type: "float", nullable: false),
+                    Speed = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                    Acceleration = table.Column<float>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

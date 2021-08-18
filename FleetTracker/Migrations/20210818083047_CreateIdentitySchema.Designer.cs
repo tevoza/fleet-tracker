@@ -3,14 +3,16 @@ using System;
 using FleetTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FleetTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210818083047_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,20 +21,26 @@ namespace FleetTracker.Migrations
 
             modelBuilder.Entity("FleetTracker.Models.Trucker", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int unsigned");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<string>("ManagerId")
                         .HasColumnType("varchar(767)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(127)
+                        .HasColumnType("varchar(127)");
 
                     b.Property<string>("VehicleNumber")
-                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("ID");
 
@@ -43,27 +51,27 @@ namespace FleetTracker.Migrations
 
             modelBuilder.Entity("FleetTracker.Models.TruckerLog", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<uint>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int unsigned");
 
-                    b.Property<double>("Acceleration")
-                        .HasColumnType("double");
+                    b.Property<float>("Acceleration")
+                        .HasColumnType("float");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("double");
+                    b.Property<float>("Latitude")
+                        .HasColumnType("float");
 
-                    b.Property<double>("Longitude")
-                        .HasColumnType("double");
+                    b.Property<float>("Longitude")
+                        .HasColumnType("float");
 
-                    b.Property<double>("Speed")
-                        .HasColumnType("double");
+                    b.Property<byte>("Speed")
+                        .HasColumnType("tinyint unsigned");
 
-                    b.Property<int>("TimeStamp")
-                        .HasColumnType("int");
+                    b.Property<uint>("TimeStamp")
+                        .HasColumnType("int unsigned");
 
-                    b.Property<int?>("TruckerID")
-                        .HasColumnType("int");
+                    b.Property<uint?>("TruckerID")
+                        .HasColumnType("int unsigned");
 
                     b.HasKey("ID");
 
