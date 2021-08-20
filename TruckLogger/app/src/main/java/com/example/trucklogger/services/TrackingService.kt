@@ -43,12 +43,15 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
+    lateinit var currNotificationBuilder: NotificationCompat.Builder
+    lateinit var notificationManager : NotificationManager
 
     var isTracking = false
 
     override fun onCreate() {
         super.onCreate()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
+        currNotificationBuilder = baseNotificationBuilder
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -73,7 +76,7 @@ class TrackingService : LifecycleService() {
     }
 
     private fun startForegroundService(){
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -120,6 +123,12 @@ class TrackingService : LifecycleService() {
             result?.locations?.let { locations ->
                 for (location in locations) {
                     Timber.d(location.latitude.toString())
+
+                    //update notification
+                    val notification = currNotificationBuilder
+                        .setContentText("${location.latitude}")
+                    notificationManager.notify(NOTIFICATION_ID, notification.build())
+
                 }
             }
         }
