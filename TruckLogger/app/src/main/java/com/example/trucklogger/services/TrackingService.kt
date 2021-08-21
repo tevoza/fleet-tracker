@@ -8,12 +8,16 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.LiveData
 import com.example.trucklogger.R
+import com.example.trucklogger.db.TruckLog
+import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
@@ -30,6 +34,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,6 +46,9 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var truckLogDao: TruckLogDAO
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
@@ -54,7 +63,7 @@ class TrackingService : LifecycleService() {
         currNotificationBuilder = baseNotificationBuilder
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
                 ACTION_START_SERVICE -> {
@@ -122,15 +131,26 @@ class TrackingService : LifecycleService() {
             super.onLocationResult(result)
             result?.locations?.let { locations ->
                 for (location in locations) {
-                    Timber.d(location.latitude.toString())
-
-                    //update notification
-                    val notification = currNotificationBuilder
-                        .setContentText("${location.latitude}")
-                    notificationManager.notify(NOTIFICATION_ID, notification.build())
-
+                    GlobalScope.launch { processLocation(location) }
                 }
             }
         }
+    }
+
+    private suspend fun processLocation(location : Location) {
+        val truckLog = TruckLog(
+            location.time,
+            location.latitude.toFloat(),
+            location.longitude.toFloat(),
+            0F
+        )
+
+        truckLogDao.insertTruckLog(truckLog)
+        val count = truckLogDao.getTruckLogsCount()
+
+        //update notification
+        val notification = currNotificationBuilder
+            .setContentText("${count} logs recorded")
+        notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 }

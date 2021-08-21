@@ -13,4 +13,7 @@ interface TruckLogDAO {
 
     @Query("SELECT * FROM tblTruckLogs ORDER BY timestamp ASC")
     fun getAllTruckLogs(): LiveData<List<TruckLog>>
+
+    @Query("SELECT COUNT(*) FROM tblTruckLogs")
+    fun getTruckLogsCount(): Int
 }
