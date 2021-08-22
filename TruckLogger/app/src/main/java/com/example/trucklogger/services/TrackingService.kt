@@ -60,6 +60,7 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var sslSocketFactory: SSLSocketFactory
+    lateinit var serverConnector : ServerConnector
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
@@ -72,6 +73,9 @@ class TrackingService : LifecycleService() {
         super.onCreate()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
         currNotificationBuilder = baseNotificationBuilder
+        GlobalScope.launch(Dispatchers.IO) {
+            serverConnector = ServerConnector(sslSocketFactory)
+        }
     }
 
    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -158,9 +162,7 @@ class TrackingService : LifecycleService() {
 
         truckLogDao.insertTruckLog(truckLog)
         val count = truckLogDao.getTruckLogsCount()
-        val socket = sslSocketFactory.createSocket(SERVER_IP, SERVER_PORT) as SSLSocket
-        socket.startHandshake();
-        socket.close()
+        serverConnector.sendMessage("Chicken Curry!!!!")
 
         //update notification
         val notification = currNotificationBuilder

@@ -18,6 +18,7 @@ import java.security.KeyStore
 import javax.inject.Singleton
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
 @Module
@@ -43,7 +44,6 @@ object AppModule {
     fun provideSSLSocketFactory(
         @ApplicationContext app: Context
     ): SSLSocketFactory {
-        Timber.d("connecting...")
         val trusted = KeyStore.getInstance(KeyStore.getDefaultType())
         val inputStream = app.resources.openRawResource(R.raw.keystore)
         trusted.load(inputStream, Constants.KEYSTORE_PASS)
