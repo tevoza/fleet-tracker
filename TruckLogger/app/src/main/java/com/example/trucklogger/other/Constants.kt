@@ -15,4 +15,8 @@ object Constants {
 
     const val LOCATION_UPDATE_INTERVAL = 5000L
     const val FASTEST_LOCATION_UPDATE_INTERVAL = 2000L
+
+    const val SERVER_IP = "192.168.8.100"
+    const val SERVER_PORT = 1234
+    val KEYSTORE_PASS = "password".toCharArray()
 }

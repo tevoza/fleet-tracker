@@ -22,10 +22,13 @@ import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
+import com.example.trucklogger.other.Constants.KEYSTORE_PASS
 import com.example.trucklogger.other.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
+import com.example.trucklogger.other.Constants.SERVER_IP
+import com.example.trucklogger.other.Constants.SERVER_PORT
 import com.example.trucklogger.other.TrackingUtility
 import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,10 +37,15 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.io.InputStream
+import java.io.PrintWriter
+import java.security.*
 import javax.inject.Inject
+import javax.net.ssl.*
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
@@ -49,6 +57,9 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var truckLogDao: TruckLogDAO
+
+    @Inject
+    lateinit var sslSocketFactory: SSLSocketFactory
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
@@ -131,7 +142,7 @@ class TrackingService : LifecycleService() {
             super.onLocationResult(result)
             result?.locations?.let { locations ->
                 for (location in locations) {
-                    GlobalScope.launch { processLocation(location) }
+                    GlobalScope.launch(Dispatchers.IO) { processLocation(location) }
                 }
             }
         }
@@ -147,6 +158,9 @@ class TrackingService : LifecycleService() {
 
         truckLogDao.insertTruckLog(truckLog)
         val count = truckLogDao.getTruckLogsCount()
+        val socket = sslSocketFactory.createSocket(SERVER_IP, SERVER_PORT) as SSLSocket
+        socket.startHandshake();
+        socket.close()
 
         //update notification
         val notification = currNotificationBuilder
