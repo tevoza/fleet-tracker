@@ -29,6 +29,7 @@ import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
 import com.example.trucklogger.other.Constants.SERVER_IP
 import com.example.trucklogger.other.Constants.SERVER_PORT
+import com.example.trucklogger.other.ServerRequest
 import com.example.trucklogger.other.TrackingUtility
 import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,6 +37,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -153,20 +156,23 @@ class TrackingService : LifecycleService() {
     }
 
     private suspend fun processLocation(location : Location) {
-        val truckLog = TruckLog(
+        truckLogDao.insertTruckLog(TruckLog(
             location.time,
             location.latitude.toFloat(),
             location.longitude.toFloat(),
             0F
-        )
+        ))
 
-        truckLogDao.insertTruckLog(truckLog)
-        val count = truckLogDao.getTruckLogsCount()
-        serverConnector.sendMessage("Chicken Curry!!!!")
+        val serverRequest = ServerRequest(2, "UPDATE_LOGS", truckLogDao.getAllTruckLogs())
+        val gson = Gson()
+        val json = gson.toJson(serverRequest)
+
+        serverConnector.sendMessage(json)
 
         //update notification
+        val count = truckLogDao.getTruckLogsCount()
         val notification = currNotificationBuilder
-            .setContentText("${count} logs recorded")
+            .setContentText("$count logs recorded")
         notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 }

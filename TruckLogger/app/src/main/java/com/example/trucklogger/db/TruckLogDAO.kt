@@ -12,7 +12,7 @@ interface TruckLogDAO {
     suspend fun deleteTruckLog(truckLog: TruckLog)
 
     @Query("SELECT * FROM tblTruckLogs ORDER BY timestamp ASC")
-    fun getAllTruckLogs(): LiveData<List<TruckLog>>
+    fun getAllTruckLogs(): List<TruckLog>
 
     @Query("SELECT COUNT(*) FROM tblTruckLogs")
     fun getTruckLogsCount(): Int
