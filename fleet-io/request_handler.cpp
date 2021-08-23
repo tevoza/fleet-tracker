@@ -1,10 +1,10 @@
 #include "request_handler.hpp"
 
-handler::handler(char[] &data_) 
+handler::handler(char* request) 
 {
     try 
     {
-       auto rec = nlohmann::json::parse(data_);
+       auto rec = nlohmann::json::parse(request);
        std::cout << rec <<std::endl;
        std::cout << "done." <<std::endl;
 
@@ -40,6 +40,6 @@ handler::handler(char[] &data_)
     catch (std::exception& e)
     {
        std::cerr << "Yikes: " << e.what() << "\n";
-       delete this;
+       //delete this;
     }
 }

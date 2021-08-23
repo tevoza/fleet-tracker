@@ -9,13 +9,13 @@ enum request_code
 {
     UPDATE_LOG  = 1,
     UPDATE_ID   = 2
-}
+};
 
 class handler
 {
 public:
-    handler(char[] &data_);
+    handler(char* request);
     ~handler();
-}
+};
 
-endif
+#endif
