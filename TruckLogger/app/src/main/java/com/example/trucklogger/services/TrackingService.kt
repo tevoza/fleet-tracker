@@ -24,6 +24,7 @@ import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.KEYSTORE_PASS
 import com.example.trucklogger.other.Constants.LOCATION_UPDATE_INTERVAL
+import com.example.trucklogger.other.Constants.MPS_TO_KMH
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
@@ -47,6 +48,7 @@ import timber.log.Timber
 import java.io.InputStream
 import java.io.PrintWriter
 import java.security.*
+import java.util.*
 import javax.inject.Inject
 import javax.net.ssl.*
 
@@ -71,6 +73,7 @@ class TrackingService : LifecycleService() {
     lateinit var notificationManager : NotificationManager
 
     var isTracking = false
+    var TRUCKERID : Int = 0;
 
     override fun onCreate() {
         super.onCreate()
@@ -85,11 +88,12 @@ class TrackingService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_SERVICE -> {
+                    TRUCKERID = it.getIntExtra("TRUCKER_ID", 0)
                     started = false
                     isTracking = true
                     startForegroundService()
                     updateTracking()
-                    Timber.d("Started Tracking service")
+                    Timber.d("Started Tracking service, $TRUCKERID")
                 }
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped Tracking service")
@@ -156,18 +160,28 @@ class TrackingService : LifecycleService() {
     }
 
     private suspend fun processLocation(location : Location) {
-        truckLogDao.insertTruckLog(TruckLog(
-            location.time,
+        Timber.d("${location.longitude.toFloat()}")
+        val truckLog = TruckLog(
+            location.time/1000,
             location.latitude.toFloat(),
             location.longitude.toFloat(),
-            0F
-        ))
+            location.speed * MPS_TO_KMH,
+            0f
+        )
 
-        val serverRequest = ServerRequest(2, "UPDATE_LOGS", truckLogDao.getAllTruckLogs())
+        truckLogDao.insertTruckLog(truckLog)
+
+        val logs = truckLogDao.getAllTruckLogs()
+        val serverRequest = ServerRequest(TRUCKERID, "UPDATE_LOGS", logs)
         val gson = Gson()
         val json = gson.toJson(serverRequest)
 
-        serverConnector.sendMessage(json)
+        val result = serverConnector.sendMessage(json)
+        if (result == "OK"){
+            for (log in logs) {
+                truckLogDao.deleteTruckLog(log)
+            }
+        }
 
         //update notification
         val count = truckLogDao.getTruckLogsCount()

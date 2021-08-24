@@ -5,17 +5,24 @@
 #include <mysql++.h>
 #include <nlohmann/json.hpp>
 
-enum request_code
+enum REQUEST_CODE
 {
     UPDATE_LOG  = 1,
     UPDATE_ID   = 2
 };
 
+enum REQUEST_RESULT
+{
+    OK          = 1,
+    FAIL        = 2,
+    INVALID_ID  = 3
+};
+
 class handler
 {
 public:
-    handler(char* request);
-    ~handler();
+    void test();
+    REQUEST_RESULT handle_request(const char* request);
 };
 
 #endif

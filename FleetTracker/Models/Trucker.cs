@@ -7,7 +7,7 @@ namespace FleetTracker.Models
     {
         public virtual Manager Manager {get; set; }
         [Key]
-        public uint ID {get; set; }
+        public int ID {get; set; }
         [Display(Name="Name")]
         [Required]
         public string Name {get; set; }

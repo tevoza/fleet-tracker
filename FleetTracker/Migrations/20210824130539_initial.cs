@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace FleetTracker.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -159,7 +159,7 @@ namespace FleetTracker.Migrations
                 name: "Trucker",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int unsigned", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ManagerId = table.Column<string>(type: "varchar(767)", nullable: true),
                     Name = table.Column<string>(type: "varchar(127)", maxLength: 127, nullable: false),
@@ -182,13 +182,13 @@ namespace FleetTracker.Migrations
                 name: "TruckerLog",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int unsigned", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    TruckerID = table.Column<int>(type: "int unsigned", nullable: true),
-                    TimeStamp = table.Column<int>(type: "int unsigned", nullable: false),
+                    TruckerID = table.Column<int>(type: "int", nullable: true),
+                    TimeStamp = table.Column<long>(type: "bigint", nullable: false),
                     Latitude = table.Column<float>(type: "float", nullable: false),
                     Longitude = table.Column<float>(type: "float", nullable: false),
-                    Speed = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                    Speed = table.Column<float>(type: "float", nullable: false),
                     Acceleration = table.Column<float>(type: "float", nullable: false)
                 },
                 constraints: table =>

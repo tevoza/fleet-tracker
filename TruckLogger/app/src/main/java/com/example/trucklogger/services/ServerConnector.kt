@@ -18,7 +18,7 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
     private lateinit var outputBuffer: PrintWriter
     private lateinit var inputBuffer: BufferedReader
 
-    public fun sendMessage(msg : String) {
+    public fun sendMessage(msg : String) : String {
         socket = socketFactory.createSocket(SERVER_IP, SERVER_PORT) as SSLSocket
         outputBuffer = PrintWriter(BufferedWriter(OutputStreamWriter(socket.outputStream)))
         inputBuffer = BufferedReader(InputStreamReader(socket.inputStream))
@@ -27,11 +27,13 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
         outputBuffer.println(msg)
         outputBuffer.flush()
 
-        var reply = inputBuffer.readLine()
+        val reply = inputBuffer.readLine()
         Timber.d("reply: $reply")
 
         inputBuffer.close()
         outputBuffer.close()
         socket.close()
+
+        return reply
     }
 }

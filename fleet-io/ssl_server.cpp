@@ -3,6 +3,8 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
+#include "request_handler.hpp"
+#include <string.h>
 
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 
@@ -50,30 +52,45 @@ public:
         {
             std::cout<<"handle_read: fail\n" << error.message() << "\n";
             delete this;
+            return;
         }
         
         std::cout << "handle_read: success\n";
         std::cout << "received : ";
-        std::cout.write(data_, bytes_transferred);
+        //std::cout.write(data_, bytes_transferred);
         std::cout << "parsing..." << std::endl;
         //call handler
+        handler request_handler;
+        memset(result, '\0', sizeof(result));
+        switch(request_handler.handle_request(data_)) 
+        {
+            case OK:
+                strcpy(result, "OK\n");
+                break;
+            case FAIL:
+                strcpy(result, "FAIL\n");
+                break;
+            case INVALID_ID:
+                strcpy(result, "INVALID_ID\n");
+                break;
+        }
 
         boost::asio::async_write(socket_,
-           boost::asio::buffer(data_, bytes_transferred),
+           boost::asio::buffer(result, bytes_transferred),
            boost::bind(&session::handle_write, this,
            boost::asio::placeholders::error));
-        
-        
     }
 
     void handle_write(const boost::system::error_code& error)
     {
         if (!error)
         {
-            socket_.async_read_some(boost::asio::buffer(data_, max_length),
-                boost::bind(&session::handle_read, this,
-                boost::asio::placeholders::error,
-                boost::asio::placeholders::bytes_transferred));
+            //socket_.async_read_some(boost::asio::buffer(data_, max_length),
+            //    boost::bind(&session::handle_read, this,
+            //    boost::asio::placeholders::error,
+            //    boost::asio::placeholders::bytes_transferred));
+            std::cout << "handle_write: completed\n";
+            delete this;
         }
         else
         {
@@ -83,8 +100,9 @@ public:
 
 private:
     ssl_socket socket_;
-    enum { max_length = 1024 };
+    enum { max_length = 1024*20 };
     char data_[max_length];
+    char result[20];
 };
 
 class server

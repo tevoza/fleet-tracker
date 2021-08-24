@@ -19,9 +19,9 @@ namespace FleetTracker.Migrations
 
             modelBuilder.Entity("FleetTracker.Models.Trucker", b =>
                 {
-                    b.Property<uint>("ID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -49,9 +49,9 @@ namespace FleetTracker.Migrations
 
             modelBuilder.Entity("FleetTracker.Models.TruckerLog", b =>
                 {
-                    b.Property<uint>("ID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int unsigned");
+                        .HasColumnType("int");
 
                     b.Property<float>("Acceleration")
                         .HasColumnType("float");
@@ -62,14 +62,14 @@ namespace FleetTracker.Migrations
                     b.Property<float>("Longitude")
                         .HasColumnType("float");
 
-                    b.Property<byte>("Speed")
-                        .HasColumnType("tinyint unsigned");
+                    b.Property<float>("Speed")
+                        .HasColumnType("float");
 
-                    b.Property<uint>("TimeStamp")
-                        .HasColumnType("int unsigned");
+                    b.Property<long>("TimeStamp")
+                        .HasColumnType("bigint");
 
-                    b.Property<uint?>("TruckerID")
-                        .HasColumnType("int unsigned");
+                    b.Property<int?>("TruckerID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 

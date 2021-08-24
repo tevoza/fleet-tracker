@@ -27,18 +27,22 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     @Inject
     lateinit var truckerLogDao: TruckLogDAO
+    var TRUCKER_ID: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestPermissions()
+        btnUpdateId.setOnClickListener {
+            TRUCKER_ID = editTextId.text.toString().toInt()
+        }
         if (intent.action == ACTION_SHOW_UI) {
             Timber.d("coming from notification")
             switchStatus.isChecked = true
         }
         switchStatus.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) sendCommandToService(ACTION_START_SERVICE)
-            else sendCommandToService(ACTION_STOP_SERVICE)
+            if (isChecked) sendCommandToService(ACTION_START_SERVICE, TRUCKER_ID)
+            else sendCommandToService(ACTION_STOP_SERVICE, TRUCKER_ID)
         }
     }
 
@@ -97,9 +101,10 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    private fun sendCommandToService(action: String) =
+    private fun sendCommandToService(action: String, truckerID: Int) =
         Intent(this, TrackingService::class.java).also {
             it.action = action
+            it.putExtra("TRUCKER_ID", truckerID)
             this.startService(it)
         }
 }

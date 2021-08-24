@@ -19,11 +19,11 @@
     @foreach (var m in @Model)
     {
         <tr>
-            <td>@m.ID  </td>
+            <td>@m.ID </td>
             <td>@DateTimeOffset.FromUnixTimeSeconds(m.TimeStamp).LocalDateTime</td>
-            <td>@m.Latitude  </td>
-            <td>@m.Longitude  </td>
-            <td>@m.Speed.ToString("0.##")  </td>
+            <td>@m.Latitude </td>
+            <td>@m.Longitude </td>
+            <td>@m.Speed.ToString("0.##") </td>
             <td>@m.Acceleration  </td>
         </tr>
     }

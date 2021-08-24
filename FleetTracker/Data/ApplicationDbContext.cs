@@ -62,3 +62,5 @@ namespace FleetTracker.Data
 }
 
 //docker run --name FleetDB -p 3306:3306 -e MYSQL_ROOT_PASSWORD=pass -d mysql
+//dotnet ef migrations add CreateIdentitySchema
+//dotnet ef database update
