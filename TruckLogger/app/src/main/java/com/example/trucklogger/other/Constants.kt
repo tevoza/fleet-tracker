@@ -19,5 +19,6 @@ object Constants {
 
     const val SERVER_IP = "192.168.8.100"
     const val SERVER_PORT = 1234
+    const val SOCKET_TIMEOUT = 5 * 1000
     val KEYSTORE_PASS = "password".toCharArray()
 }

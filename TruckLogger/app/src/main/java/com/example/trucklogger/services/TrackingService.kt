@@ -177,16 +177,22 @@ class TrackingService : LifecycleService() {
         val json = gson.toJson(serverRequest)
 
         val result = serverConnector.sendMessage(json)
+        Timber.d(result)
+        var notif:String = ""
         if (result == "OK"){
             for (log in logs) {
                 truckLogDao.deleteTruckLog(log)
             }
+            notif = "up to date"
+        }
+        else{
+            val count = truckLogDao.getTruckLogsCount()
+            notif = "$count log/s stashed"
         }
 
         //update notification
-        val count = truckLogDao.getTruckLogsCount()
         val notification = currNotificationBuilder
-            .setContentText("$count logs recorded")
+            .setContentText(notif)
         notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 }

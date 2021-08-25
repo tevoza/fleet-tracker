@@ -4,6 +4,11 @@
 }
 
 <partial name="_Fleet" />
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLmGWYDTXI7OofhF5y2_jetVhTOku4pwk&callback=initMap">
+</script>
+
+<div id="map"> </div>
 
 <div class="text-center">
     <h1>View Trucker</h1>
@@ -29,3 +34,31 @@
     }
     </table>
 </div>
+
+<script>
+
+    var points = JSON.parse('@Json.Serialize(Model.Select(s=>new { lat = s.Latitude, lng = s.Longitude }).ToList())');
+
+function initMap(){
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -26.2041, lng: 28.0473},
+        zoom: 8
+    });
+
+
+    const coords = [
+        { lat : -26.2129, lng : 28.0479 },
+        { lat : -26.6216, lng :	27.2212 },
+    ];
+
+    const path = new google.maps.Polyline({
+        path: points,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+      path.setMap(map);
+}
+
+</script>
