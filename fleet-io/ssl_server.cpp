@@ -57,8 +57,7 @@ public:
         
         std::cout << "handle_read: success\n";
         std::cout << "received : ";
-        //std::cout.write(data_, bytes_transferred);
-        std::cout << "parsing..." << std::endl;
+        std::cout.write(data_, bytes_transferred);
         //call handler
         handler request_handler;
         memset(result, '\0', sizeof(result));
@@ -100,7 +99,7 @@ public:
 
 private:
     ssl_socket socket_;
-    enum { max_length = 1024*20 };
+    enum { max_length = 1024*100 };
     char data_[max_length];
     char result[20];
 };

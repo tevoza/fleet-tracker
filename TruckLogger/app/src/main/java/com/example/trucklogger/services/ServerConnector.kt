@@ -30,8 +30,7 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
             outputBuffer = PrintWriter(BufferedWriter(OutputStreamWriter(socket.outputStream)))
             inputBuffer = BufferedReader(InputStreamReader(socket.inputStream))
 
-
-            outputBuffer.println(msg)
+            outputBuffer.print(msg + "\u0000")
             outputBuffer.flush()
 
             reply = inputBuffer.readLine()

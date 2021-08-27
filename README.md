@@ -1,6 +1,6 @@
 # **fleet-tracker - final year project**
 a fleet tracking solution which allows fleet managers to manage and monitor their fleets.  
-done as part of my final year project.  
+fleet managers can monitor their employees' live location, speed etc.
 
 # **requirements**
 an extract from the initial project description is given below.  
@@ -8,6 +8,14 @@ an extract from the initial project description is given below.
 
 # **solution overview**
 ![Project Description](docs/container.png)
+
+# **TODO**
+in order of priority
+## **android**
+ - [ ] add local data store for user data persistence
+ - [ ] unique trucker identifier with uuid
+ - [ ] network protocol for user confirmation
+ - [ ] implement better lifecycle and livedata control
 
 ## **android application**
 ### functionality

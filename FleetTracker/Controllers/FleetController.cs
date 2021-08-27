@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FleetTracker.Models;
+using FleetTracker.ViewModels;
 using FleetTracker.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -54,9 +55,14 @@ namespace FleetTracker.Controllers
         // GET: /Fleet/ViewTrucker/
         public IActionResult ViewTrucker(string id)
         {
-            var truckerLogs = _db.TruckerLog.FromSqlRaw($"SELECT * FROM TruckerLog WHERE TruckerID = '{id}'");
-            _logger.LogInformation("About to view trucker");
-            return View(truckerLogs);
+            var viewTruckerViewModel = new ViewTruckerViewModel(
+                _db.Trucker.Find(int.Parse(id)),
+                _db.TruckerLog.FromSqlRaw(
+                    $"SELECT * FROM TruckerLog WHERE TruckerID = {id} ORDER BY TimeStamp ASC")
+                );
+            viewTruckerViewModel.AggregatedLogs = viewTruckerViewModel.AggregateNearbyLogs();
+            viewTruckerViewModel.StopLogs = viewTruckerViewModel.FindStopPoints();
+            return View(viewTruckerViewModel);
         }
     }
 }
