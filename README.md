@@ -9,14 +9,6 @@ an extract from the initial project description is given below.
 # **solution overview**
 ![Project Description](docs/container.png)
 
-# **TODO**
-in order of priority
-## **android**
- - [ ] add local data store for user data persistence
- - [ ] unique trucker identifier with uuid
- - [ ] network protocol for user confirmation
- - [ ] implement better lifecycle and livedata control
-
 ## **android application**
 ### functionality
  - log sensor data every 2 minutes, that is:
