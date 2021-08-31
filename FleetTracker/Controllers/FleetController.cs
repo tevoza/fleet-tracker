@@ -64,5 +64,27 @@ namespace FleetTracker.Controllers
             viewTruckerViewModel.StopLogs = viewTruckerViewModel.FindStopPoints();
             return View(viewTruckerViewModel);
         }
+
+        // GET: /Fleet/SetRules/
+        public async Task<IActionResult> SetRules(Trucker t)
+        {
+            var manager = await _userManager.GetUserAsync(User);
+            return View(manager);
+        }
+
+        // POST: /Fleet/SetRules/
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetRules(Manager m)
+        {
+
+            if (ModelState.IsValid) {
+                var manager = await _userManager.GetUserAsync(User);
+                manager.MaxSpeed = m.MaxSpeed;
+                manager.MinSpeed = m.MinSpeed;
+                _db.Manager.Update(manager);
+                _db.SaveChanges();
+            }
+            return await Task.Run( () => RedirectToAction("Index"));
+        }
     }
 }

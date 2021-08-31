@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Manager> SignInManager
+@inject UserManager<Manager> UserManager
+@model Manager
+
+@{
+    ViewData["Title"] = "Set Rules";
+}
+
+<partial name="_Fleet" />
+
+<div class="text-center" style="text-align: left;">
+<h1>Set Rules - @Model.UserName</h1>
+<form method="POST" style="text-align: left; width=50%">
+
+    <div class="form-group">
+        <label asp-for="MaxSpeed"></label>
+        <input asp-for="MaxSpeed" class="form-control"/>
+        <span asp-validation-for="MaxSpeed" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MinSpeed"></label>
+        <input asp-for="MinSpeed" class="form-control"/>
+        <span asp-validation-for="MinSpeed" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="MaxAccel"></label>
+        <input asp-for="MaxAccel" class="form-control"/>
+        <span asp-validation-for="MaxAccel" class="text-danger"></span>
+    </div>
+    <input type="submit" class="btn-primary" value="Save"/>
+</form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
