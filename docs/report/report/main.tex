@@ -1,0 +1,114 @@
+\documentclass[11pt,peerreview]{IEEEtran}
+
+%\usepackage[backend=bibtex]{biblatex}
+%ARABIC SECTIONS
+\renewcommand\thesection{\arabic{section}}
+\renewcommand\thesubsection{\thesection.\arabic{subsection}}
+\renewcommand\thesubsubsection{\thesubsection.\arabic{subsubsection}}
+
+\renewcommand\thesectiondis{\arabic{section}}
+\renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
+\renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
+
+\usepackage{caption}
+\raggedbottom
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsfonts,amsmath,amssymb}
+\usepackage[none]{hyphenat}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\usepackage{fixltx2e}
+\usepackage{siunitx}
+
+%Clikcable Links
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+} 
+ 
+%For placing the logo properly.
+%Probably not the best way to do it
+\newlength{\PictHOffset}
+\newlength{\PictVOffset}
+\setlength{\PictHOffset}{1in}
+\addtolength{\PictHOffset}{\hoffset}
+\addtolength{\PictHOffset}{\oddsidemargin}
+ 
+\setlength{\PictVOffset}{0in}
+\addtolength{\PictVOffset}{\voffset}
+\addtolength{\PictVOffset}{\topmargin}
+\addtolength{\PictVOffset}{\headheight}
+\addtolength{\PictVOffset}{\headsep}
+\addtolength{\PictVOffset}{\topskip}
+\addtolength{\PictVOffset}{-0.25\paperheight}
+
+\usepackage{floatrow}
+\floatsetup[table]{capposition=top}
+\pagenumbering{Roman}
+\parindent 0ex
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1.5}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+ 
+\begin{document}
+ 
+\begin{titlepage}
+    \noindent\hspace*{-\PictHOffset}%
+    % Uncomment next line and replace XXX by your graphics file
+    \raisebox{\PictVOffset}[100pt][0pt]{\makebox[0pt][l]{%
+     \includegraphics[width=\paperwidth,height=0.45\paperheight]{pukke.png}}}
+
+ 
+    \begin{center}
+    	\vfill
+        \Huge {\textbf{Android GPS Data Logger}}
+    	\vfill
+        \LARGE{\textbf{A. T. Coetzee}}
+        \vfill
+        \huge{\textbf{Detailed Concept Design}}
+        \vfill
+    \end{center}
+    \textbf{Supervisor: \tab[2cm] Prof. W. Venter}\\
+    \textbf{Date: \tab[3cm] \today}\\
+    \textbf{Student Number: \tab[1cm]  29982995}\\
+    \vfill
+\end{titlepage}
+
+%regular prerequisites for a document, contents, tables, figures
+\begin{abstract}
+Trucking companies require a means to track their employees, ensuring they perform their work as expected.
+In order to achieve this, a tracking solution is considered making use of ubiquitous smartphone devices with built-in GPS capability.
+Using sensor data retrieved from smartphones, a solution is considered which intends to generate detailed reports for employers of trucking companies.
+Such a report is proposed to be displayed to the manager through a web application.
+
+A draft high-level architecture for such a system is postulated and discussed, along with technical requirements, scope definition and deliverables.
+\end{abstract}
+
+\pagebreak
+
+\tableofcontents
+\listoffigures
+
+\pagebreak
+%document start
+\pagenumbering{arabic}
+
+\setcounter{page}{1}
+
+\input{intro.tex}
+\input{lit_review.tex}
+\input{design.tex}
+
+\pagebreak
+\pagebreak
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref.bib}
+\end{document}

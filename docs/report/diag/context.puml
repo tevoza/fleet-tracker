@@ -1,0 +1,11 @@
+@startuml system_context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(driver, "Truck Driver")
+System(trackingSys, "Fleet Tracking System")
+Person(manager, "Fleet Manager")
+
+Rel_R(driver, trackingSys, "Send log data", "Android Application")
+Rel_L(trackingSys, manager, "Monitor fleet data", "Web Application")
+Rel_L(manager, trackingSys , "Manage fleet", "Web Application")
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+Person(driver, "Truck Driver")
+Container(cIO, "I/O Server", "C++", "Listening and receiving logged data to be sent to a central data store.")
+
+Container_Boundary(cAndroid, "Android Application") {
+Component(register, "Configuration Controller", "MVC", "Allows truckers to configure settings and register their IDs in to the fleet-tracking system")
+    Component(AndroidDB, "Local database", "SQLite", "Store ID and local sensor logs until they can be relayed to the central database")
+    Component(LoggingController, "Logging Controller", "MVC", "Consolidates all sensor information and sends to database. Makes requests to I/O server")
+    Component(AndroidHardWare, "Android Hardware", "API", "Android API exposing built-in sensors for reading")
+    Component(fusedLocationProvider, "Fused Location Provider", "API", "Android API exposing GPS data")
+}
+Rel(driver, cAndroid, "Uses", "Android Smartphone")
+Rel_L(register, LoggingController, "Updates", "API Request")
+Rel(register, cIO, "Verifies trucker ID", "SSL")
+Rel(LoggingController, AndroidDB, "Sends and receives", "DB Connector")
+Rel(LoggingController, AndroidHardWare, "Requests", "API Request")
+Rel(LoggingController, fusedLocationProvider, "Requests", "API Request")
+Rel(LoggingController, cIO, "Sends Log Data", "SSL")
+
+@enduml

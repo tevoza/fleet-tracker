@@ -1,0 +1,27 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+Person(manager, "Fleet Manager")
+ContainerDb(db, "Database", "MySQL", "Store logged sensor data for fleet, companies and managers", $sprite="msql_server")
+Container_Boundary(cWebApp, "Web Application"){
+    Component(sign, "Sign In Controller", "MVC Rest Controller", "Allows managers to sign in/create accounts")
+    Component(signView, "Sign In View", "MVC View Model", "UI Model for handling display logic for sign in/ sign up logic")
+    Component(FleetController,"Fleet Controller", "MVC Rest Controller", "Allow managers to view/edit/update records for their fleets.")
+    Component(FleetView, "Fleet View", "MVC ViewModel", "UI Model for displaying fleet management and viewing page")
+    Rel(FleetView,FleetController, "Requests", "HTTPS")
+    Rel(signView,sign, "Requests", "HTTPS")
+}
+
+Rel(manager, FleetView, "Uses", "HTTPS")
+Rel(manager, signView, "Uses", "HTTPS")
+Rel(FleetController,db, "Updates/Selects", "DB Connector")
+Rel(sign,db, "Updates/Selects", "DB Connector")
+
+@enduml

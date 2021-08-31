@@ -1,0 +1,10 @@
+@startuml
+(*) --> "Initialize"
+--> "Manager adds/edits/removes trucker records \nWeb Application"
+--> "Manager assigns trucker with registration ID \nWeb Application"
+--> "Trucker registers ID \nSmartphone Application"
+--> "Trucker carries out shift, logging sensor data \nSmartphone Application"
+--> "Send sensor data to data store\nSmartphone Application -> Fleet Tracking System"
+-up->"Manager inspects trucker logs (optional)\nWeb Application"
+--> "Trucker carries out shift, logging sensor data \nSmartphone Application"
+@enduml

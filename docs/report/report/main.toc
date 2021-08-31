@@ -1,0 +1,36 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Purpose of document}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Background}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Problem Statement}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Hypothesis}{2}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Project Objective}{2}{subsection.1.5}%
+\contentsline {subsubsection}{\numberline {1.5.1}Primary Objective}{2}{subsubsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.6}Anticipated Benefits of Solution}{3}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Technical Requirements}{3}{subsection.1.7}%
+\contentsline {subsubsection}{\numberline {1.7.1}Requirements}{3}{subsubsection.1.7.1}%
+\contentsline {subsubsection}{\numberline {1.7.2}Scope Definition}{3}{subsubsection.1.7.2}%
+\contentsline {subsection}{\numberline {1.8}Deliverables}{4}{subsection.1.8}%
+\contentsline {subsection}{\numberline {1.9}Conclusion}{5}{subsection.1.9}%
+\contentsline {section}{\numberline {2}Literature Review}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Internal and External Sensors}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Internal Sensors}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}External Sensors}{6}{subsubsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.2}Smartphone Application}{6}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Platform Considerations}{6}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Development methodology}{6}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}I/O Server}{7}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Database Considerations}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Web Application}{8}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Design}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}System context and base requirements }{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of tools}{10}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Data Model}{10}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Android Application}{11}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}I/O Server}{11}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Web Application}{11}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Subsystem components}{11}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Android Application}{11}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}I/O Server}{14}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}MySQL Database}{16}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{16}{subsubsection.3.3.4}%
+\contentsline {section}{References}{18}{section*.13}%

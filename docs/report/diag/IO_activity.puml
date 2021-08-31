@@ -1,0 +1,29 @@
+@startuml
+
+start
+
+:Listen for connections;
+->On Connect;
+:Open Asynchronous connection\nwith android application client;
+:Verify connection;
+
+note right
+    Ensure connection is encrypted and secure
+end note
+switch (GetRequest)
+case (Verify Trucker ID)
+    :Check if: \nID exists or\nalready in use;
+    if (ValidID?) is (valid) then
+        :return Valid connection;
+    else (invalid)
+        :return Error;
+    endif
+case (Update logs) 
+    :Parse log data to central database;
+endswitch
+
+:Close connection;
+
+stop
+
+@enduml

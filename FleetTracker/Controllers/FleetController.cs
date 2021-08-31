@@ -76,7 +76,6 @@ namespace FleetTracker.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> SetRules(Manager m)
         {
-
             if (ModelState.IsValid) {
                 var manager = await _userManager.GetUserAsync(User);
                 manager.MaxSpeed = m.MaxSpeed;

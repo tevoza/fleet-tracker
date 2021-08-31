@@ -1,0 +1,23 @@
+@startuml
+
+start
+
+repeat :start;
+    backward:Verify trucker ID;
+repeat while (Trucker verified?) is (no)
+->yes;
+
+repeat :Poll for GPS data, altitude, acceleration, speed;
+    :Store in local database;
+    if (Attempt Server Connection) is (success) then
+        :Transmit local data entries \nto central database;
+        :Clear local database;
+        ->failed;
+    endif
+    backward:Two minute delay;
+repeat while(Terminated?) is (no)
+->yes;
+
+stop
+
+@enduml

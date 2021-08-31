@@ -1,0 +1,108 @@
+\section{Introduction}
+\subsection{Purpose of document}
+This report documents the contextualization of a problem surrounding the tracking of truckers.
+The background and problem is considered, and possible solutions with objectives are identified, along with an expected outcome for the potential solution, requirements and scope definition.
+The design and implementation of a solution are investigated.
+
+\subsection{Background}
+Due to the nature of the trucking industry, it is difficult for company owners to keep track of their employees.
+Truckers carry out their shifts delivering important cargo to various locations over far distances.
+As such, it is not practical for employers to track their whereabouts throughout their shifts.
+This allows truckers the ability to behave undesirably while on the job.
+Truckers who waste time taking unnecessarily long stops or detours waste company time and money.
+In addition, some truckers may also be found breaking traffic laws without proper intervention.
+Such employees are a liability to the reputation and profitability of their respective companies.
+
+The ability to track truckers would provide a potential means to address this issue, by allowing employers to monitor their truckers' location, progress and behavior throughout their shifts.
+The ability to produce an audit trail detailing the truckers whereabouts during their shifts would allow managers to ensure that work is adequately executed. Such an audit trail would comprise of:
+\begin{itemize}
+\item \textbf{GPS coordinates\\}
+GPS-tracking will allow employers to ensure that truckers are actually traveling to required locations, and doing so via the most effective routes. This also allows employers to ensure no unnecessary detours occur.
+\item \textbf{Altitude\\}
+An optional parameter which may be useful in some cases.
+\item \textbf{Speed\\}
+Examining the trucker's speed allows for managers to examine the effectiveness of cargo transportation, and to ensure that traffic laws are generally obeyed.
+\item \textbf{Acceleration\\}
+A potentially useful parameter which may be used for inferring any dangerous driving behavior. 
+\end{itemize}
+
+The ubiquitous nature of cheap, GPS-equipped smartphones provides a potential avenue for realizing such a solution at low cost.
+In addition, country-wide continuous access to the internet allows for live tracking to be utilized. 
+
+\subsection{Problem Statement}
+A smartphone-powered tracking system must be implemented to be used by trucking companies for tracking and logging their trucker's \textbf{GPS coordinates, altitude, speed and acceleration}.
+
+In addition, an online interface is required for storing, processing and displaying logged data pertaining to the trucker's location and behavior.
+
+\subsection{Hypothesis}
+An anticipated architecture, as depicted in figure \ref{fig:high_arch}, involves the development of a smartphone application capable of interfacing with internal or external sensors, and transferring sensor data through some I/O server into a data store. \cite{bertocco1998client}
+For the purposes of information presentation, it is proposed that a web server process and serve inferred information to a user via a web application.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.45]{high_arch.png}
+    \caption{Proposed High Level Architecture}
+    \label{fig:high_arch}
+\end{figure}
+
+\subsection{Project Objective}
+\subsubsection{Primary Objective}
+The primary objective in addressing the problem will be the development of detailed reports showcasing the trucker's whereabouts and behavior during their work shifts.
+
+\subsection{Anticipated Benefits of Solution}
+Managers will be able to ensure that their truckers conduct their work efficiently and responsibly.
+They will then be able to adequately handle truckers who fail to perform as expected.
+
+Managers may also be able to analyze trucker behavior to perform optimizations, potentially allowing for increased efficiency.
+
+\subsection{Technical Requirements}
+\subsubsection{Requirements}
+\begin{enumerate}
+\item \textbf{Smartphone Application}\\
+This will be a smartphone application used by the entities being tracked(i.e the truckers).
+Interface with external sensors must be possible.
+Every 2 minutes, sensor data capturing the \textbf{GPS coordinates, altitude, speed and acceleration} must be captured and stored. After which, this data must be pushed to a central data store via an I/O server through an internet connection.
+\item \textbf{I/O Server}\\
+This server will facilitate the transfer of logged data from the Smartphone Application to a central data store, via an internet connection. As a dedicated transfer server, it must exhibit high performance, handling many requests from the smartphone client.
+\item \textbf{Data Store}\\
+The data store will be efficient, fast and capable of storing large volumes of data.
+It should also be capable of adequately interfacing with the I/O server and the Web Server.
+\item \textbf{Web Server}\\
+The web server is responsible for querying data from the data store, and serving requests to the web application.
+In addition, the web server is responsible for processing data into a report format, thereby allowing for important information extraction.
+\item \textbf{Web Application}\\
+The Web application acts as a front end.
+It is responsible for the display of processed trucker information to managers.
+Reports detailing stopping times, transit times and speeds are displayed here.
+\end{enumerate}
+\subsubsection{Scope Definition}
+The scope of the problem considered will include
+\begin{enumerate}
+\item \textbf{Internal/External Sensor Interface}\\
+The scope \textbf{does not} include the design of sensor circuitry meant to interface with the smartphone. Only configurations capable of interfacing with the smartphone are considered.
+The smartphone app is not concerned with displaying user reports and statistics. That is left to the web application.
+\item \textbf{Smartphone Application}\\
+The smartphone application is purely responsible for logging the appropriate sensor data and transferring the sensor data on through the I/O server.
+Other measurable variables such as temperature, fuel and pressure are not considered.
+\item \textbf{I/O Server}\\
+The I/O server is purely responsible for facilitating the transfer of sensor data from the smartphone to the data store.
+\item \textbf{Data Store}\\
+    The data store element is purely concerned with the storage of logs, user identity information and providing an interface for the I/O server to query and add records to the store.
+    I will consider existing database providers, and will not be building one from scratch. 
+\item \textbf{Web Server}\\
+The web server is purely responsible for querying from the data store. In addition it must process records for a shift into a format which highlights activity on a per-day basis.
+\item \textbf{Web Application}\\
+The web application's scope entails User Identity validation. Reports must be displayed for an individual trucker's daily activity. That is, a visual map with markers indicating transit times and stationary times at some location. 
+\end{enumerate}
+
+\subsection{Deliverables}
+The deliverables will require the entire project to function, from the smartphone logging implementation, to the detailed reports available in the web application. 
+\begin{itemize}
+\item Smartphone Application and I/O server
+\item Web Application and web server
+\end{itemize}
+
+\subsection{Conclusion}
+Basic contextualization of the problem has been performed.
+Low level details, however, have not been considered.
+Each aspect of the planned architecture may be realized in multiple ways on the low level.
+Further research and a feasibility analysis are necessary for adequate low level design.

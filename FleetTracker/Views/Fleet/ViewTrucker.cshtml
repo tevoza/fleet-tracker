@@ -84,9 +84,13 @@ function initMap(){
         if ((i < stops.length -1) || (stops.length == 1)){
             departIndex = points.map(function(e) { return e.time; }).indexOf(stops[i]["time"])+1;
             depart= new Date(points[departIndex]["time"]*1000);
+            stopTime = Math.round((depart - arrived)/1000/60);
+            console.log(stopTime);
+
             departDate = depart.toLocaleDateString("en-US");
             departTime = depart.toLocaleTimeString("en-US");
-            info =  "Arrived: (" + arrivedDate+") " + arrivedTime +
+            info =  stopTime + " minutes\n" +
+                    "Arrived: (" + arrivedDate+") " + arrivedTime +
                     "\nDepart: (" + departDate +") " +  departTime;
         } else {
             info =  "Arrived: (" + arrivedDate+") " + arrivedTime;

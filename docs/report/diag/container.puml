@@ -1,0 +1,27 @@
+@startuml container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/users.puml
+
+Person(driver, "Truck Driver")
+System_Boundary(c1, "Fleet Tracking System") {
+    Container(cAndroid, "Android Application", "Kotlin", "Logs various trucker sensor data and transmits to data store")
+    Container(cIO, "I/O Server", "C++", "Listening and receiving logged data to be sent to a central data store.")
+    ContainerDb(db, "Database", "MySQL", "Store logged sensor data for fleet, companies and managers", $sprite="msql_server")
+    Container(cWebApp, "Web Application", "ASP.NET MVC, Kestrel Web Server, HTML, CSS, Javascript", "Manage fleet and display fleet data")
+}
+Person(manager, "Fleet Manager")
+
+Rel_R(driver, cAndroid, "Uses", "Android device")
+Rel_R(cAndroid, cIO, "Sends logged data", "SSL")
+Rel(cIO, db, "Parses log data", "DB Connector")
+Rel_L(db, cWebApp,  "Parses log data", "DB Connector")
+Rel_L(cWebApp, db,  "update fleet data", "DB Connector")
+Rel_L(cWebApp, manager, "Monitor fleet data", "HTTPS")
+Rel_L(manager, cWebApp , "Manage fleet", "HTTPS")
+@enduml
