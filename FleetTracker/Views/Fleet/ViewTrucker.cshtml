@@ -12,34 +12,40 @@
 
 <div class="text-center">
     <h1>@Model.Trucker.Name</h1>
-    <table style="width: 70%;">
+    <table style="width: 100%;">
         <tr>
-            <th>LogID</th>
-            <th>Time</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Speed</th>
-            <th>Acceleration</th>
+            <th>Delay(minutes)</th>
+            <th>Start</th>
+            <th>Departed</th>
+            <th>Travel Time</th>
+            <th>Logs recorded</th>
+            <th>Max Speed</th>
+            <th>Average Speed</th>
+            <th>Speed limit broken</th>
         </tr>
-    @foreach (var m in @Model.AggregatedLogs)
+
+    @for (var i = 0; i < Model.Segments.Count; i++)
     {
         <tr>
-            <td>@m.ID </td>
-            <td>@DateTimeOffset.FromUnixTimeSeconds(m.TimeStamp).LocalDateTime</td>
-            <td>@m.Latitude </td>
-            <td>@m.Longitude </td>
-            <td>@m.Speed.ToString("0.##") </td>
-            <td>@m.Acceleration  </td>
+            <td style="color: red;">@(Model.Segments[i].Delay/60)</td>
+            <td>@DateTimeOffset.FromUnixTimeSeconds(Model.Segments[i].StartTime).LocalDateTime</td>
+            <td>@DateTimeOffset.FromUnixTimeSeconds(Model.Segments[i].StopTime).LocalDateTime</td>
+            <td>@Model.Segments[i].TravelTime</td>
+            <td>@Model.Segments[i].points</td>
+            <td>@Model.Segments[i].MaxSpeed</td>
+            <td>@Model.Segments[i].AvgSpeed</td>
+            <td>@Model.Segments[i].MaxSpeedBreaks</td>
         </tr>
     }
     </table>
+
 </div>
 
 <script>
-
-//var points = JSON.parse('@Json.Serialize(Model.TruckerLogs.Select(s=>new { lat = s.Latitude, lng = s.Longitude }).ToList())');
 var points = JSON.parse('@Json.Serialize(Model.AggregatedLogs.Select(s=>new { time=s.TimeStamp, lat = s.Latitude, lng = s.Longitude }).ToList())');
 var stops = JSON.parse('@Json.Serialize(Model.StopLogs.Select(s=>new { time=s.TimeStamp, lat = s.Latitude, lng = s.Longitude }).ToList())');
+var markers = JSON.parse('@Json.Serialize(Model.Segments)');
+console.log(markers);
 
 const points_coords = points.map(item => {
     const container = {};
@@ -68,7 +74,7 @@ function initMap(){
             },
         ],
         geodesic: true,
-        strokeColor: "#FF0000",
+        strokeColor: "#00FF00",
         strokeOpacity: 1.0,
         strokeWeight: 2,
       });

@@ -53,12 +53,15 @@ namespace FleetTracker.Controllers
             return await Task.Run( () => RedirectToAction("Index"));
         }
         // GET: /Fleet/ViewTrucker/
-        public IActionResult ViewTrucker(string id)
+        public async Task<IActionResult> ViewTrucker(string id)
         {
+            var manager = await _userManager.GetUserAsync(User);
             var viewTruckerViewModel = new ViewTruckerViewModel(
                 _db.Trucker.Find(int.Parse(id)),
                 _db.TruckerLog.FromSqlRaw(
-                    $"SELECT * FROM TruckerLog WHERE TruckerID = {id} ORDER BY TimeStamp ASC")
+                    $"SELECT * FROM TruckerLog WHERE TruckerID = {id} ORDER BY TimeStamp ASC"),
+                new List<Segment>(),
+                manager
                 );
             viewTruckerViewModel.AggregatedLogs = viewTruckerViewModel.AggregateNearbyLogs();
             viewTruckerViewModel.StopLogs = viewTruckerViewModel.FindStopPoints();
@@ -86,4 +89,6 @@ namespace FleetTracker.Controllers
             return await Task.Run( () => RedirectToAction("Index"));
         }
     }
+
+
 }
