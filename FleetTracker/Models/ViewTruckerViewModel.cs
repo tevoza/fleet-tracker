@@ -58,38 +58,45 @@ namespace FleetTracker.ViewModels
         {
             List<TruckerLog> stopLogs = new List<TruckerLog>();
 
-            int start = 0;
-            for (var i = 0; i < AggregatedLogs.Count - 1; i++)
+            int startLogCount = 0;
+            int startPinCount = 0;
+            for (var i = 0; i < AggregatedLogs.Count-1; i++)
             {
                 if ((AggregatedLogs[i+1].TimeStamp - AggregatedLogs[i].TimeStamp) > STOP_TIME_SECONDS)
                 {
                     stopLogs.Add(AggregatedLogs[i]);
-                    if (i != 0){
-                        AddSegment(AggregatedLogs[start].TimeStamp, AggregatedLogs[i].TimeStamp);
-                        start = i+1;
+                    if (i == 0)
+                    {
+                        startLogCount++;
                     } else {
-                        start++;
+                        AddSegment(AggregatedLogs[startPinCount], AggregatedLogs[startLogCount], AggregatedLogs[i]);
+                        startPinCount = i;
+                        startLogCount = i+1;
                     }
                 }
             }
-            AddSegment(AggregatedLogs[start].TimeStamp, AggregatedLogs.Last().TimeStamp);
-            stopLogs.Add(AggregatedLogs.Last());
+            AddSegment(AggregatedLogs[startPinCount], AggregatedLogs[startLogCount], AggregatedLogs[AggregatedLogs.Count-1]);
             return stopLogs;
         }
 
-        void AddSegment(long tStart, long tEnd)
+        void AddSegment(TruckerLog pinStart, TruckerLog logStart, TruckerLog logStop)
         {
-            var segLogs = TruckerLogs.Where(x => x.TimeStamp >= tStart && x.TimeStamp <= tEnd).ToList();
+            var segLogs = TruckerLogs.Where(x => x.TimeStamp >= logStart.TimeStamp && x.TimeStamp <= logStop.TimeStamp).ToList();
             var segment = new Segment
             {
-                StartTime = tStart,
-                StopTime = tEnd,
-                TravelTime = tEnd - tStart,
-                points = segLogs.Count(),
+                PinStart = pinStart,
+                LogStart = logStart,
+                LogStop = logStop,
+
+                StartTime = logStart.TimeStamp,
+                StopTime = logStop.TimeStamp,
+                TravelTime = logStop.TimeStamp - logStart.TimeStamp,
+
+                Points = segLogs.Count(),
                 MaxSpeed = segLogs.Max(m => m.Speed),
                 AvgSpeed = segLogs.Average(m => m.Speed),
                 MaxSpeedBreaks = segLogs.Where(x => x.Speed > Manager.MaxSpeed).Count(),
-                Delay = Segments.Count() > 0 ? (tStart-Segments.Last().StopTime) : null
+                Delay = Segments.Count() > 0 ? (logStart.TimeStamp - pinStart.TimeStamp) : null
             };
             Segments.Add(segment);
         }
@@ -98,14 +105,16 @@ namespace FleetTracker.ViewModels
     public class Segment
     {
         public long? Delay {get; set; }
-        [JsonPropertyName("start")]
+        //starting pin, but info won't start logging from here
+        public TruckerLog PinStart {get; set; } 
+        public TruckerLog LogStart {get; set; }
+        public TruckerLog LogStop {get; set; }
         public long StartTime {get; set; }
-        [JsonPropertyName("stop")]
         public long StopTime {get; set; }
-        public long TravelTime{get; set; }
-        public int points {get; set; }
-        public float AvgSpeed {get; set; }
+        public long TravelTime {get; set; }
+        public int Points {get; set; }
         public float MaxSpeed {get; set; }
-        public int MaxSpeedBreaks{get; set; }
+        public float AvgSpeed {get; set; }
+        public int MaxSpeedBreaks {get; set; }
     }
 }

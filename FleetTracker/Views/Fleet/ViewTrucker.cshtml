@@ -8,15 +8,15 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLmGWYDTXI7OofhF5y2_jetVhTOku4pwk&callback=initMap">
 </script>
 
-<div id="map"> </div>
+<div id="map"></div>
 
 <div class="text-center">
     <h1>@Model.Trucker.Name</h1>
     <table style="width: 100%;">
         <tr>
             <th>Delay(minutes)</th>
-            <th>Start</th>
-            <th>Departed</th>
+            <th>Departure</th>
+            <th>Arrival</th>
             <th>Travel Time</th>
             <th>Logs recorded</th>
             <th>Max Speed</th>
@@ -30,88 +30,167 @@
             <td style="color: red;">@(Model.Segments[i].Delay/60)</td>
             <td>@DateTimeOffset.FromUnixTimeSeconds(Model.Segments[i].StartTime).LocalDateTime</td>
             <td>@DateTimeOffset.FromUnixTimeSeconds(Model.Segments[i].StopTime).LocalDateTime</td>
-            <td>@Model.Segments[i].TravelTime</td>
-            <td>@Model.Segments[i].points</td>
+            <td>@(Model.Segments[i].TravelTime/60)</td>
+            <td>@Model.Segments[i].Points</td>
             <td>@Model.Segments[i].MaxSpeed</td>
             <td>@Model.Segments[i].AvgSpeed</td>
             <td>@Model.Segments[i].MaxSpeedBreaks</td>
         </tr>
     }
     </table>
-
 </div>
 
 <script>
-var points = JSON.parse('@Json.Serialize(Model.AggregatedLogs.Select(s=>new { time=s.TimeStamp, lat = s.Latitude, lng = s.Longitude }).ToList())');
-var stops = JSON.parse('@Json.Serialize(Model.StopLogs.Select(s=>new { time=s.TimeStamp, lat = s.Latitude, lng = s.Longitude }).ToList())');
-var markers = JSON.parse('@Json.Serialize(Model.Segments)');
-console.log(markers);
+var points = JSON.parse('@Json.Serialize(Model.TruckerLogs.ToList())');
+var segments = JSON.parse('@Json.Serialize(Model.Segments)');
+var maxSpeed = JSON.parse('@Json.Serialize(Model.Manager.MaxSpeed)');
+console.log(points);
+console.log(segments);
+console.log(maxSpeed);
 
-const points_coords = points.map(item => {
-    const container = {};
-    container["lat"] = item.lat;
-    container["lng"] = item.lng;
-    return container;
-});
+//const points_loc = points.map(item => {
+//    const container = {};
+//    container["latitude"] = item.lat;
+//    container["longitude"] = item.lng;
+//    return container;
+//});
 
-function initMap(){
-    const map = new google.maps.Map(document.getElementById('map'), {
-        center: points_coords[0],
-        zoom: 11
-    });
+function findLogByTime(t)
+{
+    var result = points.filter(obj => {
+        return obj.time === t
+    })
+    return result[0]
+}
 
+//options{log,  arriveTime, departTime, delay}
+function makeMarker(options)
+{
+    var dateOptions = {year:'numeric', month:'numeric', day:'numeric',  hour: '2-digit', minute:'2-digit'};
+    var info = "";
+    if (options.arriveTime != null) {
+        var arriveDate = new Date(options.arriveTime*1000);
+        info += "Arrived: "+ arriveDate.toLocaleTimeString([], dateOptions) + "\n";
+    }
+
+    if (options.departTime != null) {
+        var departDate = new Date(options.departTime*1000);
+        info += "Departure: " + departDate.toLocaleTimeString([], dateOptions) + "\n";
+    }
+
+    if (options.delay != null) {
+        info += "Delay: " + (options.delay/60) + " minutes";
+    }
+
+    var m = new google.maps.Marker ({
+            position: new google.maps.LatLng ( options.log.latitude, options.log.longitude ),
+            title: info
+        });
+    return m;
+}
+
+function sketchRoute(map, seg)
+{
     const lineSymbol = {
         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
     };
+    const VALID_COLOR       = "#00FF00";
+    const MAX_SPEED_COLOR   = "#FF0000";
+    
+    var path = [
+        {lat: seg.pinStart.latitude, lng: seg.pinStart.longitude},
+        {lat: seg.logStart.latitude, lng: seg.logStart.longitude}
+    ];
 
-    const path = new google.maps.Polyline({
-        path: points_coords,
+    var line = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: VALID_COLOR,
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
         icons: [
             {
                 icon: lineSymbol,
                 offset: "100%",
-                repeat: "50px"
             },
         ],
-        geodesic: true,
-        strokeColor: "#00FF00",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-      path.setMap(map);
+        map: map,
+        title: "lol"
+    });
 
-    //stop points
-    var i, k, arrived, info, arrivedDate, arrivedTime, depart, departTime, departDate, departIndex;
-    for (i = 0; i<stops.length; i++){
-        arrived = new Date(stops[i]['time']*1000);
-        arrivedDate = arrived.toLocaleDateString("en-US");
-        arrivedTime = arrived.toLocaleTimeString("en-US");
+    let segPoints = points.filter(t => t.timeStamp >= seg.logStart.timeStamp && t.timeStamp <= seg.logStop.timeStamp);
+    console.log(segPoints);
+    for (var i = 1; i < segPoints.length; i++){
+        var path = [
+            {lat: segPoints[i-1].latitude, lng: segPoints[i-1].longitude},
+            {lat: segPoints[i].latitude, lng: segPoints[i].longitude},
+        ];
 
-        if ((i < stops.length -1) || (stops.length == 1)){
-            departIndex = points.map(function(e) { return e.time; }).indexOf(stops[i]["time"])+1;
-            depart= new Date(points[departIndex]["time"]*1000);
-            stopTime = Math.round((depart - arrived)/1000/60);
-            console.log(stopTime);
+        var color =  segPoints[i].speed <= maxSpeed ? VALID_COLOR : MAX_SPEED_COLOR;
 
-            departDate = depart.toLocaleDateString("en-US");
-            departTime = depart.toLocaleTimeString("en-US");
-            info =  stopTime + " minutes\n" +
-                    "Arrived: (" + arrivedDate+") " + arrivedTime +
-                    "\nDepart: (" + departDate +") " +  departTime;
-        } else {
-            info =  "Arrived: (" + arrivedDate+") " + arrivedTime;
-        }
-
-        var marker = new google.maps.Marker({
-            position : new google.maps.LatLng ( stops[i]['lat'], stops[i]['lng'] ),
-            title : info
+        var line = new google.maps.Polyline({
+            path: path,
+            geodesic: true,
+            strokeColor: color,
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+            icons: [
+                {
+                    icon: lineSymbol,
+                    offset: "100%",
+                },
+            ],
+            map: map
         });
+    }
 
-        var infoWindow = new google.maps.InfoWindow({
-            content : info
-        })
+    return;
+}
 
-        marker.setMap(map);
+function initMap(){
+    const map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: points[0].latitude, lng: points[0].longitude },
+        zoom: 11
+    });
+
+    var markerOptions, marker;
+    for (var i = 0; i < segments.length; i++)
+    {
+        //logic for adding markers
+        switch (true) 
+        {
+            case (i == 0) :
+                console.log(i + " == 0");
+                markerOptions = {
+                    log:        segments[i].pinStart, 
+                    arriveTime: null,
+                    departTime: segments[i].logStart.timeStamp, 
+                    delay:      null
+                };
+                marker = makeMarker(markerOptions);
+                marker.setMap(map);
+            case (i >= 1):
+                console.log(i + " >= 1");
+                markerOptions = {
+                    log:        segments[i].pinStart, 
+                    arriveTime: segments[i].pinStart.timeStamp,
+                    departTime: segments[i].logStart.timeStamp,
+                    delay:      segments[i].delay
+                };
+                marker = makeMarker(markerOptions);
+                marker.setMap(map);
+            case (i == segments.length-1):
+                console.log(i + " == segments.length-1");
+                markerOptions = {
+                    log:        segments[i].logStop, 
+                    arriveTime: segments[i].logStop.timeStamp,
+                    departTime: null,
+                    delay:      null
+                };
+                marker = makeMarker(markerOptions);
+                marker.setMap(map);
+        }
+        sketchRoute(map, segments[i])
     }
 }
 
