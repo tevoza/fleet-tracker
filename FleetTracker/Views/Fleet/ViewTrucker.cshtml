@@ -157,38 +157,35 @@ function initMap(){
     for (var i = 0; i < segments.length; i++)
     {
         //logic for adding markers
-        switch (true) 
-        {
-            case (i == 0) :
-                console.log(i + " == 0");
-                markerOptions = {
-                    log:        segments[i].pinStart, 
-                    arriveTime: null,
-                    departTime: segments[i].logStart.timeStamp, 
-                    delay:      null
-                };
-                marker = makeMarker(markerOptions);
-                marker.setMap(map);
-            case (i >= 1):
-                console.log(i + " >= 1");
-                markerOptions = {
-                    log:        segments[i].pinStart, 
-                    arriveTime: segments[i].pinStart.timeStamp,
-                    departTime: segments[i].logStart.timeStamp,
-                    delay:      segments[i].delay
-                };
-                marker = makeMarker(markerOptions);
-                marker.setMap(map);
-            case (i == segments.length-1):
-                console.log(i + " == segments.length-1");
-                markerOptions = {
-                    log:        segments[i].logStop, 
-                    arriveTime: segments[i].logStop.timeStamp,
-                    departTime: null,
-                    delay:      null
-                };
-                marker = makeMarker(markerOptions);
-                marker.setMap(map);
+        if (i == 0){
+            markerOptions = {
+                log:        segments[i].pinStart, 
+                arriveTime: null,
+                departTime: segments[i].logStart.timeStamp, 
+                delay:      null
+            };
+            marker = makeMarker(markerOptions);
+            marker.setMap(map);
+        }
+        if (i >= 1) {
+            markerOptions = {
+                log:        segments[i].pinStart, 
+                arriveTime: segments[i].pinStart.timeStamp,
+                departTime: segments[i].logStart.timeStamp,
+                delay:      segments[i].delay
+            };
+            marker = makeMarker(markerOptions);
+            marker.setMap(map);
+        }
+        if (i == segments.length-1) {
+            markerOptions = {
+                log:        segments[i].logStop, 
+                arriveTime: segments[i].logStop.timeStamp,
+                departTime: null,
+                delay:      null
+            };
+            marker = makeMarker(markerOptions);
+            marker.setMap(map);
         }
         sketchRoute(map, segments[i])
     }
