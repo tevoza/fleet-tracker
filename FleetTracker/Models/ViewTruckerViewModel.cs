@@ -17,6 +17,8 @@ namespace FleetTracker.ViewModels
         private const int STOP_TIME_SECONDS = STOP_TIME_MINUTES * 60;
         public Trucker Trucker { get; set; }
         public Manager Manager {get; set; }
+        public long UpperTime {get; set; }
+        public int DaysDisplay {get; set; }
         [JsonPropertyName("data")]
         public List<Segment> Segments {get; set; }
         public IQueryable<TruckerLog> TruckerLogs {get; set; }
@@ -26,12 +28,16 @@ namespace FleetTracker.ViewModels
         public ViewTruckerViewModel(Trucker trucker, 
             IQueryable<TruckerLog> truckerLogs,
             List<Segment>  travelSegments,
-            Manager manager)
+            Manager manager,
+            int daysDisplay,
+            long upperTime)
         {
             Trucker = trucker;
             TruckerLogs = truckerLogs;
             Segments = travelSegments;
             Manager = manager;
+            DaysDisplay = daysDisplay;
+            UpperTime = upperTime;
         }
 
         private Double GetDelta(float latA, float lonA, float latB, float lonB)
@@ -41,6 +47,9 @@ namespace FleetTracker.ViewModels
         public List<TruckerLog> AggregateNearbyLogs()
         {
             List<TruckerLog> aggregatedLogs = new List<TruckerLog>();
+            if (TruckerLogs.Count() == 0) {
+                return aggregatedLogs;
+            }
             aggregatedLogs.Add(TruckerLogs.First());
             var last = aggregatedLogs[0];
             foreach (var log in TruckerLogs)
@@ -57,6 +66,9 @@ namespace FleetTracker.ViewModels
         public List<TruckerLog> FindStopPoints()
         {
             List<TruckerLog> stopLogs = new List<TruckerLog>();
+            if (AggregatedLogs.Count == 0) {
+                return stopLogs;
+            }
 
             int startLogCount = 0;
             int startPinCount = 0;

@@ -17,6 +17,8 @@ namespace FleetTracker.Controllers
     [Authorize]
     public class FleetController : Controller
     {
+        private const long DAY_SECONDS = 60*60*24;
+        private const long DAY_DISPLAY = 7;
         private readonly ILogger<FleetController> _logger;
         private readonly UserManager<Manager> _userManager;
         private readonly ApplicationDbContext _db;
@@ -53,15 +55,20 @@ namespace FleetTracker.Controllers
             return await Task.Run( () => RedirectToAction("Index"));
         }
         // GET: /Fleet/ViewTrucker/
-        public async Task<IActionResult> ViewTrucker(string id)
+        public async Task<IActionResult> ViewTrucker(string id, string upTillDate, string daysBefore)
         {
+            var UpperDate = upTillDate == null ? 
+                ((DateTimeOffset)DateTime.Today.AddDays(1)).ToUnixTimeSeconds() 
+                : ((DateTimeOffset)DateTime.Parse(upTillDate).AddDays(1)).ToUnixTimeSeconds();
+            var DaysBefore = daysBefore == null ? DAY_DISPLAY*DAY_SECONDS : Int64.Parse(daysBefore)*DAY_SECONDS;
+            var LowerDate = UpperDate - DaysBefore;
+
             var manager = await _userManager.GetUserAsync(User);
             var viewTruckerViewModel = new ViewTruckerViewModel(
                 _db.Trucker.Find(int.Parse(id)),
                 _db.TruckerLog.FromSqlRaw(
-                    $"SELECT * FROM TruckerLog WHERE TruckerID = {id} ORDER BY TimeStamp ASC"),
-                new List<Segment>(),
-                manager
+                    $"SELECT * FROM TruckerLog WHERE TruckerID = {id} AND TimeStamp > {LowerDate} AND TimeStamp < {UpperDate} ORDER BY TimeStamp ASC"),
+                new List<Segment>(), manager, Int32.Parse(daysBefore), UpperDate
                 );
             viewTruckerViewModel.AggregatedLogs = viewTruckerViewModel.AggregateNearbyLogs();
             viewTruckerViewModel.StopLogs = viewTruckerViewModel.FindStopPoints();
@@ -89,6 +96,4 @@ namespace FleetTracker.Controllers
             return await Task.Run( () => RedirectToAction("Index"));
         }
     }
-
-
 }

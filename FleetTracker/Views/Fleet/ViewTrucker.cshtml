@@ -4,14 +4,26 @@
 }
 
 <partial name="_Fleet" />
+
 <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLmGWYDTXI7OofhF5y2_jetVhTOku4pwk&callback=initMap">
 </script>
 
+<h1>@Model.Trucker.Name</h1>
+
+<form method="GET">
+    <label for="upTillDate">Date:</label>
+    <input id="upTillDate" name="upTillDate" type="date" />
+
+    <label for="daysBefore">Days:</label>
+    <input id="daysBefore" name="daysBefore" type="number" value="3"/>
+
+    <input type="submit" class="btn-primary" value="Update"/>
+</form>
+
 <div id="map"></div>
 
 <div class="text-center">
-    <h1>@Model.Trucker.Name</h1>
     <table style="width: 100%;">
         <tr>
             <th>Delay(minutes)</th>
@@ -43,31 +55,23 @@
 <script>
 var points = JSON.parse('@Json.Serialize(Model.TruckerLogs.ToList())');
 var segments = JSON.parse('@Json.Serialize(Model.Segments)');
+var upperDate = JSON.parse('@Json.Serialize(Model.UpperTime)');
+var daysBefore  = JSON.parse('@Json.Serialize(Model.DaysDisplay)');
 var maxSpeed = JSON.parse('@Json.Serialize(Model.Manager.MaxSpeed)');
-console.log(points);
-console.log(segments);
-console.log(maxSpeed);
 
-//const points_loc = points.map(item => {
-//    const container = {};
-//    container["latitude"] = item.lat;
-//    container["longitude"] = item.lng;
-//    return container;
-//});
-
-function findLogByTime(t)
-{
-    var result = points.filter(obj => {
-        return obj.time === t
-    })
-    return result[0]
-}
+var uDate = new Date(upperDate*1000).toISOString().split('T')[0];
+document.getElementById("upTillDate").value = uDate;
+document.getElementById("daysBefore").value = daysBefore;
 
 //options{log,  arriveTime, departTime, delay}
 function makeMarker(options)
 {
     var dateOptions = {year:'numeric', month:'numeric', day:'numeric',  hour: '2-digit', minute:'2-digit'};
     var info = "";
+    if (options.delay != null) {
+        info += "Delay: " + (options.delay/60) + " minutes\n";
+    }
+
     if (options.arriveTime != null) {
         var arriveDate = new Date(options.arriveTime*1000);
         info += "Arrived: "+ arriveDate.toLocaleTimeString([], dateOptions) + "\n";
@@ -76,10 +80,6 @@ function makeMarker(options)
     if (options.departTime != null) {
         var departDate = new Date(options.departTime*1000);
         info += "Departure: " + departDate.toLocaleTimeString([], dateOptions) + "\n";
-    }
-
-    if (options.delay != null) {
-        info += "Delay: " + (options.delay/60) + " minutes";
     }
 
     var m = new google.maps.Marker ({
@@ -149,7 +149,7 @@ function sketchRoute(map, seg)
 
 function initMap(){
     const map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: points[0].latitude, lng: points[0].longitude },
+        center: (points.length == 0 ? {lat:-26.2, lng:28} : {lat: points[0].latitude, lng: points[0].longitude }),
         zoom: 11
     });
 
@@ -190,5 +190,4 @@ function initMap(){
         sketchRoute(map, segments[i])
     }
 }
-
 </script>
