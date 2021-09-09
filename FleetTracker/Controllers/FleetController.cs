@@ -60,15 +60,15 @@ namespace FleetTracker.Controllers
             var UpperDate = upTillDate == null ? 
                 ((DateTimeOffset)DateTime.Today.AddDays(1)).ToUnixTimeSeconds() 
                 : ((DateTimeOffset)DateTime.Parse(upTillDate).AddDays(1)).ToUnixTimeSeconds();
-            var DaysBefore = daysBefore == null ? DAY_DISPLAY*DAY_SECONDS : Int64.Parse(daysBefore)*DAY_SECONDS;
-            var LowerDate = UpperDate - DaysBefore;
+            var DaysBefore = daysBefore == null ? DAY_DISPLAY : Int64.Parse(daysBefore);
+            var LowerDate = UpperDate - (DaysBefore*DAY_SECONDS);
 
             var manager = await _userManager.GetUserAsync(User);
             var viewTruckerViewModel = new ViewTruckerViewModel(
                 _db.Trucker.Find(int.Parse(id)),
                 _db.TruckerLog.FromSqlRaw(
                     $"SELECT * FROM TruckerLog WHERE TruckerID = {id} AND TimeStamp > {LowerDate} AND TimeStamp < {UpperDate} ORDER BY TimeStamp ASC"),
-                new List<Segment>(), manager, Int32.Parse(daysBefore), UpperDate
+                new List<Segment>(), manager, DaysBefore, UpperDate
                 );
             viewTruckerViewModel.AggregatedLogs = viewTruckerViewModel.AggregateNearbyLogs();
             viewTruckerViewModel.StopLogs = viewTruckerViewModel.FindStopPoints();

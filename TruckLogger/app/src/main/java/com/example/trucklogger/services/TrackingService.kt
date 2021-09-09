@@ -179,6 +179,7 @@ class TrackingService : LifecycleService() {
         val result = serverConnector.sendMessage(json)
         Timber.d(result)
         var notif:String = ""
+
         if (result == "OK"){
             for (log in logs) {
                 truckLogDao.deleteTruckLog(log)

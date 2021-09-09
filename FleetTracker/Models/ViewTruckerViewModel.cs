@@ -18,7 +18,7 @@ namespace FleetTracker.ViewModels
         public Trucker Trucker { get; set; }
         public Manager Manager {get; set; }
         public long UpperTime {get; set; }
-        public int DaysDisplay {get; set; }
+        public long DaysDisplay {get; set; }
         [JsonPropertyName("data")]
         public List<Segment> Segments {get; set; }
         public IQueryable<TruckerLog> TruckerLogs {get; set; }
@@ -29,7 +29,7 @@ namespace FleetTracker.ViewModels
             IQueryable<TruckerLog> truckerLogs,
             List<Segment>  travelSegments,
             Manager manager,
-            int daysDisplay,
+            long daysDisplay,
             long upperTime)
         {
             Trucker = trucker;
