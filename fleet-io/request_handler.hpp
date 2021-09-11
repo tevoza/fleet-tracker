@@ -7,22 +7,26 @@
 
 enum REQUEST_CODE
 {
-    UPDATE_LOG  = 1,
-    UPDATE_ID   = 2
+    UPDATE_ID   = 1,
+    VERIFY_ID   = 2,
+    UPDATE_LOGS = 3,
 };
 
 enum REQUEST_RESULT
 {
-    OK          = 1,
-    FAIL        = 2,
-    INVALID_ID  = 3
+    FAIL                = 0,
+    OK                  = 1,
+    INVALID_CREDENTIALS = 2,
+    DB_CONN_FAILED      = 4
 };
 
 class handler
 {
 public:
-    void test();
     REQUEST_RESULT handle_request(const char* request);
+private:
+    REQUEST_RESULT insert_logs();
+    mysqlpp::Connection _db;
 };
 
 #endif

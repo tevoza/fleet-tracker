@@ -49,6 +49,7 @@ namespace FleetTracker.Data
                 entity.HasKey(e => e.ID);
                 entity.HasOne(d => d.Manager).WithMany(p => p.Truckers);
                 entity.Property(e => e.Name).HasMaxLength(127);
+                entity.Property(e => e.AndroidID).HasMaxLength(450);
             });
 
             builder.Entity<TruckerLog>(entity =>

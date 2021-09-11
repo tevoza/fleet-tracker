@@ -7,38 +7,12 @@ REQUEST_RESULT handler::handle_request(const char* request)
         auto rec = nlohmann::json::parse(request);
         std::cout << rec.dump(4) << std::endl;
 
-        mysqlpp::Connection conn(false);
-        if (!conn.connect("FleetDB", "127.0.0.1", "root", "mypassword"))
+        _db = mysqlpp::Connection(false);
+        if (!_db.connect("FleetDB", "127.0.0.1", "root", "mypassword"))
         {
-           std::cout << "db -> failed\n";
-           return FAIL;
+           std::cout << "db conn failed\n";
+           return DB_CONN_FAILED;
         } 
-        else
-        {
-            for(const auto& value: rec["data"])
-            {
-                mysqlpp::Query qry = conn.query();
-                qry << "INSERT INTO TruckerLog " 
-                   << "(TruckerID, TimeStamp, Longitude, Latitude, Speed, Acceleration)"
-                   << "VALUES ("
-                   << rec["id"] << ", "
-                   << value["tim"] << ", "
-                   << value["lon"] << ", "
-                   << value["lat"] << ", "
-                   << value["spd"] << ", "
-                   << value["acc"] << ");";
-                qry.execute();
-
-                if (mysqlpp::StoreQueryResult res = qry.store())
-                {
-                   std::cout << "added record";
-                }
-                else
-                {
-                   std::cerr << "add record failed: " << qry.error() << std::endl;
-                }
-            }
-        }
 
     }
     catch (std::exception& e)
@@ -49,7 +23,29 @@ REQUEST_RESULT handler::handle_request(const char* request)
     return OK;
 }
 
-void handler::test(){
-    std::cout << "Hi!\n";
-    return;
+REQUEST_RESULT handler::insert_logs()
+{
+//   for(const auto& value: rec["data"])
+//   {
+//        mysqlpp::Query qry = _db.query();
+//        qry << "INSERT INTO TruckerLog " 
+//          << "(TruckerID, TimeStamp, Longitude, Latitude, Speed, Acceleration)"
+//          << "VALUES ("
+//          << rec["id"] << ", "
+//          << value["tim"] << ", "
+//          << value["lon"] << ", "
+//          << value["lat"] << ", "
+//          << value["spd"] << ", "
+//          << value["acc"] << ");";
+//        qry.execute();
+//
+//        if (mysqlpp::StoreQueryResult res = qry.store())
+//        {
+//          std::cout << "added record";
+//        }
+//        else
+//        {
+//          std::cerr << "add record failed: " << qry.error() << std::endl;
+//        }
+//    }
 }

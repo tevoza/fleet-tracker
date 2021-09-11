@@ -10,7 +10,7 @@ namespace FleetTracker.ViewModels
 {
     public class ViewTruckerViewModel
     {
-        private const Double THRESHHOLD_METERS = 75;
+        private const Double THRESHHOLD_METERS = 150;
         private const int STOP_TIME_MINUTES = 5;
         private const Double DEGREES_TO_METERS = 0.00001;
         private const Double THRESHHOLD = THRESHHOLD_METERS*DEGREES_TO_METERS;

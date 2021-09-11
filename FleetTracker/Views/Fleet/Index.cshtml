@@ -16,11 +16,12 @@
     @foreach (var m in @Model)
     {
         <tr>
-            <td>@m.ID  </td>
+            <td>@m.ID</td>
             <td>
                 <a class="nav-link text-dark" asp-area="" asp-controller="Fleet" asp-action="ViewTrucker" asp-route-id=@m.ID>@m.Name</a>
             </td>
             <td>@m.VehicleNumber</td>
+            <td>@m.Verified</td>
         </tr>
     }
     </table>

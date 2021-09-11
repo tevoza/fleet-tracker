@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.location.Location
@@ -14,47 +12,35 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.LiveData
-import com.example.trucklogger.R
 import com.example.trucklogger.db.TruckLog
 import com.example.trucklogger.db.TruckLogDAO
-import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
-import com.example.trucklogger.other.Constants.KEYSTORE_PASS
 import com.example.trucklogger.other.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.MPS_TO_KMH
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
-import com.example.trucklogger.other.Constants.SERVER_IP
-import com.example.trucklogger.other.Constants.SERVER_PORT
 import com.example.trucklogger.other.ServerRequest
+import com.example.trucklogger.other.ServerRequestCode
 import com.example.trucklogger.other.TrackingUtility
-import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.InputStream
-import java.io.PrintWriter
-import java.security.*
-import java.util.*
 import javax.inject.Inject
 import javax.net.ssl.*
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
-
     var started = true
 
     @Inject
@@ -100,6 +86,7 @@ class TrackingService : LifecycleService() {
                     isTracking = false
                     updateTracking()
                     stopForeground(true)
+                    stopSelf()
                 }
             }
         }
@@ -171,24 +158,27 @@ class TrackingService : LifecycleService() {
 
         truckLogDao.insertTruckLog(truckLog)
 
+        val TRUCKER_UUID="TEMP";
         val logs = truckLogDao.getAllTruckLogs()
-        val serverRequest = ServerRequest(TRUCKERID, "UPDATE_LOGS", logs)
+        val serverRequest = ServerRequest(TRUCKERID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
         val gson = Gson()
         val json = gson.toJson(serverRequest)
 
         val result = serverConnector.sendMessage(json)
         Timber.d(result)
-        var notif:String = ""
 
+        var notif:String = ""
+        var count:Int = 0;
         if (result == "OK"){
             for (log in logs) {
                 truckLogDao.deleteTruckLog(log)
+                count = truckLogDao.getTruckLogsCount()
             }
-            notif = "up to date"
+            notif = "${truckLog.spd} KPH Updated, $count logs stashed"
         }
         else{
-            val count = truckLogDao.getTruckLogsCount()
-            notif = "$count log/s stashed"
+            count = truckLogDao.getTruckLogsCount()
+            notif = "${truckLog.spd} KPH $count log/s stashed"
         }
 
         //update notification

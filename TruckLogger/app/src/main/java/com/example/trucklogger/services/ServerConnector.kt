@@ -15,7 +15,6 @@ import java.net.SocketTimeoutException
 import javax.net.ssl.SSLServerSocketFactory
 
 class ServerConnector (sslSocketFactory: SSLSocketFactory){
-    //var socket: SSLSocket = socketFactory.createSocket(SERVER_IP , SERVER_PORT) as SSLSocket
     private var socketFactory = sslSocketFactory
     private lateinit var socket: SSLSocket
     private lateinit var outputBuffer: PrintWriter
@@ -38,7 +37,6 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
             inputBuffer.close()
             outputBuffer.close()
             socket.close()
-
         } catch (e: ConnectException) {
             reply = "TIMEOUT"
         }
