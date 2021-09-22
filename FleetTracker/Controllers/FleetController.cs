@@ -95,5 +95,17 @@ namespace FleetTracker.Controllers
             }
             return await Task.Run( () => RedirectToAction("Index"));
         }
+        
+        // GET: /Fleet/ResetTrucker/
+        public async Task<IActionResult> ResetTrucker(string id)
+        {
+            var trucker = _db.Trucker.Single(t => t.ID == int.Parse(id));
+            trucker.Verified = false;
+            _db.Trucker.Update(trucker);
+            _db.SaveChanges();
+
+            return await Task.Run( () => RedirectToAction("Index"));
+        }
+        
     }
 }

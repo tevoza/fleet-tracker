@@ -4,6 +4,7 @@
 #include <iostream>
 #include <mysql++.h>
 #include <nlohmann/json.hpp>
+#include <typeinfo>
 
 enum REQUEST_CODE
 {
@@ -17,16 +18,22 @@ enum REQUEST_RESULT
     FAIL                = 0,
     OK                  = 1,
     INVALID_CREDENTIALS = 2,
-    DB_CONN_FAILED      = 4
+    DB_CONN_FAILED      = 3,
+    PARSE_FAIL          = 4
 };
 
 class handler
 {
 public:
-    REQUEST_RESULT handle_request(const char* request);
+    handler();
+    ~handler();
+    nlohmann::json handle_request(const char* request);
 private:
-    REQUEST_RESULT insert_logs();
-    mysqlpp::Connection _db;
+    REQUEST_RESULT insert_logs(const int& id ,const nlohmann::json& logs);
+    mysqlpp::Connection* _db;
+    mysqlpp::Query* _qry;
+    bool verify_id(const std::string& uuid, const int& id);
+    bool update_trucker_id(const std::string& uuid, const int& id);
 };
 
 #endif

@@ -23,6 +23,10 @@ namespace FleetTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("AndroidID")
+                        .HasMaxLength(450)
+                        .HasColumnType("varchar(450)");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 

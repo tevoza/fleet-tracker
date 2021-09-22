@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">TruckLogger</string>
-    <string name="btnUpdateId">Update Id</string>
+    <string name="app_name">Truck Logger</string>
+    <string name="btnUpdateId">Update ID</string>
     <string name="notification_title">Foreground!</string>
     <string name="notification_message">I am running here</string>
     <string name="ticker_text">lool</string>

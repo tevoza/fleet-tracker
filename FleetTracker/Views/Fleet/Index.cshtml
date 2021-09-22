@@ -12,6 +12,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Vehicle Number</th>
+            <th>Verified</th>
         </tr>
     @foreach (var m in @Model)
     {
@@ -22,6 +23,9 @@
             </td>
             <td>@m.VehicleNumber</td>
             <td>@m.Verified</td>
+            <td>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Fleet" asp-action="ResetTrucker" asp-route-id=@m.ID>Reset</a>
+            </td>
         </tr>
     }
     </table>

@@ -6,14 +6,19 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
 import android.os.Looper
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.MutableLiveData
+import com.example.trucklogger.R
 import com.example.trucklogger.db.TruckLog
 import com.example.trucklogger.db.TruckLogDAO
+import com.example.trucklogger.other.*
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
@@ -22,9 +27,6 @@ import com.example.trucklogger.other.Constants.MPS_TO_KMH
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
-import com.example.trucklogger.other.ServerRequest
-import com.example.trucklogger.other.ServerRequestCode
-import com.example.trucklogger.other.TrackingUtility
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -41,8 +43,8 @@ import javax.net.ssl.*
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
-    var started = true
-
+    var started = false
+    lateinit var sharedPreferences: SharedPreferences
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -59,7 +61,14 @@ class TrackingService : LifecycleService() {
     lateinit var notificationManager : NotificationManager
 
     var isTracking = false
-    var TRUCKERID : Int = 0;
+    companion object {
+        val isRunning = MutableLiveData<Boolean> ()
+        val speed = MutableLiveData<Float> ()
+    }
+    //settings
+    var TRUCKER_ID : Int = 0;
+    var TRUCKER_UUID : String = "";
+    var TRUCKER_VERIFIED  : Boolean = false;
 
     override fun onCreate() {
         super.onCreate()
@@ -68,28 +77,46 @@ class TrackingService : LifecycleService() {
         GlobalScope.launch(Dispatchers.IO) {
             serverConnector = ServerConnector(sslSocketFactory)
         }
+        sharedPreferences = this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+        getSettings()
+        speed.postValue(0.0f)
     }
 
-   override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        intent?.let {
-            when (it.action) {
-                ACTION_START_SERVICE -> {
-                    TRUCKERID = it.getIntExtra("TRUCKER_ID", 0)
-                    started = false
-                    isTracking = true
-                    startForegroundService()
-                    updateTracking()
-                    Timber.d("Started Tracking service, $TRUCKERID")
-                }
-                ACTION_STOP_SERVICE -> {
-                    Timber.d("Stopped Tracking service")
-                    isTracking = false
-                    updateTracking()
-                    stopForeground(true)
-                    stopSelf()
-                }
-            }
+    override fun onDestroy() {
+        super.onDestroy()
+        isRunning.postValue(false)
+    }
+
+    private fun getSettings(){
+        with (sharedPreferences) {
+            TRUCKER_ID = getInt("ID", 0)
+            TRUCKER_UUID = getString("UUID", "NONE").toString()
+            TRUCKER_VERIFIED = getBoolean("VERIFIED", false)
         }
+    }
+
+   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+       intent?.let {
+           when (it.action) {
+               ACTION_START_SERVICE -> {
+                   if (!started) {
+                       started = true
+                       isTracking = true
+                       isRunning.postValue(true)
+                       startForegroundService()
+                       updateTracking()
+                   }
+               }
+               ACTION_STOP_SERVICE -> {
+                   Timber.d("Stopped Tracking service")
+                   isTracking = false
+                   updateTracking()
+                   stopForeground(true)
+                   isRunning.postValue(false)
+                   stopSelf()
+               }
+           }
+       }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -137,8 +164,7 @@ class TrackingService : LifecycleService() {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            result?.locations?.let { locations ->
+            result.locations.let { locations ->
                 for (location in locations) {
                     GlobalScope.launch(Dispatchers.IO) { processLocation(location) }
                 }
@@ -147,7 +173,7 @@ class TrackingService : LifecycleService() {
     }
 
     private suspend fun processLocation(location : Location) {
-        Timber.d("${location.longitude.toFloat()}")
+        getSettings()
         val truckLog = TruckLog(
             location.time/1000,
             location.latitude.toFloat(),
@@ -155,30 +181,50 @@ class TrackingService : LifecycleService() {
             location.speed * MPS_TO_KMH,
             0f
         )
+        speed.postValue(truckLog.spd)
 
         truckLogDao.insertTruckLog(truckLog)
 
-        val TRUCKER_UUID="TEMP";
         val logs = truckLogDao.getAllTruckLogs()
-        val serverRequest = ServerRequest(TRUCKERID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
-        val gson = Gson()
-        val json = gson.toJson(serverRequest)
+        val serverRequest = ServerRequest(TRUCKER_ID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
 
-        val result = serverConnector.sendMessage(json)
-        Timber.d(result)
+        val result = serverConnector.sendMessage(serverRequest)
+        Timber.d("$result")
 
         var notif:String = ""
         var count:Int = 0;
-        if (result == "OK"){
-            for (log in logs) {
-                truckLogDao.deleteTruckLog(log)
+        when (ServerResponseCode.fromInt(result.res)){
+            ServerResponseCode.RESPONSE_OK -> {
+                for (log in logs) {
+                    truckLogDao.deleteTruckLog(log)
+                }
                 count = truckLogDao.getTruckLogsCount()
+                notif = "${String.format("%.0f",truckLog.spd)} km/h Updated, $count logs stashed"
             }
-            notif = "${truckLog.spd} KPH Updated, $count logs stashed"
-        }
-        else{
-            count = truckLogDao.getTruckLogsCount()
-            notif = "${truckLog.spd} KPH $count log/s stashed"
+
+            ServerResponseCode.RESPONSE_TIMEOUT -> {
+                count = truckLogDao.getTruckLogsCount()
+                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. No server Connection"
+            }
+
+            ServerResponseCode.RESPONSE_INVALID_CREDENTIALS -> {
+                count = truckLogDao.getTruckLogsCount()
+                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. Unverified ID"
+                with(sharedPreferences.edit()){
+                    putBoolean("VERIFIED", false)
+                    apply()
+                }
+            }
+
+            ServerResponseCode.RESPONSE_PARSE_FAIL, ServerResponseCode.RESPONSE_DB_CONN_FAIL -> {
+                count = truckLogDao.getTruckLogsCount()
+                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. Server Error"
+            }
+
+            else -> {
+                count = truckLogDao.getTruckLogsCount()
+                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed"
+            }
         }
 
         //update notification

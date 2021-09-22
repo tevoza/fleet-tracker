@@ -1,5 +1,6 @@
 package com.example.trucklogger.di
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -25,6 +26,7 @@ object ServiceModule {
         @ApplicationContext app : Context
     ) = FusedLocationProviderClient(app)
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     @ServiceScoped
     @Provides
     fun provideMainActivityPendingIntent(

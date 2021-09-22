@@ -8,6 +8,10 @@ import javax.net.ssl.SSLSocketFactory
 import com.example.trucklogger.other.Constants.SERVER_IP
 import com.example.trucklogger.other.Constants.SERVER_PORT
 import com.example.trucklogger.other.Constants.SOCKET_TIMEOUT
+import com.example.trucklogger.other.ServerRequest
+import com.example.trucklogger.other.ServerResponse
+import com.example.trucklogger.other.ServerResponseCode
+import com.google.gson.Gson
 import timber.log.Timber
 import java.io.*
 import java.net.ConnectException
@@ -20,11 +24,12 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
     private lateinit var outputBuffer: PrintWriter
     private lateinit var inputBuffer: BufferedReader
     private lateinit var reply: String
+    private lateinit var response: ServerResponse
 
-    public fun sendMessage(msg : String) : String {
-        Timber.d("sending....")
+    fun sendMessage(request : ServerRequest) : ServerResponse {
+        val msg = Gson().toJson(request)
         try {
-            socket = socketFactory.createSocket(SERVER_IP, SERVER_PORT, ) as SSLSocket
+            socket = socketFactory.createSocket(SERVER_IP, SERVER_PORT) as SSLSocket
             socket.soTimeout = SOCKET_TIMEOUT
             outputBuffer = PrintWriter(BufferedWriter(OutputStreamWriter(socket.outputStream)))
             inputBuffer = BufferedReader(InputStreamReader(socket.inputStream))
@@ -37,9 +42,10 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
             inputBuffer.close()
             outputBuffer.close()
             socket.close()
-        } catch (e: ConnectException) {
-            reply = "TIMEOUT"
+            response = Gson().fromJson(reply, ServerResponse::class.java)
+        } catch (e: Exception) {
+            response = ServerResponse(ServerResponseCode.RESPONSE_TIMEOUT.value, null)
         }
-        return reply
+        return response
     }
 }

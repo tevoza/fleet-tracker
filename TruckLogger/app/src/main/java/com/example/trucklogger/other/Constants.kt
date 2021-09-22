@@ -2,6 +2,7 @@ package com.example.trucklogger.other
 
 object Constants {
     const val TRUCKLOGGING_DATABASE_NAME = "tblTruckLogs"
+    const val PREFERENCES_FILE = "SETTINGS"
 
     const val REQUEST_CODE_LOCATION_PERMISSION = 0
 

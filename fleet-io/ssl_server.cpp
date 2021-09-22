@@ -5,6 +5,7 @@
 #include <boost/asio/ssl.hpp>
 #include "request_handler.hpp"
 #include <string.h>
+#include <nlohmann/json.hpp>
 
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 
@@ -59,20 +60,20 @@ public:
         std::cout << "received : ";
         std::cout.write(data_, bytes_transferred);
         //call handler
-        handler request_handler;
         memset(result, '\0', sizeof(result));
-        switch(request_handler.handle_request(data_)) 
-        {
-            case OK:
-                strcpy(result, "OK\n");
-                break;
-            case FAIL:
-                strcpy(result, "FAIL\n");
-                break;
-            case INVALID_ID:
-                strcpy(result, "INVALID_ID\n");
-                break;
+        try {
+            handler request_handler;
+            auto response = request_handler.handle_request(data_);
+            auto string_resp = response.dump();
+            string_resp.append("\n");
+            strcpy(result, string_resp.c_str());
         }
+        catch (std::exception& e)
+        {
+            std::cerr << "Exception: " << e.what() << "\n";
+            strcpy(result, "OK\n");
+        }
+
 
         boost::asio::async_write(socket_,
            boost::asio::buffer(result, bytes_transferred),
@@ -101,7 +102,7 @@ private:
     ssl_socket socket_;
     enum { max_length = 1024*100 };
     char data_[max_length];
-    char result[20];
+    char result[1024];
 };
 
 class server
