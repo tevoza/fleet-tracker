@@ -30,5 +30,7 @@ data class ServerRequest(
 
 data class ServerResponse(
     @SerializedName("res") var res: Int,
-    @SerializedName("trucker") var trucker: String?
+    @SerializedName("trucker") var trucker: String?,
+    @SerializedName("veh") var veh: String?,
+    @SerializedName("manager") var manager: String?
 )

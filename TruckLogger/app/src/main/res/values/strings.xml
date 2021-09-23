@@ -4,4 +4,9 @@
     <string name="notification_title">Foreground!</string>
     <string name="notification_message">I am running here</string>
     <string name="ticker_text">lool</string>
+    <string-array name="upload_schedule">
+        <item>Continuously</item>
+        <item>Hourly</item>
+        <item>On Request</item>
+    </string-array>
 </resources>

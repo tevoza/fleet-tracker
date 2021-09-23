@@ -44,7 +44,7 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
             socket.close()
             response = Gson().fromJson(reply, ServerResponse::class.java)
         } catch (e: Exception) {
-            response = ServerResponse(ServerResponseCode.RESPONSE_TIMEOUT.value, null)
+            response = ServerResponse(ServerResponseCode.RESPONSE_TIMEOUT.value, null, null, null)
         }
         return response
     }

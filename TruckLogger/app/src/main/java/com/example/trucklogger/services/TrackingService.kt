@@ -64,6 +64,9 @@ class TrackingService : LifecycleService() {
     companion object {
         val isRunning = MutableLiveData<Boolean> ()
         val speed = MutableLiveData<Float> ()
+        val lat = MutableLiveData<Float> ()
+        val lng = MutableLiveData<Float> ()
+        val logsStashed = MutableLiveData<Int> ()
     }
     //settings
     var TRUCKER_ID : Int = 0;
@@ -80,6 +83,9 @@ class TrackingService : LifecycleService() {
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
         getSettings()
         speed.postValue(0.0f)
+        lat.postValue(0.0f)
+        lng.postValue(0.0f)
+        logsStashed.postValue(0)
     }
 
     override fun onDestroy() {
@@ -182,6 +188,8 @@ class TrackingService : LifecycleService() {
             0f
         )
         speed.postValue(truckLog.spd)
+        lat.postValue(truckLog.lat)
+        lng.postValue(truckLog.lon)
 
         truckLogDao.insertTruckLog(truckLog)
 
@@ -227,6 +235,7 @@ class TrackingService : LifecycleService() {
             }
         }
 
+        logsStashed.postValue(truckLogDao.getTruckLogsCount())
         //update notification
         val notification = currNotificationBuilder
             .setContentText(notif)

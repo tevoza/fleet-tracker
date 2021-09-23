@@ -3,36 +3,29 @@ package com.example.trucklogger.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Switch
-import android.widget.TextView
-import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import com.cardiomood.android.controls.gauge.SpeedometerGauge
+import android.view.LayoutInflater
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.trucklogger.R
 import com.example.trucklogger.db.TruckLogDAO
-import com.example.trucklogger.other.*
 import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.PREFERENCES_FILE
 import com.example.trucklogger.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
+import com.example.trucklogger.other.ServerRequest
+import com.example.trucklogger.other.ServerRequestCode
+import com.example.trucklogger.other.ServerResponseCode
+import com.example.trucklogger.other.TrackingUtility
 import com.example.trucklogger.services.ServerConnector
 import com.example.trucklogger.services.TrackingService
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -61,12 +54,17 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         requestPermissions()
         GlobalScope.launch(Dispatchers.IO) { serverConnector = ServerConnector(sslSocketFactory) }
 
-        btnUpdateId.setOnClickListener { updateTruckerID() }
+        btnUpdateId.setOnClickListener { showDialog() }
 
         sharedPreferences = this.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
 
         val switchStatus : Switch = findViewById(R.id.switchStatus)
         val viewStatus : TextView = findViewById(R.id.ViewStatus)
+        val viewSpeed : TextView = findViewById(R.id.textSpeed)
+        val viewLat : TextView = findViewById(R.id.textLat)
+        val viewLng : TextView = findViewById(R.id.textLng)
+        val viewLogsStashed : TextView = findViewById(R.id.textLogsStashed)
+
         TrackingService.isRunning.observe(this, androidx.lifecycle.Observer {
             if (it) {
                 switchStatus.isChecked = true
@@ -77,6 +75,22 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
         })
 
+        TrackingService.speed.observe(this, androidx.lifecycle.Observer {
+           viewSpeed.text = String.format("%.1f", it)
+        })
+
+        TrackingService.lat.observe(this, androidx.lifecycle.Observer {
+            viewLat.text = String.format("%.4f", it)
+        })
+
+        TrackingService.lng.observe(this, androidx.lifecycle.Observer {
+            viewLng.text = String.format("%.4f", it)
+        })
+
+        TrackingService.logsStashed.observe(this, androidx.lifecycle.Observer {
+            viewLogsStashed.text = "$it"
+        })
+
         if (intent.action == ACTION_SHOW_UI) {
             Timber.d("coming from notification")
             //switchStatus.isChecked = true
@@ -84,7 +98,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         switchStatus.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 sendCommandToService(ACTION_START_SERVICE)
-                viewStatus.text = "RUNNING"
+                viewStatus.text = "LOGGING"
             }
             else{
                 sendCommandToService(ACTION_STOP_SERVICE)
@@ -92,11 +106,20 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
         }
         updateUI()
-        setSpeedo()
-        TrackingService.speed.observe(this, androidx.lifecycle.Observer {
-            val speedo :SpeedometerGauge = findViewById(R.id.speedometer)
-            speedo.speed = it.toDouble()
-        })
+
+        val spinner: Spinner = findViewById(R.id.spinner)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.upload_schedule,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -108,8 +131,29 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         updateUI()
     }
 
-    fun updateTruckerID() {
-        TRUCKER_ID = editTextId.text.toString().toInt()
+    private fun showDialog() {
+        val inflater: LayoutInflater = getSystemService(android.app.Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.edit_dialog, null)
+        val alertDialog = AlertDialog.Builder(this).create()
+        val etComments:EditText = view.findViewById(R.id.etComments)
+        with (alertDialog) {
+            setTitle("Update ID")
+            setCancelable(true)
+            setMessage("Update ID?")
+            setButton(AlertDialog.BUTTON_POSITIVE ,"OK") { dialog, which ->
+                val input = etComments.text.toString()
+                updateTruckerID(input)
+            }
+            setButton(AlertDialog.BUTTON_NEGATIVE ,"Cancel") { dialog, which ->
+                alertDialog.dismiss()
+            }
+        }
+        alertDialog.setView(view)
+        alertDialog.show()
+    }
+
+    fun updateTruckerID(truckerID:String) {
+        TRUCKER_ID = truckerID.toInt()
         TRUCKER_UUID = UUID.randomUUID().toString()
         val request = ServerRequest(TRUCKER_ID, TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_ID.value, null)
         var responseCode: ServerResponseCode
@@ -123,6 +167,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                         putInt("ID", TRUCKER_ID)
                         putString("UUID", TRUCKER_UUID)
                         putString("TRUCKER", result.trucker)
+                        putString("VEHICLE", result.veh)
+                        putString("MANAGER", result.manager)
                         putBoolean("VERIFIED", true)
                         apply()
                     }
@@ -163,6 +209,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     private fun updateUI(){
         val textTrucker: TextView = findViewById(R.id.textTrucker)
         textTrucker.text = sharedPreferences.getString("TRUCKER", "Unknown").toString()
+
+        val textVehicle: TextView = findViewById(R.id.textVehicleNumber)
+        textVehicle.text = sharedPreferences.getString("VEHICLE", "Unknown").toString()
+
+        val textManager: TextView = findViewById(R.id.textManager)
+        textManager.text = sharedPreferences.getString("MANAGER", "Unknown").toString()
+
         val textId: TextView = findViewById(R.id.textId)
         val truckerID = sharedPreferences.getInt("ID", 0).toString()
         val truckerVerified = sharedPreferences.getBoolean("VERIFIED", false)
@@ -171,23 +224,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         } else {
             textId.text = "$truckerID \u274c"
         }
-    }
-
-    private fun setSpeedo() {
-        val speedo :SpeedometerGauge = findViewById(R.id.speedometer)
-
-        // configure value range and ticks
-        speedo.maxSpeed = 200.0;
-        speedo.majorTickStep = 30.0;
-        speedo.minorTicks = 2;
-
-        // Configure value range colors
-        speedo.addColoredRange(0.0, 60.0, Color.GREEN);
-        speedo.addColoredRange(60.0, 100.0, Color.YELLOW);
-        speedo.addColoredRange(100.0, 200.0, Color.RED);
-
-        speedo.speed = 100.0
-
     }
 
     private fun sendCommandToService(action: String) =

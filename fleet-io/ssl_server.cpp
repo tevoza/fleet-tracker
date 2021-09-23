@@ -66,6 +66,7 @@ public:
             auto response = request_handler.handle_request(data_);
             auto string_resp = response.dump();
             string_resp.append("\n");
+            std::cout << string_resp << std::endl;
             strcpy(result, string_resp.c_str());
         }
         catch (std::exception& e)
@@ -76,7 +77,7 @@ public:
 
 
         boost::asio::async_write(socket_,
-           boost::asio::buffer(result, bytes_transferred),
+           boost::asio::buffer(result, 1024),
            boost::bind(&session::handle_write, this,
            boost::asio::placeholders::error));
     }

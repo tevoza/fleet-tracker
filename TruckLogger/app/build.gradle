@@ -45,7 +45,6 @@ dependencies {
 
     //location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
-    implementation 'com.cardiomood.android:android-widgets:0.1.1'
 
     // Dagger Core
     implementation "com.google.dagger:dagger:2.38.1"

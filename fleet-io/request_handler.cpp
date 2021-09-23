@@ -48,9 +48,21 @@ nlohmann::json handler::handle_request(const char* request)
                     *_qry << "SELECT * FROM Trucker WHERE ID = " << rec["id"];
                     (*_qry).storein(v);
                     std::string name;
+                    std::string vehicleNum;
+                    std::string manager;
                     v[0]["Name"].to_string(name);
-                    std::cout << name <<std::endl;
-                    resp["trucker"]         = name;
+                    v[0]["VehicleNumber"].to_string(vehicleNum);
+
+                    *_qry   << "SELECT * FROM AspNetUsers WHERE Id = '" 
+                            << v[0]["ManagerId"] << "';";
+                    std::cout << (*_qry).str();
+                    v.clear();
+                    (*_qry).storein(v);
+                    v[0]["UserName"].to_string(manager);
+
+                    resp["trucker"]     = name;
+                    resp["veh"]         = vehicleNum;
+                    resp["manager"]     = manager;
                 } else { resp["res"] = FAIL; }
                 break;
 
