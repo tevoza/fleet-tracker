@@ -9,7 +9,7 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  color: #7DDF64;
 }
 
 .btn-primary {
@@ -19,7 +19,7 @@ a {
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
+  color: #69A2B0;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
@@ -29,6 +29,7 @@ a {
 html {
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -61,7 +62,10 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: #003049;
+  color: #e5e5e5;
 }
+
 .footer {
   position: absolute;
   bottom: 0;

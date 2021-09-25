@@ -190,7 +190,6 @@ class TrackingService : LifecycleService() {
         speed.postValue(truckLog.spd)
         lat.postValue(truckLog.lat)
         lng.postValue(truckLog.lon)
-
         truckLogDao.insertTruckLog(truckLog)
 
         val logs = truckLogDao.getAllTruckLogs()

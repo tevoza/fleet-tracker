@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +37,8 @@ import javax.inject.Inject
 import javax.net.ssl.SSLSocketFactory
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, AdapterView.OnItemClickListener,
+    AdapterView.OnItemSelectedListener {
     @Inject
     lateinit var truckerLogDao: TruckLogDAO
 
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         val viewLng : TextView = findViewById(R.id.textLng)
         val viewLogsStashed : TextView = findViewById(R.id.textLogsStashed)
 
-        TrackingService.isRunning.observe(this, androidx.lifecycle.Observer {
+        TrackingService.isRunning.observe(this, {
             if (it) {
                 switchStatus.isChecked = true
                 viewStatus.text = "RUNNING"
@@ -75,19 +77,19 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
         })
 
-        TrackingService.speed.observe(this, androidx.lifecycle.Observer {
+        TrackingService.speed.observe(this, {
            viewSpeed.text = String.format("%.1f", it)
         })
 
-        TrackingService.lat.observe(this, androidx.lifecycle.Observer {
+        TrackingService.lat.observe(this, {
             viewLat.text = String.format("%.4f", it)
         })
 
-        TrackingService.lng.observe(this, androidx.lifecycle.Observer {
+        TrackingService.lng.observe(this, {
             viewLng.text = String.format("%.4f", it)
         })
 
-        TrackingService.logsStashed.observe(this, androidx.lifecycle.Observer {
+        TrackingService.logsStashed.observe(this, {
             viewLogsStashed.text = "$it"
         })
 
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             Timber.d("coming from notification")
             //switchStatus.isChecked = true
         }
+
         switchStatus.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 sendCommandToService(ACTION_START_SERVICE)
@@ -108,6 +111,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         updateUI()
 
         val spinner: Spinner = findViewById(R.id.spinner)
+        spinner.onItemSelectedListener = this
         ArrayAdapter.createFromResource(
             this,
             R.array.upload_schedule,
@@ -117,9 +121,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
+            spinner.setSelection(sharedPreferences.getInt("UPLOAD_FREQUENCY", 0))
         }
-
-
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -139,12 +142,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         with (alertDialog) {
             setTitle("Update ID")
             setCancelable(true)
-            setMessage("Update ID?")
-            setButton(AlertDialog.BUTTON_POSITIVE ,"OK") { dialog, which ->
+            setMessage("Enter your trucker ID.")
+            setButton(AlertDialog.BUTTON_POSITIVE ,"OK") { _, _ ->
                 val input = etComments.text.toString()
                 updateTruckerID(input)
             }
-            setButton(AlertDialog.BUTTON_NEGATIVE ,"Cancel") { dialog, which ->
+            setButton(AlertDialog.BUTTON_NEGATIVE ,"Cancel") { _, _ ->
                 alertDialog.dismiss()
             }
         }
@@ -203,6 +206,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 }
             }
         }
+
         updateUI()
     }
 
@@ -274,5 +278,21 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
                 android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
         }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        // An item was selected. You can retrieve the selected item using
+        with(sharedPreferences.edit()){
+            putInt("UPLOAD_FREQUENCY", pos)
+            apply()
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        Timber.d("spinner : nothing selected")
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Timber.d("spinner click")
     }
 }

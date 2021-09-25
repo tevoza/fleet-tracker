@@ -19,12 +19,12 @@
         <tr>
             <td>@m.ID</td>
             <td>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Fleet" asp-action="ViewTrucker" asp-route-id=@m.ID>@m.Name</a>
+                <a class="nav-link" asp-area="" asp-controller="Fleet" asp-action="ViewTrucker" asp-route-id=@m.ID>@m.Name</a>
             </td>
             <td>@m.VehicleNumber</td>
             <td>@m.Verified</td>
             <td>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Fleet" asp-action="ResetTrucker" asp-route-id=@m.ID>Reset</a>
+                <a class="nav-link" asp-area="" asp-controller="Fleet" asp-action="ResetTrucker" asp-route-id=@m.ID>Reset</a>
             </td>
         </tr>
     }

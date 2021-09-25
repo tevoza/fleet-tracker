@@ -31,6 +31,7 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
         try {
             socket = socketFactory.createSocket(SERVER_IP, SERVER_PORT) as SSLSocket
             socket.soTimeout = SOCKET_TIMEOUT
+            socket.sendBufferSize = msg.length+10
             outputBuffer = PrintWriter(BufferedWriter(OutputStreamWriter(socket.outputStream)))
             inputBuffer = BufferedReader(InputStreamReader(socket.inputStream))
 
