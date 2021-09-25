@@ -11,7 +11,7 @@ interface TruckLogDAO {
     @Delete
     suspend fun deleteTruckLog(truckLog: TruckLog)
 
-    @Query("SELECT * FROM tblTruckLogs ORDER BY tim ASC LIMIT 100")
+    @Query("SELECT * FROM tblTruckLogs ORDER BY tim ASC LIMIT 75")
     fun getAllTruckLogs(): List<TruckLog>
 
     @Query("SELECT COUNT(*) FROM tblTruckLogs")

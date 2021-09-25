@@ -56,9 +56,7 @@ public:
             return;
         }
         
-        std::cout << "handle_read: success\n";
-        std::cout << "received : ";
-        std::cout.write(data_, bytes_transferred);
+        std::cout << "handle_read: received " << bytes_transferred << " bytes." << std::endl;
         //call handler
         memset(result, '\0', sizeof(result));
         try {

@@ -10,12 +10,10 @@ import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
 import android.os.Looper
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import com.example.trucklogger.R
 import com.example.trucklogger.db.TruckLog
 import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.*
@@ -27,19 +25,20 @@ import com.example.trucklogger.other.Constants.MPS_TO_KMH
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_ID
 import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
+import com.example.trucklogger.other.Constants.UPLOAD_CONTINUOUSLY
+import com.example.trucklogger.other.Constants.UPLOAD_HOURLY
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import javax.net.ssl.*
+import javax.net.ssl.SSLSocketFactory
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
@@ -68,10 +67,12 @@ class TrackingService : LifecycleService() {
         val lng = MutableLiveData<Float> ()
         val logsStashed = MutableLiveData<Int> ()
     }
+
     //settings
-    var TRUCKER_ID : Int = 0;
-    var TRUCKER_UUID : String = "";
-    var TRUCKER_VERIFIED  : Boolean = false;
+    private var TRUCKER_ID : Int = 0;
+    private var TRUCKER_UUID : String = "";
+    private var TRUCKER_VERIFIED  : Boolean = false;
+    private var UPLOAD_FREQUENCY  : Int = 0;
 
     override fun onCreate() {
         super.onCreate()
@@ -81,7 +82,7 @@ class TrackingService : LifecycleService() {
             serverConnector = ServerConnector(sslSocketFactory)
         }
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
-        getSettings()
+        updateSettings()
         speed.postValue(0.0f)
         lat.postValue(0.0f)
         lng.postValue(0.0f)
@@ -93,11 +94,12 @@ class TrackingService : LifecycleService() {
         isRunning.postValue(false)
     }
 
-    private fun getSettings(){
+    private fun updateSettings(){
         with (sharedPreferences) {
             TRUCKER_ID = getInt("ID", 0)
             TRUCKER_UUID = getString("UUID", "NONE").toString()
             TRUCKER_VERIFIED = getBoolean("VERIFIED", false)
+            UPLOAD_FREQUENCY = getInt("UPLOAD_FREQUENCY", UPLOAD_CONTINUOUSLY)
         }
     }
 
@@ -179,7 +181,7 @@ class TrackingService : LifecycleService() {
     }
 
     private suspend fun processLocation(location : Location) {
-        getSettings()
+        updateSettings()
         val truckLog = TruckLog(
             location.time/1000,
             location.latitude.toFloat(),
@@ -192,52 +194,76 @@ class TrackingService : LifecycleService() {
         lng.postValue(truckLog.lon)
         truckLogDao.insertTruckLog(truckLog)
 
-        val logs = truckLogDao.getAllTruckLogs()
-        val serverRequest = ServerRequest(TRUCKER_ID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
+        var count = truckLogDao.getTruckLogsCount()
+        var statusUpload = ""
 
-        val result = serverConnector.sendMessage(serverRequest)
-        Timber.d("$result")
-
-        var notif:String = ""
-        var count:Int = 0;
-        when (ServerResponseCode.fromInt(result.res)){
-            ServerResponseCode.RESPONSE_OK -> {
-                for (log in logs) {
-                    truckLogDao.deleteTruckLog(log)
-                }
-                count = truckLogDao.getTruckLogsCount()
-                notif = "${String.format("%.0f",truckLog.spd)} km/h Updated, $count logs stashed"
+        if (TRUCKER_VERIFIED)
+        {
+            if ((UPLOAD_FREQUENCY == UPLOAD_CONTINUOUSLY) || (UPLOAD_FREQUENCY == UPLOAD_HOURLY && count > 10))
+            {
+                statusUpload = uploadLogs()
             }
-
-            ServerResponseCode.RESPONSE_TIMEOUT -> {
-                count = truckLogDao.getTruckLogsCount()
-                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. No server Connection"
-            }
-
-            ServerResponseCode.RESPONSE_INVALID_CREDENTIALS -> {
-                count = truckLogDao.getTruckLogsCount()
-                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. Unverified ID"
-                with(sharedPreferences.edit()){
-                    putBoolean("VERIFIED", false)
-                    apply()
-                }
-            }
-
-            ServerResponseCode.RESPONSE_PARSE_FAIL, ServerResponseCode.RESPONSE_DB_CONN_FAIL -> {
-                count = truckLogDao.getTruckLogsCount()
-                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed. Server Error"
-            }
-
-            else -> {
-                count = truckLogDao.getTruckLogsCount()
-                notif = "${String.format("%.0f",truckLog.spd)} km/h $count log/s stashed"
-            }
+        } else {
+            statusUpload = "Unverified ID."
         }
 
-        logsStashed.postValue(truckLogDao.getTruckLogsCount())
+        count = truckLogDao.getTruckLogsCount()
+        logsStashed.postValue(count)
+
         //update notification
+        val notif = "${String.format("%.0f",truckLog.spd)} km/h. $count log/s stashed. $statusUpload"
         val notification = currNotificationBuilder
             .setContentText(notif)
         notificationManager.notify(NOTIFICATION_ID, notification.build())
+    }
+
+    private suspend fun uploadLogs() : String {
+        var statusUpload: String
+        var count: Int
+        var resultCode: ServerResponseCode
+        //send all logs until none left
+        do {
+            var logs = truckLogDao.getAllTruckLogs()
+            var serverRequest = ServerRequest(TRUCKER_ID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
+            var result = serverConnector.sendMessage(serverRequest)
+            resultCode = ServerResponseCode.fromInt(result.res)
+            if (resultCode == ServerResponseCode.RESPONSE_OK) {
+                for (log in logs) {
+                    truckLogDao.deleteTruckLog(log)
+                }
+            }
+            count = truckLogDao.getTruckLogsCount()
+        } while ((count > 0) && (resultCode == ServerResponseCode.RESPONSE_OK))
+
+        when (resultCode) {
+            ServerResponseCode.RESPONSE_INVALID_CREDENTIALS -> {
+                with(sharedPreferences.edit()) {
+                    putBoolean("VERIFIED", false)
+                    apply()
+                }
+                statusUpload = "Unverified ID."
+            }
+
+            ServerResponseCode.RESPONSE_OK -> {
+                statusUpload = "Up-to-date."
+            }
+
+            ServerResponseCode.RESPONSE_TIMEOUT -> {
+                statusUpload = "No server connection."
+            }
+
+            ServerResponseCode.RESPONSE_FAIL -> {
+                statusUpload = "Invalid Request."
+            }
+
+            ServerResponseCode.RESPONSE_DB_CONN_FAIL, ServerResponseCode.RESPONSE_PARSE_FAIL -> {
+                statusUpload = "Serverside Error."
+            }
+
+            else -> {
+                statusUpload = "Unknown Issue."
+            }
+        }
+        return statusUpload
     }
 }
