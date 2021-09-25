@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.MainActivity">
 
     <TextView
@@ -164,6 +169,7 @@
         android:layout_marginTop="16dp"
         android:hint="@string/btnUpdateId"
         android:onClick="updateTruckerID"
+        android:text="Update ID"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewManagerNameKey2" />
@@ -225,7 +231,7 @@
 
     <View
         android:id="@+id/divider"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
@@ -235,7 +241,7 @@
 
     <View
         android:id="@+id/divider3"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
@@ -246,7 +252,7 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
@@ -257,7 +263,7 @@
 
     <View
         android:id="@+id/divider5"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
@@ -268,7 +274,7 @@
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="409dp"
+        android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
@@ -329,3 +335,5 @@
         app:layout_constraintStart_toEndOf="@+id/textViewLogsStashedKey5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

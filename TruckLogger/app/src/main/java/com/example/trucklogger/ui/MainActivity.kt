@@ -164,6 +164,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
         GlobalScope.launch(Dispatchers.IO) {
             val result = serverConnector.sendMessage(request)
             responseCode = ServerResponseCode.fromInt(result.res)
+            var toastText:String
             when (responseCode){
                 ServerResponseCode.RESPONSE_OK -> {
                     with(sharedPreferences.edit()){
@@ -175,39 +176,27 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
                         putBoolean("VERIFIED", true)
                         apply()
                     }
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext,  "Updated Identity.", Toast.LENGTH_SHORT).show()
-                    }
+                    toastText = "Updated Identity."
                 }
-
                 ServerResponseCode.RESPONSE_FAIL -> {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext,
-                            "Can't update ID. Ask your manager to reset your ID.", Toast.LENGTH_SHORT).show()
-                    }
+                    toastText = "Can't update ID. Ask your manager to reset your ID."
                 }
-
                 ServerResponseCode.RESPONSE_TIMEOUT -> {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext,  "No server connection", Toast.LENGTH_SHORT).show()
-                    }
+                    toastText = "No server connection"
                 }
-
                 ServerResponseCode.RESPONSE_DB_CONN_FAIL,ServerResponseCode.RESPONSE_PARSE_FAIL, -> {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext,  "Server Error", Toast.LENGTH_SHORT).show()
-                    }
+                    toastText = "Server Error"
                 }
-
                 else -> {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext,  "Failed!", Toast.LENGTH_SHORT).show()
-                    }
+                    toastText = "Failed!"
                 }
             }
-        }
 
-        updateUI()
+            withContext(Dispatchers.Main) {
+                updateUI()
+                Toast.makeText(applicationContext,  toastText, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateUI(){
