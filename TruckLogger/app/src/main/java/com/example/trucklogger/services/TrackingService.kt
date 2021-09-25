@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build
@@ -138,6 +139,7 @@ class TrackingService : LifecycleService() {
 
                            val i = Intent(this@TrackingService, MainActivity::class.java)
                            i.action = action
+                           i.flags = FLAG_ACTIVITY_NEW_TASK
                            startActivity(i)
                        }
                    }

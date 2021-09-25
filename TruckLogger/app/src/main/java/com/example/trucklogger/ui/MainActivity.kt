@@ -234,6 +234,8 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
         } else {
             textId.text = "$truckerID \u274c"
         }
+        GlobalScope.launch(Dispatchers.IO) {
+        textLogsStashed.text = truckerLogDao.getTruckLogsCount().toString()}
     }
 
     private fun sendCommandToService(action: String) =

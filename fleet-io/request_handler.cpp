@@ -34,7 +34,7 @@ nlohmann::json handler::handle_request(const char* request)
     try 
     {
         auto rec = nlohmann::json::parse(request);
-        //std::cout << rec.dump(4) << std::endl;
+        std::cout << "USER: " << rec["id"] << std::endl;
         int request_code = rec["req"];
         switch (request_code)
         {   

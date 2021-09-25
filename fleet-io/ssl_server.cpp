@@ -34,7 +34,6 @@ public:
     {
         if (!error)
         {
-            std::cout << "handle_handshake: success\n";
             socket_.async_read_some(boost::asio::buffer(data_, max_length),
                 boost::bind(&session::handle_read, this,
                 boost::asio::placeholders::error,
@@ -88,7 +87,6 @@ public:
             //    boost::bind(&session::handle_read, this,
             //    boost::asio::placeholders::error,
             //    boost::asio::placeholders::bytes_transferred));
-            std::cout << "handle_write: completed\n";
             delete this;
         }
         else
@@ -143,8 +141,6 @@ public:
     {
         if (!error)
         {
-            
-            std::cout << "handle_accept:started\n";
             new_session->start();
         }
         else
