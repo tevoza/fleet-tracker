@@ -19,6 +19,9 @@ import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.*
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_FAIL
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_LOGS
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_SUCCESS
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.MPS_TO_KMH
@@ -27,6 +30,7 @@ import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
 import com.example.trucklogger.other.Constants.UPLOAD_CONTINUOUSLY
 import com.example.trucklogger.other.Constants.UPLOAD_HOURLY
+import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -104,7 +108,7 @@ class TrackingService : LifecycleService() {
     }
 
    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-       intent?.let {
+       intent?.let { it ->
            when (it.action) {
                ACTION_START_SERVICE -> {
                    if (!started) {
@@ -122,6 +126,21 @@ class TrackingService : LifecycleService() {
                    stopForeground(true)
                    isRunning.postValue(false)
                    stopSelf()
+               }
+               ACTION_UPLOAD_LOGS -> {
+                   if (isTracking) {
+                       GlobalScope.launch(Dispatchers.IO) {
+                           val action = if (uploadLogs() == "Up-to-date.") {
+                               ACTION_UPLOAD_SUCCESS
+                           } else {
+                               ACTION_UPLOAD_FAIL
+                           }
+
+                           val i = Intent(this@TrackingService, MainActivity::class.java)
+                           i.action = action
+                           startActivity(i)
+                       }
+                   }
                }
            }
        }

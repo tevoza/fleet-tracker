@@ -15,6 +15,9 @@ import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_FAIL
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_LOGS
+import com.example.trucklogger.other.Constants.ACTION_UPLOAD_SUCCESS
 import com.example.trucklogger.other.Constants.PREFERENCES_FILE
 import com.example.trucklogger.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.trucklogger.other.ServerRequest
@@ -95,20 +98,27 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
 
         if (intent.action == ACTION_SHOW_UI) {
             Timber.d("coming from notification")
-            //switchStatus.isChecked = true
         }
+
 
         switchStatus.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 sendCommandToService(ACTION_START_SERVICE)
-                viewStatus.text = "LOGGING"
             }
             else{
                 sendCommandToService(ACTION_STOP_SERVICE)
-                viewStatus.text = "IDLE"
             }
         }
         updateUI()
+
+        btnUploadLogs.setOnClickListener {
+            if (switchStatus.isChecked) {
+                Toast.makeText(applicationContext,  "uploading...", Toast.LENGTH_SHORT).show()
+                sendCommandToService(ACTION_UPLOAD_LOGS)
+            } else {
+                Toast.makeText(applicationContext,  "Please enable tracking!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val spinner: Spinner = findViewById(R.id.spinner)
         spinner.onItemSelectedListener = this
@@ -130,6 +140,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
         if (intent?.action == ACTION_SHOW_UI) {
             Timber.d("coming from notification")
             //switchStatus.isChecked = true
+        }
+        if (intent?.action == ACTION_UPLOAD_FAIL) {
+            Toast.makeText(applicationContext,  "Upload Failed.", Toast.LENGTH_SHORT).show()
+        }
+
+        if (intent?.action == ACTION_UPLOAD_SUCCESS) {
+            Toast.makeText(applicationContext,  "Upload Success.", Toast.LENGTH_SHORT).show()
         }
         updateUI()
     }
