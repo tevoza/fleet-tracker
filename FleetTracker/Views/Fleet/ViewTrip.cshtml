@@ -1,0 +1,68 @@
+@model List<TruckerLog>
+@{
+    ViewData["Title"] = "View Trucker";
+}
+
+<script src="~/lib/chartjs/dist/chart.min.js"></script>
+
+<div class = "page-content">
+
+  <div class="sidebar">
+    <partial name="_Fleet" />
+  </div>
+
+  <div class="text-center">
+    <h1>VIEW TRIP</h1>
+
+    <h2>@Model.Count</h2>
+
+    <canvas id="myChart" width="100%" height="50px"></canvas>
+
+</div>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+
+var points = JSON.parse('@Json.Serialize(Model)');
+console.log(points);
+let time = points.map(a => a.timeStamp);
+let speed = points.map(a => a.speed);
+let accel = points.map(a => a.acceleration);
+let altitude = points.map(a => a.altitude);
+console.log(speed);
+
+const data = {
+  labels: time,
+  datasets: [{
+    label: 'Speed',
+    backgroundColor: 'rgb(255, 99, 132)',
+    borderColor: 'rgb(255, 99, 132)',
+    data: speed
+  },
+  {
+    label: 'Acceleration',
+    backgroundColor: 'rgb(255, 0, 0)',
+    borderColor: 'rgb(255, 0, 0)',
+    data: accel
+  },
+  {
+    label: 'Altitude',
+    backgroundColor: 'rgb(0, 255, 0)',
+    borderColor: 'rgb(0, 255, 0)',
+    data: altitude
+  }
+  ]
+};
+
+const config = {
+  type: 'line',
+  data: data,
+  options: {}
+};
+
+var myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+);
+
+
+</script>

@@ -80,16 +80,12 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
             }
         })
 
-        TrackingService.speed.observe(this, {
-           viewSpeed.text = String.format("%.1f", it)
-        })
-
-        TrackingService.lat.observe(this, {
-            viewLat.text = String.format("%.4f", it)
-        })
-
-        TrackingService.lng.observe(this, {
-            viewLng.text = String.format("%.4f", it)
+        TrackingService.log.observe(this, {
+            viewLat.text = String.format("%.4f", it.lat)
+            viewLng.text = String.format("%.4f", it.lon)
+            viewSpeed.text = String.format("%.1f", it.spd)
+            textAccel.text = String.format("%.2f", it.acc)
+            textAltitude.text = String.format("%.1f", it.alt)
         })
 
         TrackingService.logsStashed.observe(this, {

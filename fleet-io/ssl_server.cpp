@@ -55,7 +55,7 @@ public:
             return;
         }
         
-        std::cout << "handle_read: received " << bytes_transferred << " bytes." << std::endl;
+        std::cout << "RECEIVED " << bytes_transferred << " bytes: ";
         //call handler
         memset(result, '\0', sizeof(result));
         try {
@@ -63,7 +63,7 @@ public:
             auto response = request_handler.handle_request(data_);
             auto string_resp = response.dump();
             string_resp.append("\n");
-            std::cout << string_resp << std::endl;
+            //std::cout << string_resp << std::endl;
             strcpy(result, string_resp.c_str());
         }
         catch (std::exception& e)
@@ -129,7 +129,6 @@ public:
 
     void start_accept()
     {
-        std::cout << "start_accept\n";
         session* new_session = new session(io_context_, context_);
         acceptor_.async_accept(new_session->socket(),
             boost::bind(&server::handle_accept, this, new_session,

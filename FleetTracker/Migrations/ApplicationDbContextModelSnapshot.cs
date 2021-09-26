@@ -60,6 +60,9 @@ namespace FleetTracker.Migrations
                     b.Property<float>("Acceleration")
                         .HasColumnType("float");
 
+                    b.Property<float>("Altitude")
+                        .HasColumnType("float");
+
                     b.Property<float>("Latitude")
                         .HasColumnType("float");
 

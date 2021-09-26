@@ -108,7 +108,8 @@ namespace FleetTracker.ViewModels
                 MaxSpeed = segLogs.Max(m => m.Speed),
                 AvgSpeed = segLogs.Average(m => m.Speed),
                 MaxSpeedBreaks = segLogs.Where(x => x.Speed > Manager.MaxSpeed).Count(),
-                Delay = Segments.Count() > 0 ? (logStart.TimeStamp - pinStart.TimeStamp) : null
+                Delay = Segments.Count() > 0 ? (logStart.TimeStamp - pinStart.TimeStamp) : null,
+                TruckerID = Trucker.ID
             };
             Segments.Add(segment);
         }
@@ -128,5 +129,6 @@ namespace FleetTracker.ViewModels
         public float MaxSpeed {get; set; }
         public float AvgSpeed {get; set; }
         public int MaxSpeedBreaks {get; set; }
+        public int TruckerID {get; set; }
     }
 }

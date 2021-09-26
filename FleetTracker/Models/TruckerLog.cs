@@ -11,5 +11,6 @@ namespace FleetTracker.Models
         public float Longitude {get; set; }
         public float Speed {get; set; }
         public float Acceleration {get; set; }
+        public float Altitude {get; set; }
     }
 }

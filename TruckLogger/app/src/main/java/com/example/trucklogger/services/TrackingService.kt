@@ -8,6 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.SharedPreferences
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Build
 import android.os.Looper
@@ -44,9 +48,11 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 import javax.net.ssl.SSLSocketFactory
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 @AndroidEntryPoint
-class TrackingService : LifecycleService() {
+class TrackingService : LifecycleService(), SensorEventListener {
     var started = false
     lateinit var sharedPreferences: SharedPreferences
     @Inject
@@ -64,12 +70,16 @@ class TrackingService : LifecycleService() {
     lateinit var currNotificationBuilder: NotificationCompat.Builder
     lateinit var notificationManager : NotificationManager
 
+    lateinit var sensorManager:SensorManager
+    var sensor: Sensor?  = null
+    var accX:Float = 0.0f
+    var accY:Float = 0.0f
+    var accZ:Float = 0.0f
+
     var isTracking = false
     companion object {
         val isRunning = MutableLiveData<Boolean> ()
-        val speed = MutableLiveData<Float> ()
-        val lat = MutableLiveData<Float> ()
-        val lng = MutableLiveData<Float> ()
+        val log = MutableLiveData<TruckLog> ()
         val logsStashed = MutableLiveData<Int> ()
     }
 
@@ -87,10 +97,12 @@ class TrackingService : LifecycleService() {
             serverConnector = ServerConnector(sslSocketFactory)
         }
         sharedPreferences = this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+
         updateSettings()
-        speed.postValue(0.0f)
-        lat.postValue(0.0f)
-        lng.postValue(0.0f)
+        log.postValue(TruckLog())
         logsStashed.postValue(0)
     }
 
@@ -185,9 +197,11 @@ class TrackingService : LifecycleService() {
                     locationCallback,
                     Looper.getMainLooper()
                 )
+                sensorManager.registerListener(this, sensor,1000000)
             }
         } else {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+            sensorManager.unregisterListener(this)
         }
     }
 
@@ -208,11 +222,11 @@ class TrackingService : LifecycleService() {
             location.latitude.toFloat(),
             location.longitude.toFloat(),
             location.speed * MPS_TO_KMH,
-            0f
+            sqrt(accX.pow(2) + accY.pow(2) + accZ.pow(2)),
+            location.altitude.toFloat()
         )
-        speed.postValue(truckLog.spd)
-        lat.postValue(truckLog.lat)
-        lng.postValue(truckLog.lon)
+        log.postValue(truckLog)
+
         truckLogDao.insertTruckLog(truckLog)
 
         var count = truckLogDao.getTruckLogsCount()
@@ -286,5 +300,19 @@ class TrackingService : LifecycleService() {
             }
         }
         return statusUpload
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event != null) {
+            with (event) {
+                accX = values[0]
+                accY = values[1]
+                accY = values[2]
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("Not yet implemented")
     }
 }

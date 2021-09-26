@@ -66,7 +66,7 @@ namespace FleetTracker.Controllers
             var manager = await _userManager.GetUserAsync(User);
             var viewTruckerViewModel = new ViewTruckerViewModel(
                 _db.Trucker.Find(int.Parse(id)),
-                _db.TruckerLog.FromSqlRaw(
+                 _db.TruckerLog.FromSqlRaw(
                     $"SELECT * FROM TruckerLog WHERE TruckerID = {id} AND TimeStamp > {LowerDate} AND TimeStamp < {UpperDate} ORDER BY TimeStamp ASC"),
                 new List<Segment>(), manager, DaysBefore, UpperDate
                 );
@@ -105,6 +105,15 @@ namespace FleetTracker.Controllers
             _db.SaveChanges();
 
             return await Task.Run( () => RedirectToAction("Index"));
+        }
+
+        // GET: /Fleet/ViewTrip/
+        public IActionResult ViewTrip(Segment s)
+        {
+            var logs =  _db.TruckerLog.FromSqlRaw(
+                $"SELECT * FROM TruckerLog WHERE TruckerID = {s.TruckerID} AND TimeStamp > {s.StartTime} AND TimeStamp < {s.StopTime} ORDER BY TimeStamp ASC")
+                .ToList();
+            return View(logs);
         }
         
     }

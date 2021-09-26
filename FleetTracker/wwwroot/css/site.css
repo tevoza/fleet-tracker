@@ -7,9 +7,22 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.page-content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
 /* Provide sufficient contrast against white background */
 a {
-  color: #7DDF64;
+  color: cyan;
+}
+
+.sidebar {
+  padding: 20px;
+}
+
+.container {
+  max-width: 90%;
 }
 
 .btn-primary {
@@ -18,8 +31,18 @@ a {
   border-color: #1861ac;
 }
 
+.nav-link {
+  color: white;
+  font-style: italic;
+}
+
+h1 {
+  color: white;
+  font-style: italic;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #69A2B0;
+  color: cyan;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
@@ -57,6 +80,10 @@ button.accept-policy {
 html {
   position: relative;
   min-height: 100%;
+}
+
+canvas {
+  background-color: #EEF5DB;
 }
 
 body {

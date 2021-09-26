@@ -12,6 +12,7 @@ data class TruckLog (
     var lon : Float = 0f,
     var spd : Float = 0f,
     var acc : Float = 0f,
+    var alt : Float = 0f
         ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

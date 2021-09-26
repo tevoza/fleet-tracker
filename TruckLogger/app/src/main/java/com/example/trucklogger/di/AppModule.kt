@@ -33,7 +33,9 @@ object AppModule {
         app,
         TruckLoggingDatabase::class.java,
         TRUCKLOGGING_DATABASE_NAME
-    ).build()
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Singleton
     @Provides

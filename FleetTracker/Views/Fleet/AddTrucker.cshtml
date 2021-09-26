@@ -7,27 +7,32 @@
     ViewData["Title"] = "Add Driver";
 }
 
-<partial name="_Fleet" />
+<div class = "page-content">
 
-<div class="text-center" style="text-align: left;">
-<h1>Add Trucker</h1>
-<form method="POST" style="text-align: left; width=50%">
-
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control"/>
-        <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="sidebar">
+        <partial name="_Fleet" />
     </div>
-    <div class="form-group">
-        <label asp-for="VehicleNumber"></label>
-        <input asp-for="VehicleNumber" class="form-control"/>
-        <span asp-validation-for="VehicleNumber" class="text-danger"></span>
-    </div>
-    <input type="submit" class="btn-primary" value="Save"/>
 
-</form>
+    <div class="text-center" style="text-align: left;">
+        <h1>ADD TRUCKER</h1>
+        <form method="POST" style="text-align: left; width=50%">
+
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleNumber"></label>
+                <input asp-for="VehicleNumber" class="form-control"/>
+                <span asp-validation-for="VehicleNumber" class="text-danger"></span>
+            </div>
+            <input type="submit" class="btn-primary" value="Save"/>
+
+        </form>
+    </div>
+
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -34,12 +34,12 @@ nlohmann::json handler::handle_request(const char* request)
     try 
     {
         auto rec = nlohmann::json::parse(request);
-        std::cout << "USER: " << rec["id"] << std::endl;
+        std::cout << "USER: " << rec["id"];
         int request_code = rec["req"];
         switch (request_code)
         {   
             case UPDATE_ID:
-                std::cout << "handle_request: UPDATE_ID" << std::endl;
+                std::cout << " UPDATE_ID" << std::endl;
                 if (update_trucker_id(rec["uuid"], rec["id"]))
                 {
                     resp["res"]=OK;
@@ -71,7 +71,7 @@ nlohmann::json handler::handle_request(const char* request)
                 break;
 
             case UPDATE_LOGS:
-                std::cout << "handle_request: UPDATE_LOGS" << std::endl;
+                std::cout << ". REQUEST: UPDATE_LOGS. ";
                 if (verify_id(rec["uuid"], rec["id"]))
                 {
                     resp["res"] = insert_logs(rec["id"], rec["data"]);
@@ -87,7 +87,7 @@ nlohmann::json handler::handle_request(const char* request)
        std::cerr << "Yikes: " << e.what() << "\n";
        resp["res"] = PARSE_FAIL;          
     }
-    std::cout << resp["res"] << std::endl;
+    std::cout << "RESULT: " << resp["res"] << std::endl;
     return resp;
 }
 
@@ -134,17 +134,16 @@ REQUEST_RESULT handler::insert_logs(const int& id ,const nlohmann::json& logs)
    for(const auto& value: logs)
    {
         *_qry << "INSERT INTO TruckerLog " 
-              << "(TruckerID, TimeStamp, Longitude, Latitude, Speed, Acceleration)"
+              << "(TruckerID, TimeStamp, Longitude, Latitude, Speed, Acceleration, Altitude)"
               << "VALUES ("
               << id << ", "
               << value["tim"] << ", "
               << value["lon"] << ", "
               << value["lat"] << ", "
               << value["spd"] << ", "
-              << value["acc"] << ");";
+              << value["acc"] << ", "
+              << value["alt"] << ");";
         (*_qry).execute();
     }
-    std::cout << "inserted records; " << std::endl;
-
     return OK;
 }
