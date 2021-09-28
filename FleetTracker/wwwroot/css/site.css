@@ -82,10 +82,6 @@ html {
   min-height: 100%;
 }
 
-canvas {
-  background-color: #EEF5DB;
-}
-
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
