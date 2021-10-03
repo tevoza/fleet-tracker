@@ -58,21 +58,32 @@ Managers may also be able to analyze trucker behavior to perform optimizations, 
 \subsubsection{Requirements}
 \begin{enumerate}
 \item \textbf{Smartphone Application}\\
-This will be a smartphone application used by the entities being tracked(i.e the truckers).
-Interface with external sensors must be possible.
-Every 2 minutes, sensor data capturing the \textbf{GPS coordinates, altitude, speed and acceleration} must be captured and stored. After which, this data must be pushed to a central data store via an I/O server through an internet connection.
+    This will be a smartphone application used by the entities being tracked(i.e the truckers).
+    \begin{enumerate}
+        \item Trucker identification control must be implemented to ensure that logs sent to the server correspond to a unique trucker. It must not be possible for multiple truckers to assume the same or no identity.
+        \item Every 2 minutes, sensor data capturing the \textbf{GPS coordinates, altitude, speed and acceleration} must be captured and stored internally on the android device. 
+        Data capacity for one continuous week of storage must be possible, to account for connectivity issues.
+        \item The application must be able to run in the background, allowing for multitasking.
+        \item Sensor data must be uploaded to a central data store, either continuously or on request. This communication must be encrypted for security purposes.
+    \end{enumerate}
 \item \textbf{I/O Server}\\
-This server will facilitate the transfer of logged data from the Smartphone Application to a central data store, via an internet connection. As a dedicated transfer server, it must exhibit high performance, handling many requests from the smartphone client.
+This server will facilitate the transfer of logged data from the Smartphone Application to a central data store, via an internet connection. 
+    \begin{enumerate}
+        \item As a dedicated transfer server, it must exhibit high performance, handling multiple requests from the multiple smartphone clients asynchronously.
+        \item Trucker logs, received from smartphone clients, must be stored in a central database.
+        \item Information about the trucking company must also be sent to the smartphone client.
+    \end{enumerate}
 \item \textbf{Data Store}\\
 The data store will be efficient, fast and capable of storing large volumes of data.
 It should also be capable of adequately interfacing with the I/O server and the Web Server.
-\item \textbf{Web Server}\\
 The web server is responsible for querying data from the data store, and serving requests to the web application.
-In addition, the web server is responsible for processing data into a report format, thereby allowing for important information extraction.
-\item \textbf{Web Application}\\
-The Web application acts as a front end.
-It is responsible for the display of processed trucker information to managers.
-Reports detailing stopping times, transit times and speeds are displayed here.
+\item \textbf{Web Server and Web Application}\\
+The web server must implement back-end business logic and serve pages in the web application.
+    \begin{enumerate}
+        \item Multiple trucking managers must be able to log in and use the application.
+        \item Managers must be able to add multiple truckers to their fleet, including trucker-specific information such as name, and vehicle number.
+        \item Managers must be able to view detailed trip information for any adjustable time period. Log data must be processed to determine starting and arrival times for locations travelled to. Statistical information about acceleration and speed should be displayed, including averages, maximums and percentiles.
+    \end{enumerate}
 \end{enumerate}
 \subsubsection{Scope Definition}
 The scope of the problem considered will include
@@ -88,10 +99,6 @@ The I/O server is purely responsible for facilitating the transfer of sensor dat
 \item \textbf{Data Store}\\
     The data store element is purely concerned with the storage of logs, user identity information and providing an interface for the I/O server to query and add records to the store.
     I will consider existing database providers, and will not be building one from scratch. 
-\item \textbf{Web Server}\\
-The web server is purely responsible for querying from the data store. In addition it must process records for a shift into a format which highlights activity on a per-day basis.
-\item \textbf{Web Application}\\
-The web application's scope entails User Identity validation. Reports must be displayed for an individual trucker's daily activity. That is, a visual map with markers indicating transit times and stationary times at some location. 
 \end{enumerate}
 
 \subsection{Deliverables}
@@ -106,3 +113,5 @@ Basic contextualization of the problem has been performed.
 Low level details, however, have not been considered.
 Each aspect of the planned architecture may be realized in multiple ways on the low level.
 Further research and a feasibility analysis are necessary for adequate low level design.
+
+\pagebreak
