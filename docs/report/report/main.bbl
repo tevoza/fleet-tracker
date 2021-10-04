@@ -64,6 +64,20 @@ O.~Walter, J.~Schmalenstroeer, A.~Engler, and R.~Haeb-Umbach,
 M.~R. Stepper, ``J1939 high speed serial communications, the next generation
   network for heavy duty vehicles,'' SAE Technical Paper, Tech. Rep., 1993.
 
+\bibitem{gamageseparation}
+K.~Gamage, ``Separation of concerns for web engineering projects.''
+
+\bibitem{chebanyuk2016approach}
+E.~Chebanyuk and K.~Markov, ``An approach to class diagrams verification
+  according to solid design principles,'' in \emph{2016 4th International
+  Conference on Model-Driven Engineering and Software Development
+  (MODELSWARD)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2016, pp.
+  435--441.
+
+\bibitem{kocsis2017dependency}
+Z.~A. Kocsis and J.~Swan, ``Dependency injection for programming by
+  optimization,'' \emph{arXiv preprint arXiv:1707.04016}, 2017.
+
 \bibitem{statcountermaketshare}
 \BIBentryALTinterwordspacing
 ``Mobile operating system market share worldwide.'' [Online]. Available:

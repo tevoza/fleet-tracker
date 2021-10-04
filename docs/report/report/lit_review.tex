@@ -1,6 +1,8 @@
 \section{Literature Review}
 This section tackles the investigation of components which make up the proposed high level system depicted in figure \ref{fig:high_arch}.
-There exists a variety of different tools available to realize each system, 
+There exists a variety of different tools available to realize each system.
+With the hardware pre-existing, most of the design exists in the software domain.
+Various software tools and methodology are considered.
 
 \subsection{Internal and External Sensors}
 Effective data logging of acceleration, altitude, location and speed all begin with the quality of measurements being made.
@@ -8,40 +10,75 @@ Smartphones alone provide a wealth of options.
 However, external sensors available to the truck operators may also be considered.
 
 \subsubsection{Internal Sensors}
-Most smartphones come well-equipped with a wide variety of on-board sensors, such as global positioning (GPS) sensors, accelerometers, gyroscopes, magnetometers and ambient light sensors, among others \cite{majumder2019smartphone}.
+Most smartphones come well-equipped with a wide variety of on-board sensors, such as \ac{gps} sensors, accelerometers, gyroscopes, magnetometers and ambient light sensors, among others \cite{majumder2019smartphone}.
 As such, they are capable of inferring a wealth of information related to driving patterns.
 This includes dangerous driving behavior, for which algorithms have been developed \cite{li2016dangerous}.
 
 The variety of on-board sensors provide an adequate means of measuring acceleration and location (and therefore altitude). However, no effective speed sensor exists for smartphone devices.
-GPS sensors may be used for inferring speed by computing location-time differentials, but with potentially questionable accuracy or possible performance reduction.
+GPS sensors may be used for inferring speed by computing location-time differentials, but with potentially fluctuating accuracy or possible performance reduction.
 
-Battery life preservation and reduced performance are often concerns when running computationally heavy daemons.
+Battery life preservation and reduced performance are often concerns when running computationally heavy daemons (background operating system processes).
 Recent efforts in the development and standardization of new, lightweight sensor-probing protocols have been investigated.
-Namely, Message Queuing Telemetry Transport (MQTT) and Constrained Application Protocol (CoAP), which are targeted at achieving lightweight, low-power performance \cite{de2013comparison}.
+Namely, \ac{mqtt} and \ac{coap}, which are targeted at achieving lightweight, low-power performance \cite{de2013comparison}.
 
 \subsubsection{External Sensors}
 The most practical means of utilizing sensors external to the smartphone may be realized through the use of in-vehicle sensors. 
-The Control-Area Network (CAN) bus protocol is a centralized multiplex communication bus standard utilized in many modern vehicles, originally in an attempt to save on copper. 
-The protocol allows for broadcast communication between various electronic control units (ECUs) within a vehicle, all centrally connected to one bus.
+The \ac{can} bus protocol is a centralized multiplex communication bus standard utilized in many modern vehicles, originally in an attempt to save on copper. 
+The protocol allows for broadcast communication between various \ac{ecu}'s within a vehicle, all centrally connected to one bus.
 A priority-based scheme is utilized to ensure the most important units transmit their data packets first, while lower priority units are delayed until a later time when transmission may be uninterrupted. Each packet contains an identifier designating what information is being transmitted, such as wheel speed, temperature, etc.
 \cite{van2011canauth}
 
-Assuming that the vehicle has an on-board diagnostic (OBD) connector, communication with a smartphone requires some form of interfacing circuitry.
-Wireless CAN-to-smartphone interfaces can be most-practically realized via CAN-bus-to-Bluetooth implementations.
-Such an interface will allow for the smartphone to probe sensor data via the vehicle's CAN bus \cite{campolo2012smartcar} \cite{walter2013smartphone}.
-The Society of Automotive Engineers (SAE) defines the J1939 standard for CAN-bus communication in the use of heavy-duty vehicles \cite{stepper1993j1939}, which would be appropriate for the solution.
+Assuming that the vehicle has an \ac{obd} connector, communication with a smartphone requires some form of interfacing circuitry.
+Wireless \ac{can}-to-smartphone interfaces can be most-practically realized via \ac{can}-bus-to-Bluetooth implementations.
+Such an interface will allow for the smartphone to probe sensor data via the vehicle's \ac{can} bus \cite{campolo2012smartcar} \cite{walter2013smartphone}.
+The \ac{sae} defines the J1939 standard for \ac{can}-bus communication in the use of heavy-duty vehicles \cite{stepper1993j1939}, which would be appropriate for the solution.
+
+\subsection{Software Architecture}
+Effective software architecture and design patterns are necessary for writing dynamic, modifiable and modular software.
+
+\subsubsection{\ac{soc} and SOLID principles}
+\Ac{soc} addresses the need for software to be decomposed into different modular units.
+Each unit focuses on one main concern, such as data access, authentication, business logic and view rendering.
+Mixing multiple concerns within one unit leads to code which is less reusable and more difficult to modify.
+\cite{gamageseparation}
+
+The 'SOLID' acronym defines a set of guidelines for software design, in \ac{oop}.
+\begin{enumerate}
+\item \textbf{Single Responsibility Principle}\\
+Classes should have single responsibilities. 
+To achieve this, each responsibility must be implemented in a unique class.
+\item \textbf{Open/Close Principle}\\
+Software components such as classes, modules and functions should be open for extension, but closed for modification.
+That is, classes implementing a modifiable functionality should be extended with interfaces instead of modifying code in the class.
+\item \textbf{Liskov substitution Principle}\\
+Objects should be replaceable with derived sub-types without affecting the correctness of the program.
+\item \textbf{Interface Segregation Principle}\\
+It is better to implement many client-specific interfaces instead of one general-purpose interface.
+This ensures the interface being implemented only does the minimal that is required.
+\item \textbf{Dependency Inversion Principle}\\
+Where possible, it is better to depend on implementable abstractions instead of concretely defined objects.
+This can be realized by depending on implementable interfaces instead of base classes.
+This allows classes to be less tightly-bound to a base class, allowing for more modular code.
+\end{enumerate}
+\cite{chebanyuk2016approach}
+
+\subsubsection{\Ac{di}}
+Often classes require instances of other objects (or dependencies) to perform certain functions.
+It is wasteful to re-instantiate these objects especially if they are used by other classes.
+\Ac{di} provides a means to \textit{inject} an instance of a helped object into a class without explicitly recreating the dependency.
+\cite{kocsis2017dependency}
 
 \subsection{Smartphone Application}
 The smartphone application is responsible for extracting the acceleration, altitude, location and speed data from the sensors and relaying this information to the data store.
 Certain platform and development design decisions are investigated.
 
 \subsubsection{Platform Considerations}
-The two major mobile operating systems are Android (approximately 72.8 \% market share) and iOS (approximately 27.4 \% market share) \cite{statcountermaketshare}.
+The two major mobile operating systems are Android (approximately 72.8 \% market share) and \ac{ios} (approximately 27.4 \% market share) \cite{statcountermaketshare}.
 Android's high market share makes it an attractive option as a target platform for the Smartphone application component of the system.
 
 \subsubsection{Development Technologies}
 Native Android development officially supports the Java, Kotlin, C and C++ programming languages.
-Kotlin, which compiles on the Java Virtual Machine (JVM), has been pushed by Google as their suggested language for app development.
+Kotlin, which compiles on the \ac{jvm}, has been pushed by Google as their suggested language for app development.
 Kotlin aims to reduce the verbosity of traditional Java (which was the standard language used for app development), thereby reducing the prevalence of "bad coding practices." \cite{flauzino2018you}
 It is noted that Java may still be preferable for programmers with prior Java experience, or in cases where more verbosity is preferred.
 A native C/C++ tool-chain offers finer control of system hardware for potential performance boosts \cite{kwan2012google}.
@@ -51,21 +88,29 @@ Several development frameworks such as Xamarin, Flutter and Apache Cordova allow
 However, cross-platform development does impose potentially reduced performance, according to \cite{biorn2020empirical}.
 In an ecosystem where hardware used by truck drivers has potential to be slower, cross-platform development is undesirable.
 
-\subsection{I/O Server}
-The I/O server is required for relaying logged data from the smartphone application to the central data store. It must be many clients quickly and efficiently.
+\subsubsection{Android - \Ac{mvvm} Design Pattern}
+
+\subsubsection{Android - \ac{di} in with Dagger-Hilt}
+
+\subsubsection{Android - Running continuously in the background}
+
+\subsubsection{Android - SQLite database with the Room \ac{orm}}
+
+\subsection{\ac{io} Server}
+The \ac{io} server is required for relaying logged data from the smartphone application to the central data store. It must be many clients quickly and efficiently.
 This server plays a typical server role; In that it must await requests from clients attempting to establish connection for transmitting data.
 
 Implementations for realizing such a server are possible in many programming languages, and almost all top popular programming languages. 
 Generally, for performance-critical applications, C and/or C++ are considered most appropriate. \cite{ogala2020comparative}
 
 \subsection{Database Considerations}
-Relational Database Management Systems (RDBMS) are commonly used in for data handling.
-Typically, for unnormalized complex data, conventional structured query language (SQL) RDBMSs prove inefficient at scale, due to the tendency of modern data catalogues lacking in structure.
+\ac{rdbms}s are commonly used in for data handling.
+Typically, for unnormalized complex data, conventional \ac{sql} \ac{rdbms}s prove inefficient at scale, due to the tendency of modern data catalogues lacking in structure.
 In addition, relational databases also start to exhibit slower lookup times for immensely large data sets.
-The solution to this comes in the form of NoSQL (Not only SQL) database systems, which are scaleable, efficient and capable for storing large volumes of unnormalized data. \cite{gupta2017nosql} \cite{qader2018comparative} \cite{ongo2018hybrid}
+The solution to this comes in the form of \ac{nosql} database systems, which are scaleable, efficient and capable for storing large volumes of unnormalized data. \cite{gupta2017nosql} \cite{qader2018comparative} \cite{ongo2018hybrid}
 
-However, due to the completely uniform structure of the data being stored, an RDBMS would suffice.
-Numerous high quality RDBMSs, such as MySQL, Microsoft SQL, PostgreSQL, and Oracle Database are available, among others. All options offer relatively efficient performance.
+However, due to the completely uniform structure of the data being stored, an \ac{rdbms} would suffice.
+Numerous high quality \ac{rdbms}s, such as MySQL, Microsoft SQL, PostgreSQL, and Oracle Database are available, among others. All options offer relatively efficient performance.
 \cite{truskowski2020comparison}
 
 A lightweight caching database is necessary on the client-side for the momentary storage of data which has yet to be transmitted to the server. To this end, SQLite offers a popular solution for smartphone applications \cite{bhosale2015sqlite}.
@@ -73,6 +118,8 @@ A lightweight caching database is necessary on the client-side for the momentary
 \subsection{Web Application}
 The web application will be used by managers to display daily reports highlighting their truckers' behavior throughout their shifts.
 
-The web application may be easily realized by utilizing pre-existing web frameworks, such as Microsoft's ASP.NET Core and Oracle's Java EE (with comparable performance) \cite{kronis2018performance}.
+The web application may be easily realized by utilizing pre-existing web frameworks, such as Microsoft's ASP.NET Core and Oracle's Java Enterprise Edition (with comparable performance) \cite{kronis2018performance}.
+
+\subsection{Secure communication with \ac{ssl}}
 
 \pagebreak

@@ -16,8 +16,8 @@ Such employees are a liability to the reputation and profitability of their resp
 The ability to track truckers would provide a potential means to address this issue, by allowing employers to monitor their truckers' location, progress and behavior throughout their shifts.
 The ability to produce an audit trail detailing the truckers whereabouts during their shifts would allow managers to ensure that work is adequately executed. Such an audit trail would comprise of:
 \begin{itemize}
-\item \textbf{GPS coordinates\\}
-GPS-tracking will allow employers to ensure that truckers are actually traveling to required locations, and doing so via the most effective routes. This also allows employers to ensure no unnecessary detours occur.
+\item \textbf{\ac{gps} coordinates\\}
+\ac{gps} tracking will allow employers to ensure that truckers are actually traveling to required locations, and doing so via the most effective routes. This also allows employers to ensure no unnecessary detours occur.
 \item \textbf{Altitude\\}
 An optional parameter which may be useful in some cases.
 \item \textbf{Speed\\}
@@ -26,16 +26,16 @@ Examining the trucker's speed allows for managers to examine the effectiveness o
 A potentially useful parameter which may be used for inferring any dangerous driving behavior. 
 \end{itemize}
 
-The ubiquitous nature of cheap, GPS-equipped smartphones provides a potential avenue for realizing such a solution at low cost.
+The ubiquitous nature of cheap, \ac{gps}-equipped smartphones provides a potential avenue for realizing such a solution at low cost.
 In addition, country-wide continuous access to the internet allows for live tracking to be utilized. 
 
 \subsection{Problem Statement}
-A smartphone-powered tracking system must be implemented to be used by trucking companies for tracking and logging their trucker's \textbf{GPS coordinates, altitude, speed and acceleration}.
+A smartphone-powered tracking system must be implemented to be used by trucking companies for tracking and logging their trucker's \textbf{\ac{gps} coordinates, altitude, speed and acceleration}.
 
 In addition, an online interface is required for storing, processing and displaying logged data pertaining to the trucker's location and behavior.
 
 \subsection{Hypothesis}
-An anticipated architecture, as depicted in figure \ref{fig:high_arch}, involves the development of a smartphone application capable of interfacing with internal or external sensors, and transferring sensor data through some I/O server into a data store. \cite{bertocco1998client}
+An anticipated architecture, as depicted in figure \ref{fig:high_arch}, involves the development of a smartphone application capable of interfacing with internal or external sensors, and transferring sensor data through some \ac{io} server into a data store. \cite{bertocco1998client}
 For the purposes of information presentation, it is proposed that a web server process and serve inferred information to a user via a web application.
 \begin{figure}[H]
     \centering
@@ -61,12 +61,12 @@ Managers may also be able to analyze trucker behavior to perform optimizations, 
     This will be a smartphone application used by the entities being tracked(i.e the truckers).
     \begin{enumerate}
         \item Trucker identification control must be implemented to ensure that logs sent to the server correspond to a unique trucker. It must not be possible for multiple truckers to assume the same or no identity.
-        \item Every 2 minutes, sensor data capturing the \textbf{GPS coordinates, altitude, speed and acceleration} must be captured and stored internally on the android device. 
+        \item Every 2 minutes, sensor data capturing the \textbf{\ac{gps} coordinates, altitude, speed and acceleration} must be captured and stored internally on the android device. 
         Data capacity for one continuous week of storage must be possible, to account for connectivity issues.
         \item The application must be able to run in the background, allowing for multitasking.
         \item Sensor data must be uploaded to a central data store, either continuously or on request. This communication must be encrypted for security purposes.
     \end{enumerate}
-\item \textbf{I/O Server}\\
+\item \textbf{\ac{io} Server}\\
 This server will facilitate the transfer of logged data from the Smartphone Application to a central data store, via an internet connection. 
     \begin{enumerate}
         \item As a dedicated transfer server, it must exhibit high performance, handling multiple requests from the multiple smartphone clients asynchronously.
@@ -75,14 +75,15 @@ This server will facilitate the transfer of logged data from the Smartphone Appl
     \end{enumerate}
 \item \textbf{Data Store}\\
 The data store will be efficient, fast and capable of storing large volumes of data.
-It should also be capable of adequately interfacing with the I/O server and the Web Server.
+It should also be capable of adequately interfacing with the \ac{io} server and the Web Server.
 The web server is responsible for querying data from the data store, and serving requests to the web application.
 \item \textbf{Web Server and Web Application}\\
 The web server must implement back-end business logic and serve pages in the web application.
+The web application acts as an interface for managers to add truckers and view tracking information about their fleets.
     \begin{enumerate}
         \item Multiple trucking managers must be able to log in and use the application.
         \item Managers must be able to add multiple truckers to their fleet, including trucker-specific information such as name, and vehicle number.
-        \item Managers must be able to view detailed trip information for any adjustable time period. Log data must be processed to determine starting and arrival times for locations travelled to. Statistical information about acceleration and speed should be displayed, including averages, maximums and percentiles.
+        \item Managers must be able to view detailed trip information for any adjustable time period. Log data must be processed to determine starting and arrival times for locations traveled to. Statistical information about acceleration and speed should be displayed, including averages, maximums and percentiles.
     \end{enumerate}
 \end{enumerate}
 \subsubsection{Scope Definition}
@@ -92,19 +93,19 @@ The scope of the problem considered will include
 The scope \textbf{does not} include the design of sensor circuitry meant to interface with the smartphone. Only configurations capable of interfacing with the smartphone are considered.
 The smartphone app is not concerned with displaying user reports and statistics. That is left to the web application.
 \item \textbf{Smartphone Application}\\
-The smartphone application is purely responsible for logging the appropriate sensor data and transferring the sensor data on through the I/O server.
+The smartphone application is purely responsible for logging the appropriate sensor data and transferring the sensor data on through the \ac{io} server.
 Other measurable variables such as temperature, fuel and pressure are not considered.
-\item \textbf{I/O Server}\\
-The I/O server is purely responsible for facilitating the transfer of sensor data from the smartphone to the data store.
+\item \textbf{\ac{io} Server}\\
+The \ac{io} server is purely responsible for facilitating the transfer of sensor data from the smartphone to the data store.
 \item \textbf{Data Store}\\
-    The data store element is purely concerned with the storage of logs, user identity information and providing an interface for the I/O server to query and add records to the store.
-    I will consider existing database providers, and will not be building one from scratch. 
+    The data store element is purely concerned with the storage of logs, user identity information and providing an interface for the \ac{io} server to query and add records to the store.
+    Existing data store providers will be considered.
 \end{enumerate}
 
 \subsection{Deliverables}
 The deliverables will require the entire project to function, from the smartphone logging implementation, to the detailed reports available in the web application. 
 \begin{itemize}
-\item Smartphone Application and I/O server
+\item Smartphone Application and \ac{io} server
 \item Web Application and web server
 \end{itemize}
 

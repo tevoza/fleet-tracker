@@ -10,6 +10,7 @@
 \renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
 \renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
 
+\usepackage{acro}
 \usepackage{caption}
 \raggedbottom
 \usepackage{mathtools}
@@ -55,6 +56,8 @@
 \setlength{\parskip}{1em}
 \renewcommand{\baselinestretch}{1.5}
 
+\input{acronyms.tex}
+
 \newcommand\tab[1][1cm]{\hspace*{#1}}
  
 \begin{document}
@@ -65,14 +68,13 @@
     \raisebox{\PictVOffset}[100pt][0pt]{\makebox[0pt][l]{%
      \includegraphics[width=\paperwidth,height=0.45\paperheight]{pukke.png}}}
 
- 
     \begin{center}
     	\vfill
         \Huge {\textbf{Android GPS Data Logger}}
     	\vfill
         \LARGE{\textbf{A. T. Coetzee}}
         \vfill
-        \huge{\textbf{Detailed Concept Design}}
+        \huge{\textbf{Project Report}}
         \vfill
     \end{center}
     \textbf{Supervisor: \tab[2cm] Prof. W. Venter}\\
@@ -95,18 +97,16 @@ A draft high-level architecture for such a system is postulated and discussed, a
 
 \tableofcontents
 \listoffigures
-
+\printacronyms
 \pagebreak
-%document start
-\pagenumbering{arabic}
 
+\pagenumbering{arabic}
 \setcounter{page}{1}
 
 \input{intro.tex}
 \input{lit_review.tex}
 \input{design.tex}
 
-\pagebreak
 \pagebreak
 
 \bibliographystyle{IEEEtran}
