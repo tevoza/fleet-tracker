@@ -1,11 +1,13 @@
 \acswitchoff 
 \contentsline {figure}{\numberline {1}{\ignorespaces Proposed High Level Architecture\relax }}{2}{figure.caption.4}%
-\contentsline {figure}{\numberline {2}{\ignorespaces System Context Diagram\relax }}{11}{figure.caption.5}%
-\contentsline {figure}{\numberline {3}{\ignorespaces System Lifecycle - High Level\relax }}{12}{figure.caption.6}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Container Diagram - Fleet tracking system\relax }}{13}{figure.caption.7}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Life-cycle - Android Application\relax }}{15}{figure.caption.8}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Component Diagram - Android Application\relax }}{16}{figure.caption.9}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Life cycle - I/O Server\relax }}{17}{figure.caption.10}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Component Diagram - I/O Server\relax }}{18}{figure.caption.11}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Entity Relationship Diagram\relax }}{19}{figure.caption.12}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - Web Application\relax }}{20}{figure.caption.13}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Android - \Ac {mvvm} Architecture\relax }}{10}{figure.caption.5}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Web Design Pattern - \ac {mvc}\relax }}{12}{figure.caption.6}%
+\contentsline {figure}{\numberline {4}{\ignorespaces System Context Diagram\relax }}{13}{figure.caption.7}%
+\contentsline {figure}{\numberline {5}{\ignorespaces System Lifecycle - High Level\relax }}{14}{figure.caption.8}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Container Diagram - Fleet tracking system\relax }}{15}{figure.caption.9}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Life-cycle - Android Application\relax }}{17}{figure.caption.10}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Component Diagram - Android Application\relax }}{18}{figure.caption.11}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Life cycle - I/O Server\relax }}{19}{figure.caption.12}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - I/O Server\relax }}{20}{figure.caption.13}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Entity Relationship Diagram\relax }}{21}{figure.caption.14}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Component Diagram - Web Application\relax }}{22}{figure.caption.15}%

@@ -1,10 +1,15 @@
 @startuml
-(*) --> "Initialize"
---> "Manager adds/edits/removes trucker records \nWeb Application"
---> "Manager assigns trucker with registration ID \nWeb Application"
---> "Trucker registers ID \nSmartphone Application"
---> "Trucker carries out shift, logging sensor data \nSmartphone Application"
---> "Send sensor data to data store\nSmartphone Application -> Fleet Tracking System"
--up->"Manager inspects trucker logs (optional)\nWeb Application"
---> "Trucker carries out shift, logging sensor data \nSmartphone Application"
+
+!theme sandstone
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
+(*) --> "Manager registers/logs in to account\n<b>WEB APP</b>" 
+--> "Manager adds/edits/removes trucker records \n<b>WEB APP</b>"
+--> "Manager assigns trucker with registration ID \n<b>WEB APP</b>"
+--> "Trucker registers ID \n<b>SMARTPHONE APP</b>"
+--> "Trucker carries out shift, logging sensor data \n<b>SMARTPHONE APP</b>"
+--> "Send sensor data to data store\n<b>SMARTPHONE APP</b>"
+-up->"Manager inspects trucker logs (optional)\n<b>WEB APP</b>"
+--> "Trucker carries out shift, logging sensor data \n<b>SMARTPHONE APP</b>"
 @enduml

@@ -102,9 +102,39 @@ A.~Bi{\o}rn-Hansen, C.~Rieger, T.-M. Gr{\o}nli, T.~A. Majchrzak, and G.~Ghinea,
   development frameworks,'' \emph{Empirical Software Engineering}, vol.~25, pp.
   2997--3040, 2020.
 
+\bibitem{noauthor_guide_nodate}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Guide to app architecture}.'' [Online]. Available:
+  \url{https://developer.android.com/jetpack/guide}
+\BIBentrySTDinterwordspacing
+
+\bibitem{noauthor_dependency_nodate}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Dependency injection with {Hilt}}.'' [Online].
+  Available:
+  \url{https://developer.android.com/training/dependency-injection/hilt-android}
+\BIBentrySTDinterwordspacing
+
+\bibitem{noauthor_foreground_nodate}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Foreground services}.'' [Online]. Available:
+  \url{https://developer.android.com/guide/components/foreground-services}
+\BIBentrySTDinterwordspacing
+
+\bibitem{noauthor_save_nodate}
+\BIBentryALTinterwordspacing
+``\BIBforeignlanguage{en}{Save data in a local database using {Room}}.''
+  [Online]. Available:
+  \url{https://developer.android.com/training/data-storage/room}
+\BIBentrySTDinterwordspacing
+
 \bibitem{ogala2020comparative}
 J.~O. Ogala and D.~V. Ojie, ``Comparative analysis of c, c++, c\# and java
   programming languages,'' \emph{GSJ}, vol.~8, no.~5, 2020.
+
+\bibitem{anggoro2015boost}
+W.~Anggoro and J.~Torjo, \emph{Boost. Asio C++ network programming}.\hskip 1em
+  plus 0.5em minus 0.4em\relax Packt Publishing Ltd, 2015.
 
 \bibitem{gupta2017nosql}
 A.~Gupta, S.~Tyagi, N.~Panwar, S.~Sachdeva, and U.~Saxena, ``Nosql databases:
@@ -137,6 +167,18 @@ S.~Bhosale, T.~Patil, and P.~Patil, ``Sqlite: Light database system,''
 K.~Kronis and M.~Uhanova, ``Performance comparison of java ee and asp. net core
   technologies for web api development,'' \emph{Applied Computer Systems},
   vol.~23, no.~1, pp. 37--44, 2018.
+
+\bibitem{hickman1995ssl}
+K.~Hickman and T.~Elgamal, ``The ssl protocol,'' 1995.
+
+\bibitem{fielding1999hypertext}
+R.~Fielding, J.~Gettys, J.~Mogul, H.~Frystyk, L.~Masinter, P.~Leach, and
+  T.~Berners-Lee, ``Hypertext transfer protocol--http/1.1,'' 1999.
+
+\bibitem{nurseitov2009comparison}
+N.~Nurseitov, M.~Paulson, R.~Reynolds, and C.~Izurieta, ``Comparison of json
+  and xml data interchange formats: a case study.'' \emph{Caine}, vol.~9, pp.
+  157--162, 2009.
 
 \bibitem{vazquez2020c4}
 A.~V{\'a}zquez-Ingelmo, A.~Garc{\'\i}a-Holgado, and F.~J.

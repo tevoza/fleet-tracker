@@ -5,47 +5,48 @@ The nature of the system exists primarily in the software domain.
 As such, a suitable design architecture is postulated by the C4 model.
 This model breaks down the system architecture into different layers of complexity, from a generic high-level system overview down to low-level software abstractions.\cite{vazquez2020c4}
 
-Low-level abstractions are realized with unified modeling language (UML) diagrams. UML diagrams detail the members and methods belonging to classes, and the relationships between those classes in an object-oriented codebase. \cite{petre2013uml}
+Low-level abstractions are realized with \ac{uml} diagrams. \Ac{uml} diagrams detail the members and methods belonging to classes, and the relationships between those classes in an object-oriented codebase. \cite{petre2013uml}
 
 \subsection{System context and base requirements }
 Figure \ref{fig:system_context} depicts the system context in the problem domain.
-Project specifications have identified two parties expected to utilze the system - the truck drivers and the fleet managers.
+Project specifications have identified two parties expected to utilize the system - truck drivers and the fleet managers.
 Identified requirements on the solution dictate that truck drivers will use an android application to log data on the system.
 In addition, fleet managers must view the logged data and manipulate their fleets via a web application running in a browser.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=6in]{system_context.png}
+\includegraphics[width=6in]{../diag/system_context.png}
 \caption{System Context Diagram}
 \label{fig:system_context}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.65]{high_level_activity.png}
+\includegraphics[scale=0.40]{../diag/high_level_activity.png}
 \caption{System Lifecycle - High Level}
 \label{fig:high_level_activity}
 \end{figure}
+
 The high-level life cycle view of the fleet-tracking system design is depicted in figure \ref{fig:high_level_activity}.
 This life cycle view gives a broad indication of how the system is expected to work for a user.
 Only front-end components of the system are considered to clarify exactly how users will interact with the system.
 
-Managers are required to perform initial configuration, as well as adding trucker records to a data store.
+Managers are required to perform initial configuration, including adding trucker identity records to a data store.
 After this, truckers may connect to the system and perform their work while allowing their smartphone applications to track the required sensor data. 
 This data is then relayed to the system, in which managers may analyze and inspect data logs.
 
-\subsection{Contained subsystems and choice of tools}
+\subsection{Contained subsystems and choice of technologies}
 The second level of the C4 model identifies the choice of technologies to be utilized to realize the fleet tracking system.
 The fleet-tracking system is divided into mostly-independent containers, as depicted in figure \ref{fig:container}.
 Each container is a standalone process which makes calls to other processes in the system.
 The main choice of software tools are identified for each container.
 
-Truckers will make use of an android data-logging application to fetch the various sensor data, and securely transmit this data via an SSL connection.
-The IO server, implemented in C++, will listen for multiple asynchronous connections from the android application and relay the data to a MySQL database.
-A web application, realized with the ASP.NET framework fetches the data and allows the fleet manager to view the whereabouts of each member in his/her fleet.
+Truckers will make use of an android data-logging application to fetch the various sensor data, and securely transmit this data via an \ac{ssl} connection.
+The \ac{io} server, implemented in C++, will listen for multiple asynchronous connections from the android application and relay the data to a MySQL database.
+A web application, realized with Microsoft's ASP.NET framework fetches the data and allows the fleet manager to view the whereabouts of each member in his/her fleet.
 \begin{figure}[H]
 \centering
-\includegraphics[width=6in]{container.png}
+\includegraphics[width=6in]{../diag/container.png}
 \caption{Container Diagram - Fleet tracking system}
 \label{fig:container}
 \end{figure}
@@ -86,7 +87,7 @@ If this ID is not valid, the trucker must request a valid ID from the fleet mana
 After this, the usual logging process is continued.
 Data is polled from the available sensors and stored in a local database.
 A connection is attempted with the I/O server and the local database entries are transmitted to the server.
-Upon successful transmission, the local database is emptied.
+Upon successful transmission, the local database is cleared.
 
 However, if a connection fails, the local database is not cleared.
 This process loops continuously loops every two minutes.

@@ -10,7 +10,7 @@
 \renewcommand\thesubsectiondis{\thesectiondis.\arabic{subsection}}
 \renewcommand\thesubsubsectiondis{\thesubsectiondis.\arabic{subsubsection}}
 
-\usepackage{acro}
+\usepackage[version=3]{acro}
 \usepackage{caption}
 \raggedbottom
 \usepackage{mathtools}
@@ -22,6 +22,7 @@
 \usepackage[nottoc,notlot,notlof]{tocbibind}
 \usepackage{fixltx2e}
 \usepackage{siunitx}
+\usepackage{longtable}
 
 %Clikcable Links
 \usepackage{hyperref}
@@ -57,6 +58,13 @@
 \renewcommand{\baselinestretch}{1.5}
 
 \input{acronyms.tex}
+
+\acsetup{
+    make-links ,
+    pages / display = all ,
+    pages / fill = {, },
+    list / template = longtable ,
+}
 
 \newcommand\tab[1][1cm]{\hspace*{#1}}
  

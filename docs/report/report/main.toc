@@ -23,23 +23,28 @@
 \contentsline {subsubsection}{\numberline {2.3.1}Platform Considerations}{8}{subsubsection.2.3.1}%
 \contentsline {subsubsection}{\numberline {2.3.2}Development Technologies}{8}{subsubsection.2.3.2}%
 \contentsline {subsubsection}{\numberline {2.3.3}Android - \Ac {mvvm} Design Pattern}{9}{subsubsection.2.3.3}%
-\contentsline {subsubsection}{\numberline {2.3.4}Android - \ac {di} in with Dagger-Hilt}{9}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.4}Android - \ac {di} with Hilt}{9}{subsubsection.2.3.4}%
 \contentsline {subsubsection}{\numberline {2.3.5}Android - Running continuously in the background}{9}{subsubsection.2.3.5}%
 \contentsline {subsubsection}{\numberline {2.3.6}Android - SQLite database with the Room \ac {orm}}{9}{subsubsection.2.3.6}%
-\contentsline {subsection}{\numberline {2.4}\ac {io} Server}{9}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Database Considerations}{9}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Web Application}{10}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Secure communication with \ac {ssl}}{10}{subsection.2.7}%
-\contentsline {section}{\numberline {3}Design}{11}{section.3}%
-\contentsline {subsection}{\numberline {3.1}System context and base requirements }{11}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of tools}{12}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Data Model}{13}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Android Application}{13}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}I/O Server}{13}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}Web Application}{14}{subsubsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.3}Subsystem components}{14}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Android Application}{14}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}I/O Server}{16}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}MySQL Database}{18}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{19}{subsubsection.3.3.4}%
-\contentsline {section}{References}{21}{section*.14}%
+\contentsline {subsection}{\numberline {2.4}\ac {io} Server}{10}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Asynchronous \Ac {io}}{10}{subsubsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.5}Database Considerations}{11}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Web Application}{11}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}\Ac {mvc} design pattern for web applications}{11}{figure.caption.6}%
+\contentsline {subsection}{\numberline {2.7}Secure communication with \ac {ssl}}{12}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Serialization and communication protocols}{12}{subsection.2.8}%
+\contentsline {subsubsection}{\numberline {2.8.1}\Ac {https}}{12}{subsubsection.2.8.1}%
+\contentsline {subsubsection}{\numberline {2.8.2}\Ac {json} and \Ac {xml}}{12}{subsubsection.2.8.2}%
+\contentsline {section}{\numberline {3}Design}{13}{section.3}%
+\contentsline {subsection}{\numberline {3.1}System context and base requirements }{13}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of technologies}{14}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Data Model}{15}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Android Application}{15}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}I/O Server}{16}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Web Application}{16}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Subsystem components}{16}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Android Application}{16}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}I/O Server}{18}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}MySQL Database}{20}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{21}{subsubsection.3.3.4}%
+\contentsline {section}{References}{23}{section*.16}%

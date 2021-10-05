@@ -1,0 +1,51 @@
+@startuml
+!theme sandstone
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
+component view [
+<b>VIEW</b>
+Activity/Fragment (typically many)
+The view component which is
+rendered and displayed to the user.
+]
+
+component viewModel [
+<b>VIEW MODEL</b>
+(typically many)
+Stores view data and does
+processing necessary for view.
+]
+
+component repository [
+<b>REPOSITORY</b>
+Singleton
+Holds lifetime data for easy access in memory
+and accesses data sources and io services/etc
+]
+
+component webResource [
+<b>WEB RESOURCE</b>
+Service
+Service Object which facilitates
+network communication.
+]
+
+component room [
+<b>MODEL</b>
+Room - Object Relational Mapper
+Used for the abstraction of data into models
+]
+
+component sqlite [
+<b>SQLITE</b>
+Database Provider
+Physical database
+]
+
+view --> viewModel 
+viewModel  --> repository 
+repository  --> webResource 
+repository  --> room
+room --> sqlite
+@enduml

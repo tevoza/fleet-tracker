@@ -13,47 +13,48 @@ Database file #1: ref.bib
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
 Warning--empty journal in gamageseparation
 Warning--empty year in gamageseparation
+Warning--empty journal in hickman1995ssl
 
 Done.
-You've used 24 entries,
+You've used 32 entries,
             4087 wiz_defined-function locations,
-            953 strings with 12338 characters,
-and the built_in function-call counts, 18479 in all, are:
-= -- 1452
-> -- 427
-< -- 154
-+ -- 231
-- -- 71
-* -- 875
-:= -- 2690
-add.period$ -- 58
-call.type$ -- 24
-change.case$ -- 24
-chr.to.int$ -- 366
-cite$ -- 26
-duplicate$ -- 1332
-empty$ -- 1572
-format.name$ -- 91
-if$ -- 4348
+            987 strings with 13382 characters,
+and the built_in function-call counts, 21801 in all, are:
+= -- 1675
+> -- 503
+< -- 164
++ -- 271
+- -- 86
+* -- 1022
+:= -- 3196
+add.period$ -- 74
+call.type$ -- 32
+change.case$ -- 31
+chr.to.int$ -- 390
+cite$ -- 35
+duplicate$ -- 1609
+empty$ -- 1898
+format.name$ -- 110
+if$ -- 5102
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 231
-newline$ -- 97
-num.names$ -- 23
-pop$ -- 564
+int.to.str$ -- 32
+missing$ -- 290
+newline$ -- 129
+num.names$ -- 27
+pop$ -- 761
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1422
+skip$ -- 1669
 stack$ -- 0
-substring$ -- 890
-swap$ -- 1057
-text.length$ -- 32
+substring$ -- 953
+swap$ -- 1222
+text.length$ -- 34
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 24
-warning$ -- 2
-while$ -- 93
-width$ -- 26
-write$ -- 245
-(There were 2 warnings)
+type$ -- 32
+warning$ -- 3
+while$ -- 101
+width$ -- 34
+write$ -- 308
+(There were 3 warnings)

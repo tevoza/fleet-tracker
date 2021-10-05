@@ -65,8 +65,10 @@ This allows classes to be less tightly-bound to a base class, allowing for more 
 \subsubsection{\Ac{di}}
 Often classes require instances of other objects (or dependencies) to perform certain functions.
 It is wasteful to re-instantiate these objects especially if they are used by other classes.
-\Ac{di} provides a means to \textit{inject} an instance of a helped object into a class without explicitly recreating the dependency.
+\Ac{di} provides a means to \textit{inject} an instance of a helper object into a class without explicitly recreating the dependency.
 \cite{kocsis2017dependency}
+
+Objects which exist for the lifetime of the application are known as singletons, and the use of singletons is often used with \ac{di}.
 
 \subsection{Smartphone Application}
 The smartphone application is responsible for extracting the acceleration, altitude, location and speed data from the sensors and relaying this information to the data store.
@@ -89,12 +91,43 @@ However, cross-platform development does impose potentially reduced performance,
 In an ecosystem where hardware used by truck drivers has potential to be slower, cross-platform development is undesirable.
 
 \subsubsection{Android - \Ac{mvvm} Design Pattern}
+Figure \ref{fig:mvvm_layout} depicts the \ac{mvvm} architecture used in a typical android context.
+The view (typically activities or fragments in Android) represents the actual rendered output visible to the user.
+Data displayed by the view is accessed by the view model.
+The separation of views and view models is necessary for Android applications due to the temporary nature of views.
+That is, data stored purely in the view component is lost upon re-rendering of the view, while view models hold onto data for longer.\cite{noauthor_guide_nodate}
 
-\subsubsection{Android - \ac{di} in with Dagger-Hilt}
+The repository singleton acts as a central holder of application data, which is then accessed by the multiple views. It also interacts with \ac{io} resources such as web resources and database access. Views request data through the repository, and as such shouldn't have direct handles to database connections. \cite{noauthor_guide_nodate}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{../diag/mvvm_layout.png}
+\caption{Android - \Ac{mvvm} Architecture}
+\label{fig:mvvm_layout}
+\end{figure}
+
+\subsubsection{Android - \ac{di} with Hilt}
+Hilt is an android library used for easily implementing \ac{di}.
+It has support for common android components.
+\cite{noauthor_dependency_nodate}
 
 \subsubsection{Android - Running continuously in the background}
+Tracking \ac{app}s need to run continuosly, without forcing the user to keep the \ac{app} view components open.
+This can be achieved by implementing the tracking component as a \textit{foreground service}.
+In this way, the component runs continuously while allowing the user to use other applications.
+
+Users must also be notified of continuously running services for clarity.
+It is therefore required display notifications about the service.
+\cite{noauthor_foreground_nodate}
 
 \subsubsection{Android - SQLite database with the Room \ac{orm}}
+The Room \ac{orm} library provides a neat database abstraction layer over SQLite useful for modeling data.
+SQLite is preferable for android due to its lightweight nature.
+\cite{noauthor_save_nodate}
+
+The storage capacity of SQLite is basically unlimited.
+Storage capacity is, however, limited to the storage capability of the smartphone running the application.
+This makes the use of external storage desirable.
 
 \subsection{\ac{io} Server}
 The \ac{io} server is required for relaying logged data from the smartphone application to the central data store. It must be many clients quickly and efficiently.
@@ -102,6 +135,16 @@ This server plays a typical server role; In that it must await requests from cli
 
 Implementations for realizing such a server are possible in many programming languages, and almost all top popular programming languages. 
 Generally, for performance-critical applications, C and/or C++ are considered most appropriate. \cite{ogala2020comparative}
+
+\subsubsection{Asynchronous \Ac{io}}
+Servers (and many other application) are required to run relatively slow operations; that is communicating over networks and writing to disk.
+Implementing such functionality synchronously (using blocking calls) leaves functions essentially waiting for data streams to be read, transmitted and written to disk.
+This is slow and incapable of handling multiple simultaneous connections.
+
+Asynchronous \ac{io} operations enables other processing to continue before a slow \ac{io} operation has completed.
+This is essential for servers which handle many simultaneous connections.
+A popular C++ library, \textit{asio} provides asynchronous \ac{io} functionality.
+\cite{anggoro2015boost}
 
 \subsection{Database Considerations}
 \ac{rdbms}s are commonly used in for data handling.
@@ -120,6 +163,41 @@ The web application will be used by managers to display daily reports highlighti
 
 The web application may be easily realized by utilizing pre-existing web frameworks, such as Microsoft's ASP.NET Core and Oracle's Java Enterprise Edition (with comparable performance) \cite{kronis2018performance}.
 
+\subsubsection{\Ac{mvc} design pattern for web applications}
+\begin{figure}
+\centering
+\includegraphics[width=6in]{../diag/mvc_layout.png}
+\caption{Web Design Pattern - \ac{mvc}}
+\label{fig:mvc_layout}
+\end{figure}
+
+A relatively popular design pattern in web development is the \ac{mvc} architecture.
+As seen in figure \ref{fig:mvc_layout}, \ac{mvc} attempts to achieve \ac{soc} by separating logic required for viewing, routing and data into separate components.
+
 \subsection{Secure communication with \ac{ssl}}
+The use of secure communication over the internet is a modern-day standard.
+And due to sensitive location data being transmitted, it is necessary to ensure that logs are adequately encrypted.
+
+The \ac{ssl} protocol is a de facto standard for encrypted communication on the internet.
+\Ac{ssl} itself is deprecated, and the current standard for encryption is \ac{tls}.
+However, it is common to refer to refer to these related technologies interchangeably, when \ac{tls} is the protocol actually in use. \cite{hickman1995ssl}
+
+\subsection{Serialization and communication protocols}
+Facilitating communication between two devices requires both devices to use the same protocol.
+Regardless of this protocol, it is necessary for communication to be encrypted, therefore making use of \ac{ssl}.
+
+\subsubsection{\Ac{https}}
+\Ac{https} implements the de facto \Ac{http} protocol over the encrypted \ac{ssl} protocol.
+\Ac{http} is an application layer protocol which makes use of standard headers carrying a payload under formalized request types, of which \textit{GET} and \textit{POST} are common.
+\Ac{https} is commonly used for web services and websites.
+\cite{fielding1999hypertext}.
+
+\subsubsection{\Ac{json} and \Ac{xml}}
+\Ac{xml} is a strongly-typed text protocol which can be used for serialization.
+It follows a tight tagging schema.
+
+\Ac{json} is a fast and simple text protocol for serializing objects carrying data.
+Support for arrays makes \ac{json} reliable for the transmission of many logs.
+\cite{nurseitov2009comparison}
 
 \pagebreak

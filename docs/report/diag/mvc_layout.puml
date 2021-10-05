@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+!theme sandstone
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
+component view [
+<b>VIEW</b>
+HTML/CSS/JavaScript Page
+The view component which is
+rendered and displayed to the user.
+
+The user issues HTTP requests which
+are directed to the controller.
+]
+
+component controller [
+<b>CONTROLLER</b>
+Routes HTTP Requests
+Performs business logic
+
+Populates a model to be returned
+as a View
+]
+
+component model [
+<b>MODEL</b>
+Data class abstractions of 
+underlying database entities
+
+Returns data model to be displayed
+]
+
+component db [
+<b>Database</b>
+Database Provider
+Physical database
+]
+
+view --> controller
+controller --> model
+db --> model 
+model --> view
+@enduml
