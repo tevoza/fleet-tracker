@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+!theme sandstone
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
+entity Trucker {
+    *TruckerID : int <<generated>>
+    --
+    *ManagerID : text <<FK>>
+    Name : text
+    VehicleNumber : text
+    Verified : boolean
+    Description : text
+    AndroidID : text
+}
+
+entity TruckerLog {
+    *LogID : int
+    --
+    TruckerID : int
+    TimeStamp : big integer
+    Latitude : float
+    Longittude : float
+    Speed : float
+    Acceleration : float
+    Altitude : float
+}
+
+entity Manager {
+    *ManagerID : text
+    --
+    UserName : text
+    Discriminator : text
+    NormalizedUserName : text
+    Email : text
+    NormalizedEmail : text
+    EmailConfirmed : boolean
+    PasswordHash : text
+    SecurityStamp : text
+    ConcurrencyStamp : text
+    PhoneNumber : text
+    PhoneNumberConfirmed : boolean
+    TwoFactorEnabled : boolean
+    LockoutEnd : int
+    LockoutEnabled : boolean
+    AccessFailedCount : int
+    MaxAccel : float
+    MaxSpeed : int 
+    MinSpeed : int 
+}
+
+Trucker |o..o{ TruckerLog
+Manager |o..o{ Trucker 
+
+@enduml

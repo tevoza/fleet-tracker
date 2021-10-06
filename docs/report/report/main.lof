@@ -7,7 +7,10 @@
 \contentsline {figure}{\numberline {6}{\ignorespaces Container Diagram - Fleet tracking system\relax }}{15}{figure.caption.9}%
 \contentsline {figure}{\numberline {7}{\ignorespaces Life-cycle - Android Application\relax }}{17}{figure.caption.10}%
 \contentsline {figure}{\numberline {8}{\ignorespaces Component Diagram - Android Application\relax }}{18}{figure.caption.11}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Life cycle - I/O Server\relax }}{19}{figure.caption.12}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - I/O Server\relax }}{20}{figure.caption.13}%
-\contentsline {figure}{\numberline {11}{\ignorespaces Entity Relationship Diagram\relax }}{21}{figure.caption.14}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Component Diagram - Web Application\relax }}{22}{figure.caption.15}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Life cycle - \Ac {io} Server\relax }}{20}{figure.caption.12}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - \Ac {io} Server\relax }}{21}{figure.caption.13}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Request payload}}}{21}{figure.caption.14}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Response payload}}}{21}{figure.caption.14}%
+\contentsline {figure}{\numberline {11}{\ignorespaces \Ac {json} protocol\relax }}{22}{figure.caption.14}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Entity Relationship Diagram\relax }}{22}{figure.caption.15}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Component Diagram - Web Application\relax }}{23}{figure.caption.16}%

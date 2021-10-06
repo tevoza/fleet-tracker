@@ -1,5 +1,9 @@
 @startuml
 
+!theme bluegray
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
 start
 
 repeat :start;

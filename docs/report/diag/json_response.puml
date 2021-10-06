@@ -1,0 +1,8 @@
+@startjson
+{
+    "manager": "adam@test.com",
+    "res": 1,
+    "trucker": "Adam Coetzee",
+    "veh": "A_DAMN"
+}
+@endjson

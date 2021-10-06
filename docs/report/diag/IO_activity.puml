@@ -1,5 +1,9 @@
 @startuml
 
+!theme bluegray
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
 start
 
 :Listen for connections;
@@ -8,7 +12,7 @@ start
 :Verify connection;
 
 note right
-    Ensure connection is encrypted and secure
+    Ensure connection is encrypted and secure with 3-way handshake
 end note
 switch (GetRequest)
 case (Verify Trucker ID)

@@ -40,11 +40,12 @@
 \contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of technologies}{14}{subsection.3.2}%
 \contentsline {subsubsection}{\numberline {3.2.1}Data Model}{15}{subsubsection.3.2.1}%
 \contentsline {subsubsection}{\numberline {3.2.2}Android Application}{15}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}I/O Server}{16}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.3}\Ac {io} Server}{16}{subsubsection.3.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.4}Web Application}{16}{subsubsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.3}Subsystem components}{16}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Android Application}{16}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}I/O Server}{18}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}MySQL Database}{20}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{21}{subsubsection.3.3.4}%
-\contentsline {section}{References}{23}{section*.16}%
+\contentsline {subsection}{\numberline {3.3}Subsystem components and Design}{17}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Android Application - lifecycle and software abstractions}{17}{figure.caption.10}%
+\contentsline {subsubsection}{\numberline {3.3.2}\Ac {io} Server}{20}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}\ac {json} protocol}{21}{figure.caption.14}%
+\contentsline {subsubsection}{\numberline {3.3.4}MySQL Database}{21}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Web Application}{21}{subsubsection.3.3.5}%
+\contentsline {section}{References}{24}{section*.17}%

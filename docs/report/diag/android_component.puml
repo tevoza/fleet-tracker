@@ -1,4 +1,5 @@
 @startuml
+skinparam defaultFontSize 20
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
@@ -12,18 +13,35 @@ Person(driver, "Truck Driver")
 Container(cIO, "I/O Server", "C++", "Listening and receiving logged data to be sent to a central data store.")
 
 Container_Boundary(cAndroid, "Android Application") {
-Component(register, "Configuration Controller", "MVC", "Allows truckers to configure settings and register their IDs in to the fleet-tracking system")
-    Component(AndroidDB, "Local database", "SQLite", "Store ID and local sensor logs until they can be relayed to the central database")
-    Component(LoggingController, "Logging Controller", "MVC", "Consolidates all sensor information and sends to database. Makes requests to I/O server")
-    Component(AndroidHardWare, "Android Hardware", "API", "Android API exposing built-in sensors for reading")
-    Component(fusedLocationProvider, "Fused Location Provider", "API", "Android API exposing GPS data")
+    Component(mainRepository, "Main Repository", "Repository (Singleton)", "Central object providing I/O operations to services, data resources and activities")
+
+    ComponentDb(sql, "Local database", "SQLite", "Store  sensor logs until they can be relayed to the central database")
+    ComponentDb(config, "SharedPreferences", "key-value file", "Store user settings and identity")
+    Component(room, "Object Relational Mapper", "Room", "Data abstraction layer, provides class abstraction of data for easier use")
+
+    Component(mainActivity, "Main Activity", "Activity (View)", "Handles UI logic. Presents an interface for the user to interact with the application")
+    Component(mainViewModel, "Main View Model", "View Model", "Stores data/methods feeding the Main Activity View")
+
+    Component(trackingService, "Tracking Service", "Foreground Service", "Foreground LifeCycle Service which polls sensor logs in regular intervals")
+
+    Component(serverConnector, "Server Connector", "Network Service", "Serializes/deserializes server requests, creates and performs socket communication with server")
 }
-Rel(driver, cAndroid, "Uses", "Android Smartphone")
-Rel_L(register, LoggingController, "Updates", "API Request")
-Rel(register, cIO, "Verifies trucker ID", "SSL")
-Rel(LoggingController, AndroidDB, "Sends and receives", "DB Connector")
-Rel(LoggingController, AndroidHardWare, "Requests", "API Request")
-Rel(LoggingController, fusedLocationProvider, "Requests", "API Request")
-Rel(LoggingController, cIO, "Sends Log Data", "SSL")
+
+Rel(driver,mainActivity, "interacts with")
+Rel(mainActivity,mainViewModel, "depends on")
+Rel_U(mainViewModel,mainRepository, "performs I/O operations with", "Injected with DI")
+
+Rel(trackingService,mainViewModel, "provide latest log data", "LiveData")
+Rel(mainViewModel, trackingService, "starts and stops", "Intents")
+
+Rel(trackingService,mainRepository, "Sends log data to", "Injected with DI")
+Rel(mainRepository,trackingService, "Reads configuration from", "Injected with DI")
+
+Rel(serverConnector,cIO, "sends log data and configuration", "JSON over SSL")
+Rel(cIO,serverConnector, "receives status codes", "JSON over SSL")
+Rel(mainRepository,serverConnector, "Issues network requests", "Request")
+Rel(mainRepository,room, "receives data access handle", "DAO Injected with DI")
+Rel_R(mainRepository,config, "reads/writes user configuration")
+Rel(room, sql, "reads/writes to", "DB Connection")
 
 @enduml

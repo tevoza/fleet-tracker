@@ -12,12 +12,19 @@ Container(cAndroid, "Android Application", "Kotlin", "Logs various trucker senso
 ContainerDb(db, "Database", "MySQL", "Store logged sensor data for fleet, companies and managers", $sprite="msql_server")
 
 Container_Boundary(cIO, "I/O Server" ) {
-    Component(RequestHandler, "Request Handler", "MVC Rest Controller", "Process client request")
-    Component(FleetController, "Fleet Controller", "MVC Rest Controller", "Controller for fleet records")
+    Component(server, "Server", "Singleton server object", "Listens for incoming connections on the set port.")
+    Component(session, "Session", "Newly instatiated by the Server for connection lifetime", "Handles SSL handshake, SSL encryption/decryption and sending/receiving data streams.")
+    Component(requestHandler, "Request Handler", "Handler", "Parses json request and generates appropriate response.")
+    Component(sql, "MySQL Connector", "mysql++", "Provides database operations")
 }
 
-Rel(cAndroid, RequestHandler, "sends API requests", "JSON/SSL")
-Rel_R(RequestHandler, FleetController, "sends API requests", "JSON")
-Rel(FleetController, db, "Update/select data", "DB Connector")
+Rel_R(cAndroid,server, "transmits request data to", "SSL")
+Rel_L(server,cAndroid, "transmits response data to", "SSL")
+
+Rel_R(server,session, "assigns session to connection with payload data")
+Rel(session,requestHandler, "transmits serialized request payload")
+Rel(requestHandler, session, "transmits serialized response payload")
+Rel_R(requestHandler,sql, "issues database transaction")
+Rel_R(sql,db, "writes to/reads from")
 
 @enduml

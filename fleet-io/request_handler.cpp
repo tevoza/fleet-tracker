@@ -35,6 +35,7 @@ nlohmann::json handler::handle_request(const char* request)
     {
         auto rec = nlohmann::json::parse(request);
         std::cout << "USER: " << rec["id"];
+        //std::cout  << std::endl << rec.dump(4) << std::endl;
         int request_code = rec["req"];
         switch (request_code)
         {   
@@ -88,6 +89,8 @@ nlohmann::json handler::handle_request(const char* request)
        resp["res"] = PARSE_FAIL;          
     }
     std::cout << "RESULT: " << resp["res"] << std::endl;
+
+    //std::cout  << std::endl << resp.dump(4) << std::endl;
     return resp;
 }
 
