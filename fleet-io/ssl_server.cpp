@@ -6,6 +6,8 @@
 #include "request_handler.hpp"
 #include <string.h>
 #include <nlohmann/json.hpp>
+#include <chrono>
+#include <ctime>    
 
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 
@@ -53,6 +55,11 @@ public:
             std::cout<<"handle_read: fail\n" << error.message() << "\n";
             delete this;
             return;
+        }
+        std::time_t t = std::time(nullptr);
+        char t_string[64];
+        if (std::strftime(t_string, sizeof(t_string), "%Y-%Om-%e %H:%M:%S", std::localtime(&t))) {
+            std::cout << "[" << t_string << "] ";
         }
         
         std::cout << "RECEIVED " << bytes_transferred << " bytes: ";
