@@ -192,4 +192,11 @@ M.~Petre, ``Uml in practice,'' in \emph{2013 35th international conference on
   software engineering (icse)}.\hskip 1em plus 0.5em minus 0.4em\relax IEEE,
   2013, pp. 722--731.
 
+\bibitem{noauthor_required_nodate}
+\BIBentryALTinterwordspacing
+``Required {Precision} for {GPS} {Calculations} - {TresCopter}.'' [Online].
+  Available:
+  \url{http://www.trescopter.com/Home/concepts/required-precision-for-gps-calculations}
+\BIBentrySTDinterwordspacing
+
 \end{thebibliography}

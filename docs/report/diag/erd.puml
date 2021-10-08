@@ -16,9 +16,9 @@ entity Trucker {
 }
 
 entity TruckerLog {
-    *LogID : int
+    *LogID : int <<generated>>
     --
-    TruckerID : int
+    TruckerID : int <<FK>>
     TimeStamp : big integer
     Latitude : float
     Longittude : float
@@ -28,7 +28,7 @@ entity TruckerLog {
 }
 
 entity Manager {
-    *ManagerID : text
+    *ManagerID : text <<generated>> 
     --
     UserName : text
     Discriminator : text
@@ -50,7 +50,7 @@ entity Manager {
     MinSpeed : int 
 }
 
-Trucker |o..o{ TruckerLog
-Manager |o..o{ Trucker 
+Trucker ||..o{ TruckerLog
+Manager ||..o{ Trucker 
 
 @enduml

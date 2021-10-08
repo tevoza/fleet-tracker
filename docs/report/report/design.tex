@@ -56,7 +56,7 @@ The entire system revolves around the effective abstraction and manipulation of 
 MySQL is chosen as the \ac{rdbms} to realize a relational database model, as it is high performance and reliable.
 Other \ac{rdbms}s (such as Microsoft SQL Server, PostgreSQL) offer comparable performance, but MySQL is chosen for familiarity.
 
-The relational model is depicted in figure \ref{fig:ERD_Overview}.
+The relational model is depicted in figure \ref{fig:erd}.
 The model is designed to allow one company to have many managers and truckers. Each trucker can have many logs.
 
 \subsubsection{Android Application}
@@ -139,6 +139,8 @@ Android's \textit{SharedPreferences} library provides an \ac{api} for the purpos
 This is used for storing user configuration, such as identity and upload preferences, which aren't appropriate for a database.
 \end{enumerate}
 
+These components are necessary for realizing a modular, extendable application.
+
 \pagebreak
 \subsubsection{\Ac{io} Server}
 The typical life cycle view of the \ac{io} server is depicted in figure \ref{fig:IO_activity}.
@@ -148,6 +150,8 @@ A secure connection must be made due to the sensitive nature of \ac{gps} data.
 \item A request handler parses (and deserializes) the decrypted payload, which queries the database to generate an appropriate serialized response.
 \item The response is sent back to the client and the session is terminated.
 \end{itemize}
+
+The popular C++ library, \textit{asio} can implement the above workflow in an asynchronous manner.
 
 \begin{figure}
 \centering
@@ -179,46 +183,278 @@ It processes the request and queries the database appropriately.
 An interfacing object to the MySQL database.
 \end{enumerate}
 
+\pagebreak
 \subsubsection{\ac{json} protocol}
-\begin{figure}
+Figure \ref{fig:json_protocol} depicts the structure of the protocol used for communication between the \ac{io} server and the android client.
+The communication follows a \ac{rest}ful structure, which is common for web communications.
+That is, communication requires no knowledge of intermediate state.
+One request is enough to complete the required transactions, after which an appropriate response is sent back to the client.
+
+\begin{figure}[H]
 \centering
     \subfigure[Request payload]
     {
-        \includegraphics[scale=0.35]{../diag/json_request.png}
+        \includegraphics[scale=0.5]{../diag/json_request.png}
         \label{fig:json_request}
     }
     \subfigure[Response payload]
     {
-        \includegraphics[scale=0.35]{../diag/json_response.png}
+        \includegraphics[scale=0.5]{../diag/json_response.png}
         \label{fig:json_response}
     }
 \caption{\Ac{json} protocol}
 \label{fig:json_protocol}
 \end{figure}
 
-\subsubsection{MySQL Database}
-The MySQL database is driven by MySQL server.
-A relational data structure is utilized, as shown in figure \ref{fig:ERD_Overview}.
-Relational modeling allows for logical structuring and integrity of the data.
-\begin{figure}
-\centering
-\includegraphics[width=6in]{../diag/erd.png}
-\caption{Entity Relationship Diagram}
-\label{fig:erd}
-\end{figure}
 
+\begin{itemize}
+\item The client makes a request in \ac{json} form, as shown in figure \ref{fig:json_request}.
+It contains \ac{id} information about the client, a request code and any payload data (typically tracking data). Possible requests include verifying \ac{id}, sending log updates and registering new \ac{id}s.
+\item The server appropriately handles the request (based on request code) and generates an appropriate response. Usually the response will just contain the response code, but it may sometimes carry extra information (as seen in figure \ref{fig:json_response}).
+Responses can return a fail, ok, invalid credential, database connection error or parsing error status.
+\end{itemize}
+
+ This communication is realized through \ac{ssl} sockets over the network.
+
+\pagebreak
 \subsubsection{Web Application}
-The web application is modeled with the \ac{mvc} design pattern, which allows separation of \ac{ui} logic from business logic.
-Two view models are considered to allow for managers to sign in and manage their fleets.
-Controllers handle core logic behind the presentation of data.
-The central database is also accessed by the controller.
-Figure \ref{fig:webapp_component} depicts the architectural arrangement of the web application.
+The web application is modeled with the \ac{mvc} design pattern, which allows for following \ac{soc} principles.
+Backend logic is realized in C\# using Microsoft's \textit{ASP.NET} framework.
+Web pages are generated with a combination of C\#, JavaScript and \ac{html} styled with \ac{css}.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{webapp_component.png}
+\includegraphics[width=6in]{../diag/webapp_component.png}
 \caption{Component Diagram - Web Application}
 \label{fig:webapp_component}
 \end{figure}
+
+Figure \ref{fig:webapp_component} depicts the architectural arrangement of the web application.
+\begin{enumerate}
+\item \textbf{ASP.NET Identity Views and Controller}\\
+Microsoft provides a professional library for handling user access, known as \textit{ASP.NET Identity}.
+This library handles logic for user registration, signing in and account editing.
+In addition, there is support for email verification and two-factor authentication.
+Identity also implements logic for restricting access to pages, ensuring managers can only view data related to their fleets'.
+
+\item \textbf{DB Context and MySQL database}\\
+Microsoft's \textit{Entity Framework} provides the abstraction of data as 'entites' to be represented by models (data classes in code).
+This makes for easier interaction with data in code.
+The back-end database in use is MySQL.
+
+\item \textbf{Fleet Models}\\
+The Fleet Models are a set of data classes used for the abstraction of data entities in code.
+They allow for the easy passing of data from controllers to views.
+An extra view model class is used for viewing truckers.
+Since viewing truckers requires extra processing of trucker information logs, an extra class is utilized to handle this processing.
+
+\item \textbf{Fleet Controller}\\
+User interactions from any of the fleet views results in \ac{http} requests issued to the Fleet Controller.
+The Controller has multiple methods for handling different \ac{http} requests.
+Upon receiving a routed request, it selects the appropriate method and queries the appropriate fleet data from the database abstraction layer.
+The results of the query are populated into one of the models, and the model is returned to the view.
+
+\item \textbf{Fleet Views}\\
+Multiple views are returned by the Fleet Controller depending on request, and act as the \ac{ui} component visible to the user.
+Each view only handles the necessary logic required for displaying data returned as a model from the controller.
+The \ac{ui} is rendered as \ac{html}, with backend C\# logic utilized to dynamically render view components, such as tables.
+Additional \ac{ui} logic is realized with JavaScript.
+
+\begin{enumerate}
+\item \textbf{Index}\\
+The Index view displays a list of all truckers registered by the manager.
+It provides an interface for resetting each trucker's Android \ac{id}.
+
+\item \textbf{Add Trucker}\\
+The "Add Trucker" page provides an \ac{html} form for the purposes of adding trucker's to the fleet.
+Details about the trucker such as name and vehicle number can be added.
+
+\item \textbf{Set Rules}\\
+The "Set Rules" page allows the manager to define custom rules defining unacceptable driving behavior, including maximum speed and acceleration.
+
+\item \textbf{View Trucker}\\
+The "View Trucker" page displays details about the trucker's activities for an adjustable time period.
+A table is used to group location data into individual trips.
+This table is generated by means of a grouping algorithm to segment the driver's activities into separate trips, and includes information such as waiting time, average speed and indications of any rule breaks.
+
+In addition, each trip is drawn in a map using the \textit{Google Maps JavaScript \ac{api}}.
+This provides a neat visual representation of Trucker activities.
+
+\item \textbf{View Trip}\\
+The "View Trip" page allows for detailed statistical analysis of individual trips.
+It provides percentile analysis and graphs showcasing the trucker's speed, acceleration and altitude.
+\end{enumerate}
+
+\end{enumerate}
+
+\pagebreak
+\subsubsection{MySQL Database and Entity relationships}
+The central backend \ac{rdbms} used is MySQL.
+A relational data structure is utilized, as shown in figure \ref{fig:erd}.
+Relational modeling allows for logical structuring and integrity of the data.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../diag/erd.png}
+\caption{Fleet Tracking System - Entity Relationship Diagram}
+\label{fig:erd}
+\end{figure}
+
+The Manager entity represents the web application user, and contains various fields used for storing the manager's identity.
+In addition, the fields "MaxAccel", "MaxSpeed" and "MinSpeed" define rules for good trucker behavior.
+
+One manager can manage multiple truckers (or none), therefore enforcing a zero-to-many relationship.
+Similarly, each trucker can have multiple (or no) logs.
+The Trucker entity stores information about each trucker.
+The TruckerLog entity stores the entries of each log in the database.
+
+Unix timestamps are used for identifying the time of each log, which is convenient and saves on storage, as only 8 bytes are required.
+Additionally, single precision float precision provides location precision within 2.37 meters\cite{noauthor_required_nodate} in the worst case, making it adequate it for this application, while saving on storage. Double precision is more computationally expensive for little benefit.
+
+\subsection{Data Processing}
+The main focus and purpose of the system is to generate useful information for managers which can be used to optimize their fleets.
+The raw tracking data alone doesn't give the clearest indication of trucking behavior.
+
+\subsubsection{Aggregating nearby logs}
+Determining when trucker's have stopped is useful for segmenting trips.
+Grouping trips into different segments gives a clear idea of what truckers are doing.
+To this end, an algorithm is designed with this goal in mind.
+
+It is first helpful to remove logs where an insignificant distance is traveled, or where the user is stationary.
+Algorithm \ref{algo_agg} achieves this, by creating a new list where the distance between each log is some \textit{MINDISTANCE} away from the previous log. A threshold of 150 meters is chosen.
+
+\SetKwComment{Comment}{/* }{ */}
+
+\begin{algorithm}
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{List of chronologically Sorted Logs}
+\Output{Aggregated list of logs, where each log is a significant distance away from the next}
+
+\BlankLine
+\emph{Generate list of aggregated logs far enough away from each other}\;
+$AggregatedLogs.Append \gets LogsSortedByDate[0]$\;
+$LastLog \gets LogsSortedByDate[0]$\;
+\For{$i\leftarrow 0$ \KwTo $LogsSortedByDate.Length$}{
+    \If{$Distance(LogsSortedByDate[i], LastLog)\geq MINDISTANCE$}
+    {
+        $AggregatedLogs.Append \gets LogsSortedByDate[i]$\;
+        $LastLog \gets LogsSortedByDate[i]$\;
+    }
+}
+\caption{Aggregating logs close to each other}\label{algo_agg}
+\end{algorithm}\DecMargin{1em} 
+
+\subsubsection{Defining trips between stop locations}
+The aggregated list of logs determined in algorithm \ref{algo_agg} is then used to group together trips.
+A trip is defined as the logs between consecutive stops.
+A stop is defined using the time difference between two distance-aggregated logs, where the time between each log is greater than some threshold (\textit{MINTIME}).
+A value of 5 minutes is chosen to designate a stop.
+Algorithm \ref{algo_trips} shows the algorithm used to determine this.
+
+\begin{algorithm}[H]
+\SetKwData{Left}{left}\SetKwData{This}{this}\SetKwData{Up}{up}
+\SetKwFunction{Union}{Union}\SetKwFunction{FindCompress}{FindCompress}
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\Input{List of chronologically, aggregated Logs, where consecutive logs are a minimum distance away from each other}
+\Output{List of trips(segments) defined from some start log to some end log}
+
+\BlankLine
+\emph{Use aggregated list to determine individual \textit{trips} separated by stopping points}\;
+$startLogCount \gets 0$ \Comment*[r]{The start of a trip}
+\For{$i\leftarrow 0$ \KwTo $AggregatedLogs.Length-1$}{
+    \If{$TimeDifference(AggregatedLogs[i+1], AggregatedLogs[i])\geq MINTIME$}
+    {
+        \eIf{$i == 0$}
+        {
+            \emph{If the first log is a stop, don't start the trip from here}
+            $startLogCount \gets startLogCount+1$\;
+        }
+        {
+            \emph{Add a trip, starting from the previous start log till the current log}\;
+            $Segments.Append \gets AggregatedLogs[startLogCount],AggregatedLogs[i]$\;
+            \emph{the next trip will start from the next aggregated log}\;
+            $startLogCount \gets i+1$\;
+        }
+    }
+}
+\caption{Grouping logs into trips}\label{algo_trips}
+\end{algorithm}\DecMargin{1em} 
+
+The \textit{Segments} determined in algorithm \ref{algo_trips} can be tabulated to give details of each trip the trucker performed.
+
+\pagebreak
+\subsection{\Acf{ui} Design}
+The primary goal of \ac{ui} design is to make the interface clear and intuitive for users.
+
+\subsubsection{Android Application}
+Figure \ref{fig:android_ui} depicts the blueprint of Android application's \ac{ui}.
+\Ac{xml} is used in Android to define the positioning of elements in the layout.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{android_ui.png}
+\caption{Android Application - \ac{ui}}
+\label{fig:android_ui}
+\end{figure}
+
+To account for different screen sizes, a Constraint layout is used, in which elements are tied to edges or specific points in the layout's geometry.
+Elements are places relative to each other, and will dynamically adjust when tilting the screen.
+The constraint layout is placed within a scroll view to allow scrolling if the elements can not fit on the screen.
+
+The \ac{ui} allows the user to toggle the tracking service.
+It provides information about the trucker and his/her manager.
+An interface is provided for toggling upload frequency of logs.
+Finally, the current sensor readings are displayed.
+
+\subsubsection{Web Application}
+\begin{figure}
+\centering
+    \subfigure[Fleet index page]
+    {
+        \centering
+        \includegraphics[width=2.5in]{fleet_index.png}
+        \label{fig:fleet_index}
+    }
+    \subfigure[Add Trucker]
+    {
+        \centering
+        \includegraphics[width=2.5in]{fleet_add_trucker.png}
+        \label{fig:fleet_add_trucker}
+    }\\
+    \subfigure[Set rules]
+    {
+        \centering
+        \includegraphics[width=2.5in]{fleet_set_rules.png}
+        \label{fig:fleet_set_rules}
+    }
+    \subfigure[View Trucker]
+    {
+        \centering
+        \includegraphics[width=2.5in]{fleet_view_trucker.png}
+        \label{fig:fleet_view_trucker}
+    }\\
+    \subfigure[View Trip]
+    {
+        \centering
+        \includegraphics[width=2.5in]{fleet_view_trip.png}
+        \label{fig:fleet_view_trip}
+    }
+\caption{Web application - Pages}
+\label{fig:web_app_pages}
+\end{figure}
+
+Figure \ref{fig:web_app_pages} depicts the main pages used by managers for manipulating and viewing their fleets.
+The web pages are designed using \ac{html} elements, which are style in \ac{css} aided by the \textit{Bootstrap} library which provides elegant \ac{css} presets.
+
+\Ac{html} elements are spaced using \textit{div} containers in a grid layout.
+
+\begin{itemize}
+\item The index page, seen in figure \ref{fig:fleet_index} displays a list of truckers in the managers fleet. Managers can reset trucker \ac{id}s and navigate to individual trucker pages.
+\item The "Add Trucker" page, in figure \ref{fig:fleet_add_trucker} allows managers to add new trucker entries.
+\item The "Set Rules" page in figure \ref{fig:fleet_set_rules} allows managers to set rule thresholds for defining good behavior.
+\item The "View Trucker" page, in figure \ref{fig:fleet_view_trucker} displays a map and table for displaying information about trips.
+\item The "View Trip" page, in figure \ref{fig:fleet_view_trip} contains a graph for viewing statistics for trips.
+\end{itemize}
 
 \pagebreak

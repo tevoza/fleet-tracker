@@ -1,4 +1,5 @@
 @startuml
+skinparam defaultFontSize 20
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
@@ -11,17 +12,58 @@
 Person(manager, "Fleet Manager")
 ContainerDb(db, "Database", "MySQL", "Store logged sensor data for fleet, companies and managers", $sprite="msql_server")
 Container_Boundary(cWebApp, "Web Application"){
-    Component(sign, "Sign In Controller", "MVC Rest Controller", "Allows managers to sign in/create accounts")
-    Component(signView, "Sign In View", "MVC View Model", "UI Model for handling display logic for sign in/ sign up logic")
-    Component(FleetController,"Fleet Controller", "MVC Rest Controller", "Allow managers to view/edit/update records for their fleets.")
-    Component(FleetView, "Fleet View", "MVC ViewModel", "UI Model for displaying fleet management and viewing page")
-    Rel(FleetView,FleetController, "Requests", "HTTPS")
-    Rel(signView,sign, "Requests", "HTTPS")
+
+    Component(FleetController,"Fleet Controller", "MVC Controller", "Receives requests related to fleets, populates model with data from database and returns a model to populate the approporiate view")
+    Component(IdentityController,"Identity Controller", "MVC Controller", "ASP.NET Identity library controller for manager identities")
+    Component(IdentityViews,"Identity Views", "MVC Views", "ASP.NET Identity library views for managers to register/login/edit their accounts")
+
+    Container_Boundary(cWebAppViews, "Fleet Views"){
+        Component(FleetViewIndex, "Fleet Index", "MVC View", "Displays a list of truckers")
+        Component(FleetViewAddTrucker, "Add Trucker", "MVC View", "Interface for adding new truckers")
+        Component(FleetViewSetRules, "Set Rules", "MVC View", "Interface for defining speed and acceleration rules")
+        Component(FleetViewViewTrucker, "View Trucker", "MVC View", "Displays trucker activity over adjustable time period")
+        Component(FleetViewViewTrip, "View Trip", "MVC View", "Displays statistical analysis of sensor data for specific trip")
+    }
+
+    Container_Boundary(cWebAppModels, "Fleet Models"){
+        Component(ModelManager, "Manager Model", "MVC Model", "Data model, represented as a class in code")
+        Component(ModelTrucker, "Trucker Model", "MVC Model", "Data model, represented as a class in code")
+        Component(ModelTruckerLog, "Trucker Log Model", "MVC Model", "Data model, represented as a class in code")
+        Component(ModelTruckerView, "Trucker View Model", "MVC View Model", "Class used to group together and perform simple processing of ")
+    }
+
+    Component(ApplicationDbContext, "DB Context", "Entity Framework DB Context", "ASP.NET Entity Framework library. data abstraction layer for querying database")
 }
 
-Rel(manager, FleetView, "Uses", "HTTPS")
-Rel(manager, signView, "Uses", "HTTPS")
-Rel(FleetController,db, "Updates/Selects", "DB Connector")
-Rel(sign,db, "Updates/Selects", "DB Connector")
+Rel_U(manager, FleetViewIndex, "views/interacts", "HTTPS")
+Rel_U(manager, FleetViewAddTrucker, "views/interacts", "HTTPS")
+Rel_U(manager, FleetViewSetRules, "views/interacts", "HTTPS")
+Rel_U(manager, FleetViewViewTrip, "views/interacts", "HTTPS")
+Rel_U(manager, FleetViewViewTrucker, "views/interacts", "HTTPS")
+
+Rel_U(manager, IdentityViews, "views/interacts", "HTTPS")
+Rel_L(IdentityViews, IdentityController, "requests")
+Rel_L(IdentityController, IdentityViews, "returns view")
+Rel_L(IdentityController,ApplicationDbContext, "queries")
+
+Rel_U(FleetViewIndex, FleetController, "requests")
+Rel_U(FleetViewAddTrucker, FleetController, "requests")
+Rel_U(FleetViewSetRules, FleetController, "requests")
+Rel_U(FleetViewViewTrip, FleetController, "requests")
+Rel_U(FleetViewViewTrucker, FleetController, "requests")
+
+Rel(FleetController, ModelManager , "populates")
+Rel(FleetController, ModelTrucker , "populates")
+Rel(FleetController, ModelTruckerLog , "populates")
+Rel(FleetController, ModelTruckerView , "populates")
+
+Rel(ModelTrucker, FleetViewIndex, "returns")
+Rel(ModelTrucker, FleetViewAddTrucker, "returns")
+Rel(ModelManager, FleetViewSetRules, "returns")
+Rel(ModelTruckerLog, FleetViewViewTrip, "returns")
+Rel(ModelTruckerView, FleetViewViewTrucker, "returns")
+
+Rel_L(ApplicationDbContext, db, "reads/writes")
+Rel_L(FleetController, ApplicationDbContext, "queries")
 
 @enduml
