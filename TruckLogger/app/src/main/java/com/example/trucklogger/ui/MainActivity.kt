@@ -1,5 +1,6 @@
 package com.example.trucklogger.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,12 +19,20 @@ import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_UPLOAD_FAIL
 import com.example.trucklogger.other.Constants.ACTION_UPLOAD_LOGS
 import com.example.trucklogger.other.Constants.ACTION_UPLOAD_SUCCESS
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_ID
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_MANAGER
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_NAME
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_UUID
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_VEHICLE_NUMBER
+import com.example.trucklogger.other.Constants.KEY_TRUCKER_VERIFIED
+import com.example.trucklogger.other.Constants.KEY_UPLOAD_FREQUENCY
 import com.example.trucklogger.other.Constants.PREFERENCES_FILE
 import com.example.trucklogger.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.trucklogger.other.ServerRequest
 import com.example.trucklogger.other.ServerRequestCode
 import com.example.trucklogger.other.ServerResponseCode
 import com.example.trucklogger.other.TrackingUtility
+import com.example.trucklogger.repositories.MainRepository
 import com.example.trucklogger.services.ServerConnector
 import com.example.trucklogger.services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,33 +52,73 @@ import javax.net.ssl.SSLSocketFactory
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, AdapterView.OnItemClickListener,
     AdapterView.OnItemSelectedListener {
     @Inject
-    lateinit var truckerLogDao: TruckLogDAO
+    lateinit var mainRepository: MainRepository
 
-    @Inject
-    lateinit var sslSocketFactory: SSLSocketFactory
-    lateinit var serverConnector : ServerConnector
-    lateinit var sharedPreferences: SharedPreferences
-
-    var TRUCKER_ID: Int = 0
-    var TRUCKER_UUID: String = ""
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    lateinit var switchStatus : Switch
+    lateinit var viewStatus : TextView
+    lateinit var viewSpeed : TextView
+    lateinit var viewLat : TextView
+    lateinit var viewLng : TextView
+    lateinit var viewLogsStashed : TextView
+    lateinit var spinner: Spinner
+    lateinit var textVehicle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestPermissions()
-        GlobalScope.launch(Dispatchers.IO) { serverConnector = ServerConnector(sslSocketFactory) }
+
+        switchStatus        = findViewById(R.id.switchStatus)
+        viewStatus          = findViewById(R.id.ViewStatus)
+        viewSpeed           = findViewById(R.id.textSpeed)
+        viewLat             = findViewById(R.id.textLat)
+        viewLng             = findViewById(R.id.textLng)
+        viewLogsStashed     = findViewById(R.id.textLogsStashed)
+        spinner             = findViewById(R.id.spinner)
+        textVehicle         = findViewById(R.id.textVehicleNumber)
 
         btnUpdateId.setOnClickListener { showDialog() }
+        subscribeToObservers()
 
-        sharedPreferences = this.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+        if (intent.action == ACTION_SHOW_UI) {
+            Timber.d("coming from notification")
+        }
 
-        val switchStatus : Switch = findViewById(R.id.switchStatus)
-        val viewStatus : TextView = findViewById(R.id.ViewStatus)
-        val viewSpeed : TextView = findViewById(R.id.textSpeed)
-        val viewLat : TextView = findViewById(R.id.textLat)
-        val viewLng : TextView = findViewById(R.id.textLng)
-        val viewLogsStashed : TextView = findViewById(R.id.textLogsStashed)
+        switchStatus.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                sendCommandToService(ACTION_START_SERVICE)
+            }
+            else{
+                sendCommandToService(ACTION_STOP_SERVICE)
+            }
+        }
 
+        btnUpdateId.setOnClickListener {
+            showDialog()
+        }
+
+        btnUploadLogs.setOnClickListener {
+            Toast.makeText(this, "Uploading logs...", Toast.LENGTH_SHORT).show()
+            GlobalScope.launch(Dispatchers.IO) { uploadLogs() }
+        }
+
+        updateUI()
+        spinner.onItemSelectedListener = this
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.upload_schedule,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+            spinner.setSelection(mainRepository.appSettings.UPLOAD_FREQUENCY)
+        }
+    }
+
+    private fun subscribeToObservers(){
         TrackingService.isRunning.observe(this, {
             if (it) {
                 switchStatus.isChecked = true
@@ -91,44 +140,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
         TrackingService.logsStashed.observe(this, {
             viewLogsStashed.text = "$it"
         })
-
-        if (intent.action == ACTION_SHOW_UI) {
-            Timber.d("coming from notification")
-        }
-
-
-        switchStatus.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked){
-                sendCommandToService(ACTION_START_SERVICE)
-            }
-            else{
-                sendCommandToService(ACTION_STOP_SERVICE)
-            }
-        }
-        updateUI()
-
-        btnUploadLogs.setOnClickListener {
-            if (switchStatus.isChecked) {
-                Toast.makeText(applicationContext,  "uploading...", Toast.LENGTH_SHORT).show()
-                sendCommandToService(ACTION_UPLOAD_LOGS)
-            } else {
-                Toast.makeText(applicationContext,  "Please enable tracking!", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val spinner: Spinner = findViewById(R.id.spinner)
-        spinner.onItemSelectedListener = this
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.upload_schedule,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner.adapter = adapter
-            spinner.setSelection(sharedPreferences.getInt("UPLOAD_FREQUENCY", 0))
-        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -137,15 +148,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
             Timber.d("coming from notification")
             //switchStatus.isChecked = true
         }
-        if (intent?.action == ACTION_UPLOAD_FAIL) {
-            Toast.makeText(applicationContext,  "Upload Failed.", Toast.LENGTH_SHORT).show()
-        }
-
-        if (intent?.action == ACTION_UPLOAD_SUCCESS) {
-            Toast.makeText(applicationContext,  "Upload Success.", Toast.LENGTH_SHORT).show()
-        }
         updateUI()
     }
+
 
     private fun showDialog() {
         val inflater: LayoutInflater = getSystemService(android.app.Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -157,8 +162,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
             setCancelable(true)
             setMessage("Enter your trucker ID.")
             setButton(AlertDialog.BUTTON_POSITIVE ,"OK") { _, _ ->
+                Toast.makeText(this@MainActivity, "Updating ID..." ,Toast.LENGTH_SHORT, ).show()
                 val input = etComments.text.toString()
-                updateTruckerID(input)
+                GlobalScope.launch(Dispatchers.IO) { updateTruckerID(input.toInt()) }
             }
             setButton(AlertDialog.BUTTON_NEGATIVE ,"Cancel") { _, _ ->
                 alertDialog.dismiss()
@@ -168,70 +174,79 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
         alertDialog.show()
     }
 
-    fun updateTruckerID(truckerID:String) {
-        TRUCKER_ID = truckerID.toInt()
-        TRUCKER_UUID = UUID.randomUUID().toString()
-        val request = ServerRequest(TRUCKER_ID, TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_ID.value, null)
-        var responseCode: ServerResponseCode
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val result = serverConnector.sendMessage(request)
-            responseCode = ServerResponseCode.fromInt(result.res)
-            var toastText:String
-            when (responseCode){
-                ServerResponseCode.RESPONSE_OK -> {
-                    with(sharedPreferences.edit()){
-                        putInt("ID", TRUCKER_ID)
-                        putString("UUID", TRUCKER_UUID)
-                        putString("TRUCKER", result.trucker)
-                        putString("VEHICLE", result.veh)
-                        putString("MANAGER", result.manager)
-                        putBoolean("VERIFIED", true)
-                        apply()
-                    }
-                    toastText = "Updated Identity."
-                }
-                ServerResponseCode.RESPONSE_FAIL -> {
-                    toastText = "Can't update ID. Ask your manager to reset your ID."
-                }
-                ServerResponseCode.RESPONSE_TIMEOUT -> {
-                    toastText = "No server connection"
-                }
-                ServerResponseCode.RESPONSE_DB_CONN_FAIL,ServerResponseCode.RESPONSE_PARSE_FAIL, -> {
-                    toastText = "Server Error"
-                }
-                else -> {
-                    toastText = "Failed!"
-                }
+    suspend fun updateTruckerID(newID : Int) {
+        val toastText = when(mainRepository.updateID(newID)) {
+            ServerResponseCode.RESPONSE_OK -> {
+                "Successfully updated ID."
             }
-
-            withContext(Dispatchers.Main) {
-                updateUI()
-                Toast.makeText(applicationContext,  toastText, Toast.LENGTH_SHORT).show()
+            ServerResponseCode.RESPONSE_PARSE_FAIL -> {
+                "Server parsing error."
             }
+            ServerResponseCode.RESPONSE_DB_CONN_FAIL -> {
+                "Server database error."
+            }
+            ServerResponseCode.RESPONSE_FAIL -> {
+                "Server error."
+            }
+            ServerResponseCode.RESPONSE_TIMEOUT -> {
+                "No network connection."
+            }
+            else -> {
+                "Error."
+            }
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            Toast.makeText(this@MainActivity, toastText, Toast.LENGTH_SHORT).show()
+            updateUI()
+        }
+    }
+
+    private suspend fun uploadLogs() {
+        val toastText = when(mainRepository.uploadLogs()) {
+            ServerResponseCode.RESPONSE_OK -> {
+                "Successfully uploaded logs."
+            }
+            ServerResponseCode.RESPONSE_PARSE_FAIL -> {
+                "Server parsing error."
+            }
+            ServerResponseCode.RESPONSE_DB_CONN_FAIL -> {
+                "Server database error."
+            }
+            ServerResponseCode.RESPONSE_FAIL -> {
+                "Server error."
+            }
+            ServerResponseCode.RESPONSE_TIMEOUT -> {
+                "No network connection."
+            }
+            else -> {
+                "Error."
+            }
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            Toast.makeText(this@MainActivity, toastText, Toast.LENGTH_SHORT).show()
+            updateUI()
         }
     }
 
     private fun updateUI(){
-        val textTrucker: TextView = findViewById(R.id.textTrucker)
-        textTrucker.text = sharedPreferences.getString("TRUCKER", "Unknown").toString()
+        mainRepository.fetchSettings()
 
-        val textVehicle: TextView = findViewById(R.id.textVehicleNumber)
-        textVehicle.text = sharedPreferences.getString("VEHICLE", "Unknown").toString()
-
-        val textManager: TextView = findViewById(R.id.textManager)
-        textManager.text = sharedPreferences.getString("MANAGER", "Unknown").toString()
-
-        val textId: TextView = findViewById(R.id.textId)
-        val truckerID = sharedPreferences.getInt("ID", 0).toString()
-        val truckerVerified = sharedPreferences.getBoolean("VERIFIED", false)
-        if (truckerVerified) {
-            textId.text = "$truckerID \u2713"
-        } else {
-            textId.text = "$truckerID \u274c"
+        with (mainRepository.appSettings) {
+            textTrucker.text = TRUCKER_NAME
+            textVehicle.text = TRUCKER_VEHICLE_NUMBER
+            textManager.text = TRUCKER_MANAGER
+            val truckerID = TRUCKER_ID
+            val truckerVerified = TRUCKER_VERIFIED
+            if (truckerVerified) {
+                textId.text = "$truckerID \u2713"
+            } else {
+                textId.text = "$truckerID \u274c"
+            }
         }
+
         GlobalScope.launch(Dispatchers.IO) {
-        textLogsStashed.text = truckerLogDao.getTruckLogsCount().toString()}
+            textLogsStashed.text = mainRepository.getTruckLogsCount().toString()
+        }
     }
 
     private fun sendCommandToService(action: String) =
@@ -239,6 +254,22 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
             it.action = action
             this.startService(it)
         }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        // An item was selected. You can retrieve the selected item using
+        with(mainRepository.sharedPreferences.edit()){
+            putInt(KEY_UPLOAD_FREQUENCY, pos)
+            apply()
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        Timber.d("spinner : nothing selected")
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        Timber.d("spinner click")
+    }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
     }
@@ -282,21 +313,5 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
                 android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
         }
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        with(sharedPreferences.edit()){
-            putInt("UPLOAD_FREQUENCY", pos)
-            apply()
-        }
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        Timber.d("spinner : nothing selected")
-    }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Timber.d("spinner click")
     }
 }

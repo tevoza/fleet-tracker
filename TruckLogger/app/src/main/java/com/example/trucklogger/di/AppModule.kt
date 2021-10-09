@@ -1,6 +1,5 @@
 package com.example.trucklogger.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.trucklogger.R
@@ -9,16 +8,13 @@ import com.example.trucklogger.other.Constants
 import com.example.trucklogger.other.Constants.TRUCKLOGGING_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.DefineComponent
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Singleton
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
 @Module
@@ -58,4 +54,11 @@ object AppModule {
         sslContext.init(kmf.keyManagers, null, null)
         return sslContext.socketFactory
     }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreferences(
+        @ApplicationContext app: Context
+    ) = app.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
+
 }

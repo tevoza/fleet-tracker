@@ -20,7 +20,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.example.trucklogger.db.TruckLog
-import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.*
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
@@ -35,6 +34,7 @@ import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
 import com.example.trucklogger.other.Constants.UPLOAD_CONTINUOUSLY
 import com.example.trucklogger.other.Constants.UPLOAD_HOURLY
+import com.example.trucklogger.repositories.MainRepository
 import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -47,29 +47,23 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import javax.net.ssl.SSLSocketFactory
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService(), SensorEventListener {
-    var started = false
-    lateinit var sharedPreferences: SharedPreferences
+    @Inject
+    lateinit var mainRepository: MainRepository
+
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    @Inject
-    lateinit var truckLogDao: TruckLogDAO
-
-    @Inject
-    lateinit var sslSocketFactory: SSLSocketFactory
-    lateinit var serverConnector : ServerConnector
 
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
     lateinit var currNotificationBuilder: NotificationCompat.Builder
     lateinit var notificationManager : NotificationManager
 
+    var started = false
     lateinit var sensorManager:SensorManager
     var sensor: Sensor?  = null
     var accX:Float = 0.0f
@@ -83,25 +77,15 @@ class TrackingService : LifecycleService(), SensorEventListener {
         val logsStashed = MutableLiveData<Int> ()
     }
 
-    //settings
-    private var TRUCKER_ID : Int = 0;
-    private var TRUCKER_UUID : String = "";
-    private var TRUCKER_VERIFIED  : Boolean = false;
-    private var UPLOAD_FREQUENCY  : Int = 0;
-
     override fun onCreate() {
         super.onCreate()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
         currNotificationBuilder = baseNotificationBuilder
-        GlobalScope.launch(Dispatchers.IO) {
-            serverConnector = ServerConnector(sslSocketFactory)
-        }
-        sharedPreferences = this.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
 
-        updateSettings()
+        mainRepository.fetchSettings()
         log.postValue(TruckLog())
         logsStashed.postValue(0)
     }
@@ -109,15 +93,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         isRunning.postValue(false)
-    }
-
-    private fun updateSettings(){
-        with (sharedPreferences) {
-            TRUCKER_ID = getInt("ID", 0)
-            TRUCKER_UUID = getString("UUID", "NONE").toString()
-            TRUCKER_VERIFIED = getBoolean("VERIFIED", false)
-            UPLOAD_FREQUENCY = getInt("UPLOAD_FREQUENCY", UPLOAD_CONTINUOUSLY)
-        }
     }
 
    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -139,22 +114,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
                    stopForeground(true)
                    isRunning.postValue(false)
                    stopSelf()
-               }
-               ACTION_UPLOAD_LOGS -> {
-                   if (isTracking) {
-                       GlobalScope.launch(Dispatchers.IO) {
-                           val action = if (uploadLogs() == "Up-to-date.") {
-                               ACTION_UPLOAD_SUCCESS
-                           } else {
-                               ACTION_UPLOAD_FAIL
-                           }
-
-                           val i = Intent(this@TrackingService, MainActivity::class.java)
-                           i.action = action
-                           i.flags = FLAG_ACTIVITY_NEW_TASK
-                           startActivity(i)
-                       }
-                   }
                }
            }
        }
@@ -216,7 +175,7 @@ class TrackingService : LifecycleService(), SensorEventListener {
     }
 
     private suspend fun processLocation(location : Location) {
-        updateSettings()
+        mainRepository.fetchSettings()
         val truckLog = TruckLog(
             location.time/1000,
             location.latitude.toFloat(),
@@ -227,22 +186,44 @@ class TrackingService : LifecycleService(), SensorEventListener {
         )
         log.postValue(truckLog)
 
-        truckLogDao.insertTruckLog(truckLog)
+        mainRepository.insertTruckingLog(truckLog)
 
-        var count = truckLogDao.getTruckLogsCount()
+        var count = mainRepository.getTruckLogsCount()
         var statusUpload = ""
 
-        if (TRUCKER_VERIFIED)
-        {
-            if ((UPLOAD_FREQUENCY == UPLOAD_CONTINUOUSLY) || (UPLOAD_FREQUENCY == UPLOAD_HOURLY && count > 10))
-            {
-                statusUpload = uploadLogs()
+        with (mainRepository.appSettings) {
+            if (TRUCKER_VERIFIED) {
+                if ((UPLOAD_FREQUENCY == UPLOAD_CONTINUOUSLY) || (UPLOAD_FREQUENCY == UPLOAD_HOURLY && count > 10)) {
+                    statusUpload = when(mainRepository.uploadLogs()) {
+                        ServerResponseCode.RESPONSE_OK -> {
+                            "Up to date."
+                        }
+                        ServerResponseCode.RESPONSE_PARSE_FAIL -> {
+                            "Server parsing error."
+                        }
+                        ServerResponseCode.RESPONSE_DB_CONN_FAIL -> {
+                            "Server database error."
+                        }
+                        ServerResponseCode.RESPONSE_FAIL -> {
+                            "Server error."
+                        }
+                        ServerResponseCode.RESPONSE_TIMEOUT -> {
+                            "No network connection."
+                        }
+                        ServerResponseCode.RESPONSE_INVALID_CREDENTIALS -> {
+                            "Unverified ID."
+                        }
+                        else -> {
+                            "Error."
+                        }
+                    }
+                }
+            } else {
+                statusUpload = "Unverified ID."
             }
-        } else {
-            statusUpload = "Unverified ID."
         }
 
-        count = truckLogDao.getTruckLogsCount()
+        count = mainRepository.getTruckLogsCount()
         logsStashed.postValue(count)
 
         //update notification
@@ -252,55 +233,6 @@ class TrackingService : LifecycleService(), SensorEventListener {
         notificationManager.notify(NOTIFICATION_ID, notification.build())
     }
 
-    private suspend fun uploadLogs() : String {
-        var statusUpload: String
-        var count: Int
-        var resultCode: ServerResponseCode
-        //send all logs until none left
-        do {
-            var logs = truckLogDao.getAllTruckLogs()
-            var serverRequest = ServerRequest(TRUCKER_ID,TRUCKER_UUID, ServerRequestCode.REQUEST_UPDATE_LOGS.value, logs)
-            var result = serverConnector.sendMessage(serverRequest)
-            resultCode = ServerResponseCode.fromInt(result.res)
-            if (resultCode == ServerResponseCode.RESPONSE_OK) {
-                for (log in logs) {
-                    truckLogDao.deleteTruckLog(log)
-                }
-            }
-            count = truckLogDao.getTruckLogsCount()
-        } while ((count > 0) && (resultCode == ServerResponseCode.RESPONSE_OK))
-
-        when (resultCode) {
-            ServerResponseCode.RESPONSE_INVALID_CREDENTIALS -> {
-                with(sharedPreferences.edit()) {
-                    putBoolean("VERIFIED", false)
-                    apply()
-                }
-                statusUpload = "Unverified ID."
-            }
-
-            ServerResponseCode.RESPONSE_OK -> {
-                statusUpload = "Up-to-date."
-            }
-
-            ServerResponseCode.RESPONSE_TIMEOUT -> {
-                statusUpload = "No server connection."
-            }
-
-            ServerResponseCode.RESPONSE_FAIL -> {
-                statusUpload = "Invalid Request."
-            }
-
-            ServerResponseCode.RESPONSE_DB_CONN_FAIL, ServerResponseCode.RESPONSE_PARSE_FAIL -> {
-                statusUpload = "Serverside Error."
-            }
-
-            else -> {
-                statusUpload = "Unknown Issue."
-            }
-        }
-        return statusUpload
-    }
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {

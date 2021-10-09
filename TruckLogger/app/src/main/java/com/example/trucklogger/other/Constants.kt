@@ -29,4 +29,12 @@ object Constants {
     const val UPLOAD_CONTINUOUSLY   = 0
     const val UPLOAD_HOURLY         = 1
     const val UPLOAD_ON_REQUEST     = 2
+
+    const val KEY_TRUCKER_ID = "ID"
+    const val KEY_TRUCKER_UUID = "UUID"
+    const val KEY_TRUCKER_NAME = "TRUCKER"
+    const val KEY_TRUCKER_VEHICLE_NUMBER = "VEHICLE"
+    const val KEY_TRUCKER_MANAGER = "MANAGER"
+    const val KEY_TRUCKER_VERIFIED = "VERIFIED"
+    const val KEY_UPLOAD_FREQUENCY = "UPLOAD_FREQUENCY"
 }
