@@ -108,6 +108,9 @@ This process loops continuously loops every two minutes.
 
 The android application is designed with the \ac{mvvm} design pattern (detailed in figure \ref{fig:mvvm_layout}).
 Figure \ref{fig:android_component} details software components (classes) that are clearly represented in the source code.
+The application is targeted to support Android version 4.4 onward.
+This allows for the application to run on 99.6\% of Android devices.
+
 \begin{enumerate}
 \item \textbf{Main Activity}\\
 The main activity renders the application's main user interface to the user.
@@ -119,6 +122,19 @@ Due to this, a manager class is necessary to ensure data is persisted - this is 
 The tracking service is toggleable service which runs in the background as a foreground service.
 It polls acceleration and location data via interfaces made available in the Android \ac{api}.
 It runs without requiring the main activity to be open on the user's screen.
+\begin{enumerate}
+\item \textbf{Fused Location Provider \ac{api}}\\
+The Android \ac{api} provides the \textit{Fused Location Provider} for the purposes of accessing location data according to required settings.
+The \ac{api} provides callbacks which can be hooked into for storing location data, at an adjustable interval.
+
+\item \textbf{Sensor Manager}\\
+The sensor manager provides callbacks for reading data from the various sensors (including accelerometers).
+The \textit{Linear accelerometer} is a "composite" sensor which relies on magnetometers or gyroscropes, in addition to the accelerometer to "zero" out the acceleration due to gravity.
+This is provided by the Android \ac{api}.
+Devices without Linear acceleromters require signal processing to remove the gravitational component. However, this processing is very limited in accuracy.
+
+Acceleration will only be logged in devices with linear accelerometers.
+\end{enumerate}
 \item \textbf{Main Repository}\\
 Multiple components require performing \ac{io} operations.
 To avoid repetition and prevent conflicts, the main repository performs these operations.

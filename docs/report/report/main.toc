@@ -44,15 +44,15 @@
 \contentsline {subsubsection}{\numberline {3.2.4}Web Application}{16}{subsubsection.3.2.4}%
 \contentsline {subsection}{\numberline {3.3}Subsystem components and Design}{17}{subsection.3.3}%
 \contentsline {subsubsection}{\numberline {3.3.1}Android Application - lifecycle and software abstractions}{17}{figure.caption.10}%
-\contentsline {subsubsection}{\numberline {3.3.2}\Ac {io} Server}{20}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}\ac {json} protocol}{22}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{23}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}MySQL Database and Entity relationships}{26}{subsubsection.3.3.5}%
-\contentsline {subsection}{\numberline {3.4}Data Processing}{27}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Aggregating nearby logs}{27}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Defining trips between stop locations}{27}{subsubsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.5}\Acf {ui} Design}{29}{subsection.3.5}%
-\contentsline {subsubsection}{\numberline {3.5.1}Android Application}{29}{subsubsection.3.5.1}%
-\contentsline {subsubsection}{\numberline {3.5.2}Web Application}{31}{figure.caption.19}%
-\contentsline {section}{\numberline {4}Implementation}{32}{section.4}%
-\contentsline {section}{References}{33}{section*.20}%
+\contentsline {subsubsection}{\numberline {3.3.2}\Ac {io} Server}{21}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}\ac {json} protocol}{23}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{24}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}MySQL Database and Entity relationships}{27}{subsubsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.4}Data Processing}{28}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Aggregating nearby logs}{28}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Defining trips between stop locations}{28}{subsubsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.5}\Acf {ui} Design}{30}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Android Application}{30}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Web Application}{32}{figure.caption.19}%
+\contentsline {section}{\numberline {4}Implementation}{33}{section.4}%
+\contentsline {section}{References}{34}{section*.20}%

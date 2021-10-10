@@ -7,15 +7,15 @@
 \contentsline {figure}{\numberline {6}{\ignorespaces Container Diagram - Fleet tracking system\relax }}{15}{figure.caption.9}%
 \contentsline {figure}{\numberline {7}{\ignorespaces Life-cycle - Android Application\relax }}{17}{figure.caption.10}%
 \contentsline {figure}{\numberline {8}{\ignorespaces Component Diagram - Android Application\relax }}{18}{figure.caption.11}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Life cycle - \Ac {io} Server\relax }}{20}{figure.caption.12}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - \Ac {io} Server\relax }}{21}{figure.caption.13}%
-\contentsline {figure}{\numberline {11}{\ignorespaces \Ac {json} protocol\relax }}{22}{figure.caption.14}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Component Diagram - Web Application\relax }}{23}{figure.caption.15}%
-\contentsline {figure}{\numberline {13}{\ignorespaces Fleet Tracking System - Entity Relationship Diagram\relax }}{26}{figure.caption.16}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Android Application - \ac {ui}\relax }}{29}{figure.caption.18}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Fleet index page}}}{29}{figure.caption.19}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Add Trucker}}}{29}{figure.caption.19}%
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Set rules}}}{29}{figure.caption.19}%
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {View Trucker}}}{29}{figure.caption.19}%
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {View Trip}}}{29}{figure.caption.19}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Web application - Pages\relax }}{30}{figure.caption.19}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Life cycle - \Ac {io} Server\relax }}{21}{figure.caption.12}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Component Diagram - \Ac {io} Server\relax }}{22}{figure.caption.13}%
+\contentsline {figure}{\numberline {11}{\ignorespaces \Ac {json} protocol\relax }}{23}{figure.caption.14}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Component Diagram - Web Application\relax }}{24}{figure.caption.15}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Fleet Tracking System - Entity Relationship Diagram\relax }}{27}{figure.caption.16}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Android Application - \ac {ui}\relax }}{30}{figure.caption.18}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Fleet index page}}}{30}{figure.caption.19}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Add Trucker}}}{30}{figure.caption.19}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Set rules}}}{30}{figure.caption.19}%
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {View Trucker}}}{30}{figure.caption.19}%
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {View Trip}}}{30}{figure.caption.19}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Web application - Pages\relax }}{31}{figure.caption.19}%
