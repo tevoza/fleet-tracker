@@ -16,7 +16,7 @@ handler::handler()
         throw std::bad_alloc();
     }
 
-    if (!(*_db).connect("FleetDB", "127.0.0.1", "root", "mypassword"))
+    if (!(*_db).connect("FleetDB", "172.18.0.2", "root", "mypassword"))
     {
         throw dbconn_ex;
     } 

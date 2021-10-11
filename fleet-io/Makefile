@@ -5,12 +5,12 @@ LDLIBS := -lmysqlpp -lmysqlclient
 
 all: ssl_server 
 
-ssl_server: ssl_server.o request_handler.o
-	$(CC) $(LDFLAGS) $(LDLIBS) ssl_server.o request_handler.o -o ssl_server
 ssl_server.o: ssl_server.cpp
 	$(CC) $(CFLAGS) $(LDLIBS)  ssl_server.cpp $(LDFLAGS)
 request_handler.o: request_handler.cpp
 	$(CC) $(CFLAGS) $(LDLIBS)  request_handler.cpp  $(LDFLAGS)
+ssl_server: ssl_server.o request_handler.o
+	$(CC) $(LDFLAGS) $(LDLIBS) ssl_server.o request_handler.o -o ssl_server
 
 clean:
 	rm -f *.o ssl_server ssl_client
