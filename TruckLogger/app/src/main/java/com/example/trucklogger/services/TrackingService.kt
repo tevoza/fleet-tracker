@@ -6,8 +6,6 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.SharedPreferences
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -20,12 +18,8 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.example.trucklogger.db.TruckLog
-import com.example.trucklogger.other.*
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_FAIL
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_LOGS
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_SUCCESS
 import com.example.trucklogger.other.Constants.FASTEST_LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.LOCATION_UPDATE_INTERVAL
 import com.example.trucklogger.other.Constants.MPS_TO_KMH
@@ -34,8 +28,9 @@ import com.example.trucklogger.other.Constants.NOTIFICATION_CHANNEL_NAME
 import com.example.trucklogger.other.Constants.NOTIFICATION_ID
 import com.example.trucklogger.other.Constants.UPLOAD_CONTINUOUSLY
 import com.example.trucklogger.other.Constants.UPLOAD_HOURLY
+import com.example.trucklogger.other.ServerResponseCode
+import com.example.trucklogger.other.TrackingUtility
 import com.example.trucklogger.repositories.MainRepository
-import com.example.trucklogger.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -193,7 +188,7 @@ class TrackingService : LifecycleService(), SensorEventListener {
 
         with (mainRepository.appSettings) {
             if (TRUCKER_VERIFIED) {
-                if ((UPLOAD_FREQUENCY == UPLOAD_CONTINUOUSLY) || (UPLOAD_FREQUENCY == UPLOAD_HOURLY && count > 10)) {
+                if ((UPLOAD_FREQUENCY == UPLOAD_CONTINUOUSLY) || (UPLOAD_FREQUENCY == UPLOAD_HOURLY && count > 20)) {
                     statusUpload = when(mainRepository.uploadLogs()) {
                         ServerResponseCode.RESPONSE_OK -> {
                             "Up to date."

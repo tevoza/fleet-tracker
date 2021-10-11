@@ -3,7 +3,6 @@ package com.example.trucklogger.other
 import android.content.Context
 import android.os.Build
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.jar.Manifest
 
 object TrackingUtility {
    fun hasLocationPermissions(context : Context) =

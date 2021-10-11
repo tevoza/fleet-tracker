@@ -15,9 +15,6 @@ import com.example.trucklogger.other.ServerRequest
 import com.example.trucklogger.other.ServerRequestCode
 import com.example.trucklogger.other.ServerResponseCode
 import com.example.trucklogger.services.ServerConnector
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 import javax.net.ssl.SSLSocketFactory

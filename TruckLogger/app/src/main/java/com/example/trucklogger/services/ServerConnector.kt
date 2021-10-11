@@ -1,10 +1,5 @@
 package com.example.trucklogger.services
 
-import android.app.Service
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
 import com.example.trucklogger.other.Constants.SERVER_IP
 import com.example.trucklogger.other.Constants.SERVER_PORT
 import com.example.trucklogger.other.Constants.SOCKET_TIMEOUT
@@ -14,9 +9,8 @@ import com.example.trucklogger.other.ServerResponseCode
 import com.google.gson.Gson
 import timber.log.Timber
 import java.io.*
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import javax.net.ssl.SSLServerSocketFactory
+import javax.net.ssl.SSLSocket
+import javax.net.ssl.SSLSocketFactory
 
 class ServerConnector (sslSocketFactory: SSLSocketFactory){
     private var socketFactory = sslSocketFactory
@@ -46,6 +40,7 @@ class ServerConnector (sslSocketFactory: SSLSocketFactory){
             response = Gson().fromJson(reply, ServerResponse::class.java)
         } catch (e: Exception) {
             response = ServerResponse(ServerResponseCode.RESPONSE_TIMEOUT.value, null, null, null)
+            Timber.d(e.message)
         }
         return response
     }

@@ -2,8 +2,6 @@ package com.example.trucklogger.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.JsonAdapter
-import java.sql.Timestamp
 
 @Entity(tableName = "tblTruckLogs")
 data class TruckLog (

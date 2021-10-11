@@ -1,9 +1,7 @@
 package com.example.trucklogger.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,41 +10,25 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trucklogger.R
-import com.example.trucklogger.db.TruckLogDAO
 import com.example.trucklogger.other.Constants.ACTION_SHOW_UI
 import com.example.trucklogger.other.Constants.ACTION_START_SERVICE
 import com.example.trucklogger.other.Constants.ACTION_STOP_SERVICE
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_FAIL
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_LOGS
-import com.example.trucklogger.other.Constants.ACTION_UPLOAD_SUCCESS
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_ID
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_MANAGER
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_NAME
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_UUID
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_VEHICLE_NUMBER
-import com.example.trucklogger.other.Constants.KEY_TRUCKER_VERIFIED
 import com.example.trucklogger.other.Constants.KEY_UPLOAD_FREQUENCY
-import com.example.trucklogger.other.Constants.PREFERENCES_FILE
 import com.example.trucklogger.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
-import com.example.trucklogger.other.ServerRequest
-import com.example.trucklogger.other.ServerRequestCode
 import com.example.trucklogger.other.ServerResponseCode
 import com.example.trucklogger.other.TrackingUtility
 import com.example.trucklogger.repositories.MainRepository
-import com.example.trucklogger.services.ServerConnector
 import com.example.trucklogger.services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import javax.net.ssl.SSLSocketFactory
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, AdapterView.OnItemClickListener,
@@ -186,7 +168,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, A
                 "Server database error."
             }
             ServerResponseCode.RESPONSE_FAIL -> {
-                "Server error."
+                "Failed. Please ensure your manager has reset your ID."
             }
             ServerResponseCode.RESPONSE_TIMEOUT -> {
                 "No network connection."
