@@ -1,4 +1,4 @@
-PWD /home/adam/Projects/fleet-tracker/docs/report/report
+PWD /home/adam/drive/Projects/fleet-tracker/docs/report/report
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
 INPUT main.tex
@@ -836,6 +836,7 @@ OUTPUT main.aux
 INPUT ./main.acr
 INPUT ./main.acr
 OUTPUT main.acr
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
