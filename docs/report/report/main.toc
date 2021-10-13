@@ -4,8 +4,8 @@
 \contentsline {subsection}{\numberline {1.2}Background}{1}{subsection.1.2}%
 \contentsline {subsection}{\numberline {1.3}Problem Statement}{2}{subsection.1.3}%
 \contentsline {subsection}{\numberline {1.4}Hypothesis}{2}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Project Objective}{2}{subsection.1.5}%
-\contentsline {subsubsection}{\numberline {1.5.1}Primary Objective}{2}{subsubsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5}Project Objective}{3}{subsection.1.5}%
+\contentsline {subsubsection}{\numberline {1.5.1}Primary Objective}{3}{subsubsection.1.5.1}%
 \contentsline {subsection}{\numberline {1.6}Anticipated Benefits of Solution}{3}{subsection.1.6}%
 \contentsline {subsection}{\numberline {1.7}Technical Requirements}{3}{subsection.1.7}%
 \contentsline {subsubsection}{\numberline {1.7.1}Requirements}{3}{subsubsection.1.7.1}%
