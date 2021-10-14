@@ -1,0 +1,59 @@
+\section{Conclusion}
+The implemented solution is discussed.
+The solution is investigated by assessing its capability to meet primary objectives, requirements and deliverables.
+The viability of the solution in the deployment environment is considered.
+Finally, potential downfalls are considered and future improvements are recommended.
+
+\subsection{Meeting objectives, requirements and deliverables}
+The implemented solution meets the primary objective, by providing detailed reports about the truckers whereabouts.
+Managers can view (both visually on a map and in a tabulated form) where the truckers have been.
+Managers can also view speed data for trips executed by truckers with reasonable precision.
+
+Technical requirements and deliverables are achieved.
+The android application runs in the background and logs data in the required interval.
+Logging data can be uploaded at a predefined frequency or on request.
+
+The \ac{io} server and web application are reliable and run indefinitely.
+An intuitive user interface is provided to managers for the purposes of managing and viewing their fleets.
+
+\subsection{Usability}
+In a deployment environment, managers will have to ensure that truckers using the android application do so diligently and restart the service if the device shuts down (or in the case of an occasional crash).
+
+The Android application appears to perform more reliably on newer Android versions.
+For minimal the Samsung Galaxy A01 offers a popular option.
+
+Battery life of Android devices is slightly reduced when running the application, although most devices should be able to adequately perform for 8 hours.
+It would be recommended that truckers make use of chargers while en route.
+
+\subsection{Future Improvements}
+A few aspects are considered in improving the system for commercial applications.
+
+\subsubsection{External sensor integration}
+Trucks which make use of the \ac{can} protocol can be interfaced with additional hardware to give more detailed information about trucks.
+This includes data such as wheel speed, fuel and oil readings among others.
+Such an addition will allow managers better monitoring of their vehicles, allowing for preventative maintenance.
+
+\subsubsection{Improving the robustness of the Android application}
+If the android application stops running, or the device restarts, it requires manual intervention by the trucker to restart the service.
+It would be beneficial to implement the automatic startup of the application upon crashing or booting the device.
+
+\subsubsection{Serialization protocol and data usage}
+The \ac{json} protocol used for communication contains an element of redundant data which makes it more debuggable at the expense of data usage.
+This is due to the repetition of key text used to identify the corresponding value associated with the key.
+Serialization libraries such as Google's Protobuf library offer room for improvement.
+
+The current implementation opens and closes sockets with every connection.
+This is undesirable due to the significant data usage overhead associated with establishing encrypted \ac{ssl} connections.
+It would be desirable to rather keep socket connections open.
+
+\subsubsection{Accelerometer data}
+Logging accelerometer data periodically offers limited insight into the driving behavior of truckers, as large time periods where truckers could be misbehaving, are neglected.
+A smoother mechanism would be required, making use of continuous polling.
+
+\subsection{Conclusion}
+The truck tracking system is realized to meet the primary objectives, goals and deliverables.
+Software engineering methods and good practices are utilized in the design, development and implementation of the system.
+
+While the system developed offers insight into the whereabouts of truckers, there is potential for more driver-specific behavior to be inferred.
+
+The system requires some improvement in robustness, to be deployed in commercial applications.

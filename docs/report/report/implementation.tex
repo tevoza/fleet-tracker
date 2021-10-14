@@ -126,7 +126,7 @@ It provides user log in and sign up pages, as seen in figure \ref{fig:webapp_use
 \end{figure}
 
 \pagebreak
-\subsubsection{Fleet Index}
+\subsubsection{Fleet viewing and management}
 The Fleet Controller is implemented in handling \Ac{http} requests for serving web pages related to the manager's Fleet.
 Fleet Controller methods are called when the \ac{uri} in the address bar is appended with the text \textit{Fleet}.
 
@@ -161,6 +161,7 @@ Figure \ref{fig:webapp_userhandling} depicts pages implemented for adding trucke
 They both make use of \ac{html} forms bound to the Manager and Trucker model.
 \Ac{http} requests are routed to the Fleet Controller and handled by an appropriate method.
 
+\subsubsection{Trucker activity}
 \begin{figure}[H]
 \centering
     \subfigure[View Trucker]
