@@ -12,23 +12,24 @@
   </div>
 
   <div class="text-center">
-    <h1>VIEW TRIP</h1>
+    <h1>VIEW TRIP - @Model.Count logs:  @DateTimeOffset.FromUnixTimeSeconds(@Model.First().TimeStamp).LocalDateTime - @DateTimeOffset.FromUnixTimeSeconds(@Model.Last().TimeStamp).LocalDateTime </h1>
 
-    <h2>@Model.Count logs</h2>
+    <h2>Time plot</h2>
+    <div>
+      <canvas id="myChart" width="100%" height="30px" style="background-color: #EEF5DB;"></canvas>
+    </div>
 
-    <canvas id="myChart" width="100%" height="50px" style="background-color: #EEF5DB;"></canvas>
-
+    <h2>Percentile Distribution</h2>
+    <div>
+      <canvas id="myPercentile" width="100%" height="30px" style="background-color: #EEF5DB;"></canvas>
+    <div>
 </div>
 <script>
-var ctx = document.getElementById('myChart').getContext('2d');
-
 var points = JSON.parse('@Json.Serialize(Model)');
-console.log(points);
-let time = points.map(a => a.timeStamp);
+let time = points.map(a => new Date(a.timeStamp*1000).toTimeString().split(" ")[0]);
 let speed = points.map(a => a.speed);
 let accel = points.map(a => a.acceleration);
 let altitude = points.map(a => a.altitude);
-console.log(speed);
 
 const data = {
   labels: time,
@@ -48,7 +49,8 @@ const data = {
     label: 'Altitude',
     backgroundColor: 'rgb(0, 255, 0)',
     borderColor: 'rgb(0, 255, 0)',
-    data: altitude
+    data: altitude,
+    hidden: true
   }
   ]
 };
@@ -64,5 +66,44 @@ var myChart = new Chart(
     config
 );
 
+//percentiles
+function linspace(start, stop, num, endpoint = true) {
+    const div = endpoint ? (num - 1) : num;
+    const step = (stop - start) / div;
+    return Array.from({length: num}, (_, i) => start + step * i);
+}
 
+var speedSorted  = speed.sort(function(a, b){return a - b}); 
+var accelSorted  = accel.sort(function(a, b){return a - b}); 
+var x = linspace(0, 100, speedSorted.length)
+x = x.map(x => x.toFixed(1))
+
+console.log(speedSorted  , x)
+const percentile_data = {
+  labels: x,
+  datasets: [{
+    label: 'Speed',
+    backgroundColor: 'rgb(255, 99, 132)',
+    borderColor: 'rgb(255, 99, 132)',
+    data: speedSorted
+  },
+  {
+    label: 'Acceleration',
+    backgroundColor: 'rgb(255, 99, 132)',
+    borderColor: 'rgb(255, 99, 132)',
+    data: accelSorted
+  }  
+  ]
+};
+
+const percentile_config = {
+  type: 'line',
+  data: percentile_data,
+  options: {}
+};
+
+var percentile_plot = new Chart(
+    document.getElementById('myPercentile'),
+    percentile_config 
+);
 </script>

@@ -50,14 +50,18 @@ namespace FleetTracker.ViewModels
             if (TruckerLogs.Count() == 0) {
                 return aggregatedLogs;
             }
-            aggregatedLogs.Add(TruckerLogs.First());
+            var lst = TruckerLogs.ToList();
+
+            aggregatedLogs.Add(lst[0]);
             var last = aggregatedLogs[0];
-            foreach (var log in TruckerLogs)
+
+            for(var l = 0; l < lst.Count - 1; l++)
             {
-                if (GetDelta(log.Latitude, log.Longitude,last.Latitude,last.Longitude) > THRESHHOLD)
+                if ((GetDelta(lst[l].Latitude, lst[l].Longitude, last.Latitude,last.Longitude) > THRESHHOLD)
+                && (GetDelta(lst[l+1].Latitude, lst[l+1].Longitude, last.Latitude,last.Longitude) > THRESHHOLD))
                 {
-                    aggregatedLogs.Add(log);
-                    last = log;
+                    aggregatedLogs.Add(lst[l]);
+                    last = lst[l];
                 }
             }
             return aggregatedLogs;
