@@ -18,7 +18,7 @@ namespace FleetTracker.Controllers
     public class FleetController : Controller
     {
         private const long DAY_SECONDS = 60*60*24;
-        private const long DAY_DISPLAY = 7;
+        private const long DAY_DISPLAY = 3;
         private readonly ILogger<FleetController> _logger;
         private readonly UserManager<Manager> _userManager;
         private readonly ApplicationDbContext _db;
