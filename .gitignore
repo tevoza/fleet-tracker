@@ -303,7 +303,6 @@ __pycache__/
 *.app
 
 # Built application files
-*.apk
 *.aar
 *.ap_
 *.aab
