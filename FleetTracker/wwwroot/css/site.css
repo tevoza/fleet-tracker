@@ -101,3 +101,10 @@ body {
 #map {
   height: 500px;
 }
+.carousel-item img {
+    width: 550px !important;
+    height: 650px !important;
+}
+.carousel-inner img {
+  margin: auto;
+}

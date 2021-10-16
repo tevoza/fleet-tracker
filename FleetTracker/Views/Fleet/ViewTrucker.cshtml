@@ -74,13 +74,14 @@ var uDate = new Date(upperDate*1000).toISOString().split('T')[0];
 document.getElementById("upTillDate").value = uDate;
 document.getElementById("daysBefore").value = daysBefore;
 
+let markerLabel = 1
 //options{log,  arriveTime, departTime, delay}
 function makeMarker(options)
 {
     var dateOptions = {year:'numeric', month:'numeric', day:'numeric',  hour: '2-digit', minute:'2-digit'};
     var info = "";
     if (options.delay != null) {
-        info += "Delay: " + (options.delay/60) + " minutes\n";
+        info += "Delay: " + (options.delay/60).toFixed(1) + " minutes\n";
     }
 
     if (options.arriveTime != null) {
@@ -95,8 +96,10 @@ function makeMarker(options)
 
     var m = new google.maps.Marker ({
             position: new google.maps.LatLng ( options.log.latitude, options.log.longitude ),
-            title: info
+            title: info,
+            label: markerLabel.toString() 
         });
+    markerLabel++;
     return m;
 }
 

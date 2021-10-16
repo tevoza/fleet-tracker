@@ -1,16 +1,53 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<div class="text-center">
+    <h1>Welcome to FleetTracker</h1>
+</div>
 
-<div class="text-left">
-    <h1 class="display-4">Welcome to Fleet Tracker!</h1>
-    <h3 class="display-4">Get Started!</h3>
+<div class="container">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="assets/android_app_running.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="assets/webapp_view_trucker.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="assets/webapp_view_trip.png" class="d-block w-100" alt="...">
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+    </div>
+</div>
 
-    <ul>
-        <li>Register your manager account</li>
-        <li>Add truckers to your fleet</li>
-        <li>Get the app on their phones</li>
-        <li>Run the app during their shifts and monitor on this site</li>
+<div class="d-flex justify-content-center" style="padding-top: 25px;">
+    <h1>How does it work?</h1>
+    <ul class="text-left" >
+        <li>Register a manager account</li>
+        <li>Add entries for each member of your fleet</li>
+        <li>Download the app onto your fleets' phones</li>
+        <li>Monitor your fleet!</li>
     </ul> 
 </div>
 
+<div class="d-flex justify-content-center" style="padding-top: 25px;">
+    <h1>Android App</h1>
+    <ul class="text-left" >
+        <li><a href="https://tf2sa.xyz/demos/app-release.apk">Download</a></li>
+        <li>You need to enable apps from "untrusted sources!"</li>
+    </ul> 
+</div>
