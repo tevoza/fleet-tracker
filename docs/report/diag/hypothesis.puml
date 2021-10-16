@@ -1,0 +1,41 @@
+@startuml
+!theme sandstone
+skinparam defaultTextAlignment center
+skinparam defaultFontSize 20
+
+component android_app [
+<b>Smartphone Application</b>
+Collects and generates log data
+locally for each trucker.
+]
+
+component io_server [
+<b>I/O Server</b>
+A web service which can transmit data
+from multiple android devices to/from
+the data store.
+]
+
+component db [
+<b>Central Data Store</b>
+Storing log data and user information
+]
+
+component web_server [
+<b>Web Server (Backend)</b>
+Generating and serving web pages
+Back-end of web applcation
+]
+
+component web_app [
+<b>Web Application (Frontend)</b>
+Rendering and displaying the graphical
+interface to the user
+]
+
+android_app -up-> io_server
+io_server -r- db
+db -r- web_server
+web_app -up-> web_server
+
+@enduml

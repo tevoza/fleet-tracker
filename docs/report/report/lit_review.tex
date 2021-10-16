@@ -1,21 +1,51 @@
 \section{Literature Review}
-This section tackles the investigation of components which make up the proposed high level system depicted in figure \ref{fig:high_arch}.
+This section tackles the investigation of components which make up the proposed high level system depicted in figure \ref{fig:hypothesis}.
 There exists a variety of different tools available to realize each system.
-With the hardware pre-existing, most of the design exists in the software domain.
-Various software tools and methodology are considered.
+With the hardware preexisting, most of the design exists in the software domain.
+Various software tools and methodologies are considered.
 
-\subsection{Internal and External Sensors}
+\subsection{Sensors}
 Effective data logging of acceleration, altitude, location and speed all begin with the quality of measurements being made.
 Smartphones alone provide a wealth of options.
-However, external sensors available to the truck operators may also be considered.
+However, external sensors available to the truck operators offer a variety of options.
 
 \subsubsection{Internal Sensors}
 Most smartphones come well-equipped with a wide variety of on-board sensors, such as \ac{gps} sensors, accelerometers, gyroscopes, magnetometers and ambient light sensors, among others \cite{majumder2019smartphone}.
 As such, they are capable of inferring a wealth of information related to driving patterns.
 This includes dangerous driving behavior, for which algorithms have been developed \cite{li2016dangerous}.
 
-The variety of on-board sensors provide an adequate means of measuring acceleration and location (and therefore altitude). However, no effective speed sensor exists for smartphone devices.
-GPS sensors may be used for inferring speed by computing location-time differentials, but with potentially fluctuating accuracy or possible performance reduction.
+While not all smartphones provide a full suite of sensors, a combination of on-board sensors can be used to measure variables of interest.
+\begin{itemize}
+\item \textbf{Acceleration}\\
+Raw accelerometers provide acceleration readings along 3 axes to encompass a three dimensional space.
+Tilting or rotating the smartphone will change the axis on which an applied acceleration is detected.
+This will happen often in smartphones which aren't securely mounted, or when traversing steep gradients.
+The combined applied acceleration (or resultant acceleration $a_{res}$) can be found by combining the component in each direction, with
+\begin{equation}\label{eq:acc}
+\begin{split}
+a_{res} = \sqrt{a_{x}^2 + a_{y}^2 + a_{z}^2},\\
+\end{split}
+\end{equation}
+where $a_{x}, a_{y}, a_{z}$ denote the acceleration components on each axis.\cite{david2020halliday}
+
+Gravity applies a constant acceleration as well, which is not of interest.
+Filters that eliminate this constant gravity component can do so by means of highpass filtering, clearing the constant bias.
+However, if this acceleration is sustained for several samples (as is often the case when driving), this momentarily constant acceleration is also filtered out.
+
+The most effective means for determining acceleration excluding gravity is to use a combination of sensors in a strategy usually termed \textit{sensor fusion}.\cite{sasiadek2002sensor}
+This method makes additional use of magnetometers and gyroscopes to isolate and remove the gravity component.
+An Android \ac{api} abstraction makes use of sensor fusion implementing a so-called \textit{linear accelerometer}, which allows for acceleration readings which exclude the influence of gravity.
+
+\item \textbf{\Ac{gps} Location}\\
+\Ac{gps} receivers are typically available in most modern smartphones.
+They determine the user's \ac{gps} coordinates, which reveals their location.
+
+\item \textbf{Speed}\\
+Devices with \ac{gps} capabilities can infer speed using location-time differences.
+
+\item \textbf{Altitude}\\
+\Ac{gps} capable devices also supply altitude information.
+\end{itemize}
 
 Battery life preservation and reduced performance are often concerns when running computationally heavy daemons (background operating system processes).
 Recent efforts in the development and standardization of new, lightweight sensor-probing protocols have been investigated.

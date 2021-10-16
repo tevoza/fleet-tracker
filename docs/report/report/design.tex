@@ -1,5 +1,5 @@
 \section{Design}
-This section considers the context in which the problem exists and the design of each system and subsystem necessary to visualize and realize a possible solution to solve the problem.
+The design considers the context in which the problem exists and the design of each system and subsystem necessary to visualize and realize a possible solution to solve the problem.
 
 The nature of the system exists primarily in the software domain.
 As such, a suitable design architecture is postulated by the C4 model.
@@ -51,16 +51,17 @@ A web application, realized with Microsoft's ASP.NET framework fetches the data 
 \label{fig:container}
 \end{figure}
 
-\subsubsection{Data Model}
+\subsubsection{Choice of \ac{rdbms}}
 The entire system revolves around the effective abstraction and manipulation of logged fleet data.
-MySQL is chosen as the \ac{rdbms} to realize a relational database model, as it is high performance and reliable.
+MySQL is chosen as the \ac{rdbms} to realize a relational database model, as it is highly performant and reliable.
 Other \ac{rdbms}s (such as Microsoft SQL Server, PostgreSQL) offer comparable performance, but MySQL is chosen for familiarity.
 
-The relational model is depicted in figure \ref{fig:erd}.
-The model is designed to allow one company to have many managers and truckers. Each trucker can have many logs.
-
 \subsubsection{Android Application}
-Kotlin is the language of choice to write the android application due to its simplicity and mainstream Google support.
+The smartphone application is written for the Android \ac{os}, due to its cost benefits and larger market share.
+
+Kotlin is the language of choice to write the android application due to its simplicity, modern powerful feature set and mainstream Google support.
+Kotlin runs on the \ac{jvm} (as does Java) but offers a cleaner development experience with modern features such as coroutines, flows and less verbosity (and therefore less "code smells").
+Common Java classes may be called within Kotlin code, allowing for the legacy Java libraries to be integrated with modern Kotlin code.
 
 Truckers must receive an initial code from their managers' to register their devices.
 Sensor readings are taken every two minutes, and stored into a lightweight database.
@@ -71,17 +72,19 @@ C++ is chosen for the \ac{io} server, due to its high performance capabilities.
 The \ac{io} server needs to listen and allow multiple asynchronous connections, during which log data is transmitted to the database.
 
 \subsubsection{Web Application}
-The \ac{mvc} architecture will be realized with the Microsoft ASP.NET framework.
-This architecture allows for separation between business-logic, data models and viewing logic.
-This is necessary to ensure that code related to displaying data is not mixed with code used for core logic, thereby separating and modularizing the functionality of different components in the system.
+Web applications consist of a backend (running on a server) component, and serves content to the frontend component (rendered on a browser).
 
-\pagebreak
+Many web frameworks can be used to build effective and powerful web applications.
+Frameworks such as Node.js, Express, Django, Rails, Spring all offer a feature rich experience.
+Choice often depends on preference.
+Microsoft's ASP.NET web framework is chosen as it offers great performance, and is familiar.
+
 \subsection{Subsystem components and Design}
 Each container in figure \ref{fig:container} is subdivided into several core software components necessary to achieve the desired outcomes.
 This is depicted through container diagrams, which makes up the third level of the C4 model.
 
 \subsubsection{Android Application - lifecycle and software abstractions}
-\begin{figure}[H]
+\begin{figure}
 \centering
 \includegraphics[scale=0.4]{../diag/android_activity.png}
 \caption{Life-cycle - Android Application}
