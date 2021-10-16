@@ -8,35 +8,42 @@ Finally, this solution is evaluated and analyzed, and future recommendations are
 
 \subsection{Background}
 Due to the nature of the trucking industry, it is difficult for company owners to keep track of their employees.
-Truckers carry out their shifts delivering important cargo to various locations over far distances.
-As such, it is not practical for employers to track their whereabouts throughout their shifts.
-This allows truckers the ability to behave undesirably while on the job.
-Truckers who waste time taking unnecessarily long stops or detours waste company time and money.
-In addition, some truckers may also be found breaking traffic laws without proper intervention.
+Truckers carry out their shifts delivering cargo to various locations over far distances.
+As such, it is not possible for employers to track their whereabouts throughout their shifts.
+
+Lack of supervision allows truckers the ability to behave undesirably while on the job.
+They can waste time by taking unnecessarily long stops.
+Some truckers may drive erratically, unsafely or illegally.
 Such employees are a liability to the reputation and profitability of their respective companies.
 
 The ability to track truckers would provide a potential means to address this issue, by allowing employers to monitor their truckers' location, progress and behavior throughout their shifts.
 The ability to produce an audit trail detailing the truckers whereabouts during their shifts would allow managers to ensure that work is adequately executed. Such an audit trail would comprise of:
 \begin{itemize}
 \item \textbf{\ac{gps} coordinates\\}
-\ac{gps} tracking will allow employers to ensure that truckers are actually traveling to required locations, and doing so via the most effective routes. This also allows employers to ensure no unnecessary detours occur.
+\ac{gps} tracking will allow employers to ensure that truckers are traveling to required locations, and doing so via effective routes. This also allows employers to ensure no unnecessary detours occur.
 \item \textbf{Altitude\\}
-An optional parameter which may be useful in some cases and detailed optimization improvements.
+Altitude logging may be useful for identifying trends in routes traveled, especially where large altitude gradients occur.
+Trucks often struggle traversing steep gradients.
+Altitude analysis may offer insight for companies looking to perform optimizations.
 \item \textbf{Speed\\}
-Examining the trucker's speed allows for managers to examine the effectiveness of cargo transportation, and to ensure that traffic laws are generally obeyed.
+Examining trucker speeds allows for managers to monitor how quickly truckers are able to transport goods.
+Slower routes may be identified where traffic is more prevalent.
+This could allow for route optimization, or truck malfunctions.
 \item \textbf{Acceleration\\}
-A potentially useful parameter which may be used for inferring any dangerous driving behavior. 
+Acceleration may be used for inferring any dangerous driving behavior. 
 Erratic acceleration and deceleration is associated with dangerous driving behavior.
+Additionally, erratic driving can cause more strain and deterioration on the vehicle.
 \end{itemize}
 
-The ubiquitous nature of cheap, \ac{gps}-equipped smartphones provides a potential avenue for realizing such a solution at low cost.
-In addition, nation-wide continuous access to the internet allows for live tracking to be utilized. 
+The ubiquitous nature of cheap, \ac{gps}-equipped smartphones provides a potential avenue for realizing a simple solution at low cost.
+In addition, nation-wide continuous access to the internet allows for live tracking to be utilized most of the time.
 
 \subsection{Problem Statement}
-A smartphone-powered tracking system must be implemented to be used by trucking companies for tracking and logging their trucker's \textbf{\ac{gps} coordinates, altitude, speed and acceleration}.
-This data should be capable of being continuously (or periodically) uploaded to a central data store.
+A tracking system must be implemented to be used by trucking companies for tracking and logging their truckers' \textbf{\ac{gps} coordinates, altitude, speed and acceleration}.
+Logging should be performed with sensors available on most standard smartphones.
 
-In addition, an online interface is required for storing, processing and displaying logged data pertaining to the trucker's location and behavior.
+Logging data should be continuously (or periodically) made accessible to managers remotely.
+In addition, an interface is required for storing, processing and displaying logged data pertaining to the trucker's location and behavior.
 
 \subsection{Hypothesis}
 An low-cost anticipated architecture, as depicted in figure \ref{fig:high_arch}, involves the development of a smartphone application capable of interfacing with internal or external sensors, and transferring sensor data through some \ac{io} server into a data store. \cite{bertocco1998client}
