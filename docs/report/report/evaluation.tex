@@ -1,9 +1,6 @@
 \section{Evaluation}
 Evaluation of the system is performed by testing the deployed \ac{io} server and web application with several Android devices which are available.
 
-\subsection{Android application}
-Four Android devices were readily available for testing purposes, which are highlighted in table \ref{tab:android_devices_tested}.
-
 \begin{table}[H]
 \caption{Android devices tested}
 \label{tab:android_devices_tested}
@@ -17,8 +14,8 @@ Huawei Nova 5T      & 7700     & 10                    & Yes                  \\
 \end{tabular}
 \end{table}
 
-\subsubsection{Log accuracy}
-Generally, \ac{gps} accuracy is reasonable, within an approximately 30 meter range.
+\subsection{Location accuracy}
+Generally, \ac{gps} accuracy is reasonable, within an approximately 20 meter range.
 Occasionally, a rogue data point occurs resulting in a random spike, as shown in figure \ref{fig:random_spike}.
 A small adjustment is made to algorithm \ref{algo_agg}, where the proceeding log is also compared with the current log in each iteration of the for loop.
 This ensures that two consecutive logs must be greater than the distance threshold, when aggregating nearby data points.
@@ -41,7 +38,49 @@ The result of this correction is depicted in figure \ref{fig:random_spike_correc
 \caption{Location spike correction}
 \label{fig:spike_correction}
 \end{figure}
-Acceleration is only logged on devices which have linear accelerometer.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=6in]{eval_location.png}
+\caption{Location Tracking with the A3 Core}
+\label{fig:eval_location}
+\end{figure}
+
+The four devices are taken on the same trip through town, with the logging frequency set to 10 seconds.
+They all register near identical arrival and departure times, and sketch the same route on the map, as depicted in figure \ref{fig:eval_location}.
+With the speed limit set to 60km/h, portions of the trip were correctly logged above this speed.
+Other statistics all indicate similar trends.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{eval_speed.png}
+\caption{Speed data}
+\label{fig:eval_speed}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{eval_accel.png}
+\caption{Acceleration Data}
+\label{fig:eval_accel}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{eval_accel_slow.png}
+\caption{Acceleration Data - Slow}
+\label{fig:eval_accel_slow}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5in]{eval_altitude.png}
+\caption{Altitude Data}
+\label{fig:eval_altitude}
+\end{figure}
+
+\subsection{Android application}
+Four Android devices were readily available for testing purposes, which are highlighted in table \ref{tab:android_devices_tested}.
 
 \subsubsection{Application reliability}
 Application reliability is tested by ensuring that the tracking service remains active indefinitely.

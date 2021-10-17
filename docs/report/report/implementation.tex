@@ -51,7 +51,7 @@ Depending on the upload frequency, an attempt is made to upload logs to the cent
 Otherwise logs are stashed in the SQLite database.
 
 \subsection{\Ac{io} Server}
-Figure \ref{fig:io_output} depicts the output of the \ac{io} server, logging request information to standard output.
+Figure \ref{fig:io_output} depicts the output of the \ac{io} server, logging request information from multiple users to standard output.
 
 \begin{figure}[H]
 \centering
@@ -125,7 +125,6 @@ It provides user log in and sign up pages, as seen in figure \ref{fig:webapp_use
 \label{fig:webapp_userhandling}
 \end{figure}
 
-\pagebreak
 \subsubsection{Fleet viewing and management}
 The Fleet Controller is implemented in handling \Ac{http} requests for serving web pages related to the manager's Fleet.
 Fleet Controller methods are called when the \ac{uri} in the address bar is appended with the text \textit{Fleet}.
@@ -155,14 +154,14 @@ This attribute can be reset to allow the pairing process to be performed again f
         \label{fig:webapp_set_rules}
     }
 \caption{Web application - Fleet management}
-\label{fig:webapp_userhandling}
+\label{fig:webapp_fleet_management}
 \end{figure}
-Figure \ref{fig:webapp_userhandling} depicts pages implemented for adding truckers and setting rule thresholds.
+Figure \ref{fig:webapp_fleet_management} depicts pages implemented for adding truckers and setting rule thresholds.
 They both make use of \ac{html} forms bound to the Manager and Trucker model.
 \Ac{http} requests are routed to the Fleet Controller and handled by an appropriate method.
 
 \subsubsection{Trucker activity}
-\begin{figure}[H]
+\begin{figure}
 \centering
     \subfigure[View Trucker]
     {

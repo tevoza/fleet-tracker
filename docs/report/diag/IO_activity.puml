@@ -9,23 +9,33 @@ start
 :Listen for connections;
 ->On Connect;
 :Open Asynchronous connection\nwith android application client;
-:Verify connection;
+:Verify SSL connection;
 
 note right
     Ensure connection is encrypted and secure with 3-way handshake
 end note
 switch (GetRequest)
-case (Verify Trucker ID)
-    :Check if: \nID exists or\nalready in use;
-    if (ValidID?) is (valid) then
-        :return Valid connection;
+case (VERIFY ID)
+    if (if: \nID and UUID match\nin local database) is (valid) then
+        :return Verified Trucker;
     else (invalid)
-        :return Error;
+        :return Unverified Trucker;
     endif
-case (Update logs) 
-    :Parse log data to central database;
+case (UPDATE ID) 
+    if (if: \nID is associated\nwith unverified trucker) is (yes) then
+        :update UUID and set\nverified status true\nreturn OK;
+    else (no)
+        :return Fail;
+    endif
+case (UPDATE LOGS) 
+    if (if:\nVERIFY ID) is (Verified) then
+        :Insert incoming log data\n into database\n return OK;
+    else (Unverified)
+        :return Unverified Trucker;
+    endif
 endswitch
 
+:Send appropriate response;
 :Close connection;
 
 stop
