@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex main"] 1634553497 "main.aux" "main.bbl" "main" 1634553616
+["bibtex main"] 1634553776 "main.aux" "main.bbl" "main" 1634553784
   "/usr/share/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1617738001 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "main.aux" 1634553615 28646 ec2408fb609727347b2154824bd9e382 "pdflatex"
+  "main.aux" 1634553783 28646 36197ffd3650fb9ea187bb31a7a07581 "pdflatex"
   "ref.bib" 1634415840 10720 a5ff5aa44ce0ad84552584ba8d1a1755 ""
   (generated)
   "main.bbl"
   "main.blg"
-["pdflatex"] 1634553608 "main.tex" "main.pdf" "main" 1634553616
+["pdflatex"] 1634553776 "main.tex" "main.pdf" "main" 1634553784
   "../diag/IO_activity.png" 1634550035 140808 2eea082c7e6aceb18ab91454553778e7 ""
   "../diag/IO_component.png" 1634550035 74290 e6258c71c27d3be188320f9123199cc7 ""
   "../diag/android_activity.png" 1634550034 72092 2b978866b1e89e57556f02f5f522afc2 ""
@@ -171,7 +171,6 @@
   "android_profiling.png" 1634296648 25020 a30df296fb6b946858830f98e7cc2b19 ""
   "android_ui.png" 1633687725 26647 6c5f4e01c169b73b5bad8f7c97fbee2c ""
   "conclusion.tex" 1634553071 4410 616ba1d5bc61a1d29a69e87c849ea435 ""
-  "cover.png" 1634553361 1205904 fa1f7380bd23e10e54c0007bdb9de4e3 ""
   "design.tex" 1634492315 27733 b80c8a3ab90ee8edc209b065f2c7c975 ""
   "eval_accel.png" 1634544221 168745 27ab191d8118353a197e6db672b88e5a ""
   "eval_accel_slow.png" 1634544259 136422 4804fefcfe0ebc99dfa9bd54030f202c ""
@@ -188,14 +187,15 @@
   "intro.tex" 1634550212 10839 91fbfc88646dbdb1961b95f218932883 ""
   "io_output.png" 1634073824 26386 2657c05ea2945d11c03720918c85b5e6 ""
   "lit_review.tex" 1634417602 16415 3b17b1a32a5f9b344a9a3452dce710ed ""
-  "main.acr" 1634553615 1889 33fc40a4c734e490718e0ee16ae9b91f "pdflatex"
-  "main.aux" 1634553615 28646 ec2408fb609727347b2154824bd9e382 "pdflatex"
-  "main.bbl" 1634553497 9277 fa0fe4c2dd70d3d2dfb224835a9050cf "bibtex main"
-  "main.lof" 1634553615 5052 dcf61885a189582f3c58d122b7a8dd07 "pdflatex"
-  "main.lot" 1634553615 122 e7886f2d981fc59a2ad513d5214aee29 "pdflatex"
-  "main.out" 1634553615 13790 e756649501716118b73db6f4768b5cf5 "pdflatex"
-  "main.tex" 1634553607 3717 d5adbcea8720acbac35175a123b9e284 ""
-  "main.toc" 1634553615 7589 44a573947ed7c76e5994a7e9c0ab6412 "pdflatex"
+  "main.acr" 1634553783 1889 577b361897bef10f06f5650eb3339ba2 "pdflatex"
+  "main.aux" 1634553783 28646 36197ffd3650fb9ea187bb31a7a07581 "pdflatex"
+  "main.bbl" 1634553776 9277 fa0fe4c2dd70d3d2dfb224835a9050cf "bibtex main"
+  "main.lof" 1634553783 5052 dcf61885a189582f3c58d122b7a8dd07 "pdflatex"
+  "main.lot" 1634553783 122 e7886f2d981fc59a2ad513d5214aee29 "pdflatex"
+  "main.out" 1634553783 13790 e756649501716118b73db6f4768b5cf5 "pdflatex"
+  "main.tex" 1634553767 3733 6b80164063e62e59d53840b4978d3efc ""
+  "main.toc" 1634553783 7589 44a573947ed7c76e5994a7e9c0ab6412 "pdflatex"
+  "pukke.png" 1614264052 30232 8e9e11d133a920aa3a307800638b217e ""
   "random_spike.png" 1634296648 60289 7aaa72a2b9c9489edee7b68b32460721 ""
   "random_spike_correct.png" 1634296648 66274 9ff33ca446c5c4eb1b7469857747f30a ""
   "webapp_add_trucker.png" 1634115741 13619 fb84dfdacf3b9ab092bffaa6aa26b95f ""
