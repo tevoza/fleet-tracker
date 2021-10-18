@@ -42,12 +42,15 @@ The result of this correction is depicted in figure \ref{fig:random_spike_correc
 \begin{figure}[H]
 \centering
 \includegraphics[width=6in]{eval_location.png}
-\caption{Location Tracking with the A3 Core}
+\caption{Location Tracking}
 \label{fig:eval_location}
 \end{figure}
 
-The four devices are taken on the same trip through town, with the logging frequency set to 10 seconds.
-They all register near identical arrival and departure times, and sketch the same route on the map, as depicted in figure \ref{fig:eval_location}.
+The four devices are taken on the same trip, with the logging frequency set to 10 seconds.
+The first trip is performed more erratically, with more rapid acceleration and speed.
+Afterwards, the return trip is performed in a slower passive manner.
+
+All devices register near identical arrival and departure times, and sketch the same route on the map, as depicted in figure \ref{fig:eval_location}.
 With the speed limit set to 60km/h, portions of the trip were correctly logged above this speed.
 Other statistics all indicate similar trends.
 
@@ -60,16 +63,20 @@ Other statistics all indicate similar trends.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=5in]{eval_accel.png}
-\caption{Acceleration Data}
-\label{fig:eval_accel}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=5in]{eval_accel_slow.png}
-\caption{Acceleration Data - Slow}
-\label{fig:eval_accel_slow}
+    \subfigure[Erratic]
+    {
+        \centering
+        \includegraphics[width=5in]{eval_accel.png}
+        \label{fig:eval_accel_fast}
+    }
+    \subfigure[Passive]
+    {
+        \centering
+        \includegraphics[width=5in]{eval_accel_slow.png}
+        \label{fig:eval_accel_slow}
+    }
+\caption{Acceleration comparison for different driving behavior}
+\label{fig:accel}
 \end{figure}
 
 \begin{figure}[H]

@@ -66,17 +66,17 @@
 \contentsline {subsection}{\numberline {4.4}Deployment}{39}{subsection.4.4}%
 \contentsline {section}{\numberline {5}Evaluation}{40}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Location accuracy}{40}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Android application}{43}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Application reliability}{43}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Application Profiling}{43}{subsubsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.3}\Ac {io} server and web application}{44}{subsection.5.3}%
-\contentsline {section}{\numberline {6}Conclusion}{45}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Meeting objectives, requirements and deliverables}{45}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Usability}{45}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Future Improvements}{45}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}External sensor integration}{46}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Improving the robustness of the Android application}{46}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}Serialization protocol and data usage}{46}{subsubsection.6.3.3}%
-\contentsline {subsubsection}{\numberline {6.3.4}Accelerometer data}{46}{subsubsection.6.3.4}%
-\contentsline {subsection}{\numberline {6.4}Conclusion}{46}{subsection.6.4}%
-\contentsline {section}{References}{47}{section*.35}%
+\contentsline {subsection}{\numberline {5.2}Android application}{44}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Application reliability}{44}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Application Profiling}{44}{subsubsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.3}\Ac {io} server and web application}{45}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Conclusion}{46}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Meeting objectives, requirements and deliverables}{46}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Usability}{46}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Future Improvements}{46}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}External sensor integration}{47}{subsubsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.2}Improving the robustness of the Android application}{47}{subsubsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3}Serialization protocol and data usage}{47}{subsubsection.6.3.3}%
+\contentsline {subsubsection}{\numberline {6.3.4}Accelerometer data}{47}{subsubsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.4}Conclusion}{47}{subsection.6.4}%
+\contentsline {section}{References}{48}{section*.34}%
