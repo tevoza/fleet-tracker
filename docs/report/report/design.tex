@@ -142,7 +142,7 @@ It runs without requiring the main activity to be open on the user's screen.
 The Android \ac{api} provides the \textit{Fused Location Provider} for the purposes of accessing location data according to required settings.
 The \ac{api} provides callbacks which can be hooked into for storing location data, at an adjustable interval.
 This \ac{api} provides access to location, speed and altitude data, all determined via the \ac{gps}.
-
+Speed is inferred by comparing the difference in location with the difference in time.
 \item \textbf{Sensor Manager}\\
 The sensor manager provides callbacks for reading data from the various sensors (including accelerometers).
 The \textit{linear accelerometer} is a "composite" (software-implemented) sensor which relies on magnetometers or gyroscropes, in addition to the accelerometer to negate the acceleration due to gravity.
@@ -381,6 +381,9 @@ $LastLog \gets LogsSortedByDate[0]$\;
 }
 \caption{Aggregating logs close to each other}\label{algo_agg}
 \end{algorithm}\DecMargin{1em} 
+
+The \textit{Distance} method implements a simple two-dimensional distance formula between coordinates to determine distance latitude and longitude.
+While not ideal for the spherical shape of the planet, it reduces computational complexity for large data sets.
 
 \subsubsection{Defining trips between stop locations}
 The aggregated list of logs determined in algorithm \ref{algo_agg} is then used to group together trips.

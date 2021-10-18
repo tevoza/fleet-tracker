@@ -10,74 +10,74 @@
 \contentsline {subsection}{\numberline {1.7}Technical Requirements}{4}{subsection.1.7}%
 \contentsline {subsubsection}{\numberline {1.7.1}Requirements}{4}{subsubsection.1.7.1}%
 \contentsline {subsubsection}{\numberline {1.7.2}Scope Definition}{5}{subsubsection.1.7.2}%
-\contentsline {subsection}{\numberline {1.8}Deliverables}{6}{subsection.1.8}%
+\contentsline {subsection}{\numberline {1.8}Deliverables}{5}{subsection.1.8}%
 \contentsline {subsection}{\numberline {1.9}Conclusion}{6}{subsection.1.9}%
 \contentsline {section}{\numberline {2}Literature Review}{7}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Sensors}{7}{subsection.2.1}%
 \contentsline {subsubsection}{\numberline {2.1.1}Internal Sensors}{7}{subsubsection.2.1.1}%
 \contentsline {subsubsection}{\numberline {2.1.2}External Sensors}{8}{subsubsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.2}Software Architecture}{9}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}\ac {soc} and SOLID principles}{9}{subsubsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2}Software Architecture}{8}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}\ac {soc} and SOLID principles}{8}{subsubsection.2.2.1}%
 \contentsline {subsubsection}{\numberline {2.2.2}\Ac {di}}{9}{subsubsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.3}Smartphone Application}{10}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Platform Considerations}{10}{subsubsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3}Smartphone Application}{9}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Platform Considerations}{9}{subsubsection.2.3.1}%
 \contentsline {subsubsection}{\numberline {2.3.2}Development Technologies}{10}{subsubsection.2.3.2}%
 \contentsline {subsubsection}{\numberline {2.3.3}Android - \Ac {mvvm} Design Pattern}{10}{subsubsection.2.3.3}%
-\contentsline {subsubsection}{\numberline {2.3.4}Android - \ac {di} with Hilt}{11}{subsubsection.2.3.4}%
-\contentsline {subsubsection}{\numberline {2.3.5}Android - Running continuously in the background}{12}{subsubsection.2.3.5}%
-\contentsline {subsubsection}{\numberline {2.3.6}Android - SQLite database with the Room \ac {orm}}{12}{subsubsection.2.3.6}%
-\contentsline {subsection}{\numberline {2.4}\ac {io} Server}{12}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.3.4}Android - \ac {di} with Hilt}{10}{subsubsection.2.3.4}%
+\contentsline {subsubsection}{\numberline {2.3.5}Android - Running continuously in the background}{10}{subsubsection.2.3.5}%
+\contentsline {subsubsection}{\numberline {2.3.6}Android - SQLite database with the Room \ac {orm}}{10}{subsubsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.4}\ac {io} Server}{11}{subsection.2.4}%
 \contentsline {subsubsection}{\numberline {2.4.1}Asynchronous \Ac {io}}{12}{subsubsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.5}Database Considerations}{13}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Web Application}{13}{subsection.2.6}%
-\contentsline {subsubsection}{\numberline {2.6.1}\Ac {mvc} design pattern for web applications}{14}{figure.caption.7}%
-\contentsline {subsection}{\numberline {2.7}Secure communication with \ac {ssl}}{14}{subsection.2.7}%
-\contentsline {subsection}{\numberline {2.8}Serialization and communication protocols}{14}{subsection.2.8}%
-\contentsline {subsubsection}{\numberline {2.8.1}\Ac {https}}{14}{subsubsection.2.8.1}%
-\contentsline {subsubsection}{\numberline {2.8.2}\Ac {json} and \Ac {xml}}{14}{subsubsection.2.8.2}%
-\contentsline {section}{\numberline {3}Design}{15}{section.3}%
-\contentsline {subsection}{\numberline {3.1}System context and base requirements }{15}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of technologies}{16}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Choice of \ac {rdbms}}{17}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Android Application}{17}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}\Ac {io} Server}{18}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}Web Application}{18}{subsubsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.3}Subsystem components and Design}{18}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Android Application - lifecycle and software abstractions}{18}{figure.caption.11}%
-\contentsline {subsubsection}{\numberline {3.3.2}\Ac {io} Server}{22}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}\ac {json} protocol}{24}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{25}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}MySQL Database and Entity relationships}{27}{subsubsection.3.3.5}%
-\contentsline {subsection}{\numberline {3.4}Data Processing}{28}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Aggregating nearby logs}{28}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Defining trips between stop locations}{28}{subsubsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.5}\Acf {ui} Design}{30}{subsection.3.5}%
-\contentsline {subsubsection}{\numberline {3.5.1}Android Application}{30}{subsubsection.3.5.1}%
-\contentsline {subsubsection}{\numberline {3.5.2}Web Application}{32}{figure.caption.20}%
-\contentsline {section}{\numberline {4}Implementation}{33}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Android Application}{33}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}\Ac {io} Server}{34}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}Requests}{35}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}Responses}{35}{subsubsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.3}Web application}{36}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}User login and signup}{36}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}Fleet viewing and management}{36}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Trucker activity}{37}{figure.caption.26}%
-\contentsline {subsection}{\numberline {4.4}Deployment}{39}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Evaluation}{40}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Logging accuracy}{40}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Android application}{44}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Application reliability}{44}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Application Profiling}{44}{subsubsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.3}\Ac {io} server and web application}{45}{subsection.5.3}%
-\contentsline {section}{\numberline {6}Conclusion}{46}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Meeting objectives, requirements and deliverables}{46}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Usability}{46}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Future Improvements}{47}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}External sensor integration}{47}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Improving the robustness of the Android application}{47}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}Serialization protocol and data usage}{47}{subsubsection.6.3.3}%
-\contentsline {subsubsection}{\numberline {6.3.4}Sensor fusion}{47}{subsubsection.6.3.4}%
-\contentsline {subsubsection}{\numberline {6.3.5}Accelerometer data}{47}{subsubsection.6.3.5}%
-\contentsline {subsection}{\numberline {6.4}Conclusion}{48}{subsection.6.4}%
-\contentsline {section}{References}{49}{section*.35}%
+\contentsline {subsection}{\numberline {2.5}Database Considerations}{12}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Web Application}{12}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}\Ac {mvc} design pattern for web applications}{12}{figure.caption.7}%
+\contentsline {subsection}{\numberline {2.7}Secure communication with \ac {ssl}}{13}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Serialization and communication protocols}{13}{subsection.2.8}%
+\contentsline {subsubsection}{\numberline {2.8.1}\Ac {https}}{13}{subsubsection.2.8.1}%
+\contentsline {subsubsection}{\numberline {2.8.2}\Ac {json} and \Ac {xml}}{13}{subsubsection.2.8.2}%
+\contentsline {section}{\numberline {3}Design}{14}{section.3}%
+\contentsline {subsection}{\numberline {3.1}System context and base requirements }{14}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Contained subsystems and choice of technologies}{15}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Choice of \ac {rdbms}}{16}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Android Application}{16}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}\Ac {io} Server}{17}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Web Application}{17}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Subsystem components and Design}{17}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Android Application - lifecycle and software abstractions}{17}{figure.caption.11}%
+\contentsline {subsubsection}{\numberline {3.3.2}\Ac {io} Server}{20}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}\ac {json} protocol}{23}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Web Application}{24}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}MySQL Database and Entity relationships}{25}{subsubsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.4}Data Processing}{26}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Aggregating nearby logs}{27}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Defining trips between stop locations}{27}{subsubsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.5}\Acf {ui} Design}{29}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Android Application}{29}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Web Application}{29}{figure.caption.20}%
+\contentsline {section}{\numberline {4}Implementation}{32}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Android Application}{32}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}\Ac {io} Server}{33}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Requests}{33}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Responses}{34}{subsubsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.3}Web application}{34}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}User login and signup}{34}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Fleet viewing and management}{35}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Trucker activity}{36}{figure.caption.26}%
+\contentsline {subsection}{\numberline {4.4}Deployment}{36}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Evaluation}{39}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Logging accuracy}{39}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Android application}{43}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Application reliability}{43}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Application Profiling}{43}{subsubsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.3}\Ac {io} server and web application}{44}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Conclusion}{45}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Meeting objectives, requirements and deliverables}{45}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Usability}{45}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Future Improvements}{45}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}External sensor integration}{45}{subsubsection.6.3.1}%
+\contentsline {subsubsection}{\numberline {6.3.2}Improving the robustness of the Android application}{46}{subsubsection.6.3.2}%
+\contentsline {subsubsection}{\numberline {6.3.3}Serialization protocol and data usage}{46}{subsubsection.6.3.3}%
+\contentsline {subsubsection}{\numberline {6.3.4}Sensor fusion}{46}{subsubsection.6.3.4}%
+\contentsline {subsubsection}{\numberline {6.3.5}Accelerometer data}{46}{subsubsection.6.3.5}%
+\contentsline {subsection}{\numberline {6.4}Conclusion}{46}{subsection.6.4}%
+\contentsline {section}{References}{47}{section*.35}%
