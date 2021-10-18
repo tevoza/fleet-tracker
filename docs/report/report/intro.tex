@@ -47,10 +47,14 @@ This data should be continuously (or periodically) made accessible to managers r
 To this end, an interface is required for storing, processing and displaying logged data pertaining to the truckers' locations and behavior.
 This interface must allow managers to assess the truckers' whereabouts and behavior.
 
+Data presented to truckers must be processed to group log data into separate segments, identifying individual trips.
+Any stopping times between must be determined and indicated.
+
 \pagebreak
 \subsection{Hypothesis}
 A low-cost architecture is proposed in figure \ref{fig:hypothesis}.
-This proposal involves the development of a smartphone application capable of interfacing with internal or external sensors, and transferring sensor data through an \ac{io} server into a data store. \cite{bertocco1998client}
+This proposal involves the development of a smartphone application capable of interfacing with internal sensors, and transferring sensor data through an \ac{io} server into a data store.
+A web interface is postulated for the purposes of displaying processed log data to managers.\cite{bertocco1998client}
 
 \begin{figure}[H]
     \centering
@@ -59,7 +63,7 @@ This proposal involves the development of a smartphone application capable of in
     \label{fig:hypothesis}
 \end{figure}
 
-Android devices offer great multipurpose capabilities, allowing truckers to communicate.
+Smartphones offer great multipurpose capabilities, allowing truckers to communicate and perform other tasks.
 They have a rich feature set and have access to a variety of on-board sensors, appealing as a budget-conscious solution.
 
 The \ac{io} server and central data store form part of the necessary infrastructure needed to provide remote capabilities to the system.
@@ -84,7 +88,7 @@ They will then be able to adequately handle truckers who fail to perform as expe
 Managers may also be able to analyze trucker behavior to perform fleet optimizations, allowing for increased efficiency.
 
 \subsection{Technical Requirements}
-For the realization of the hypothesized solution presented in figure \ref{fig:hypothesis}, the technical requirements and scope definition is proposed.
+For the realization of the hypothesized solution presented in figure \ref{fig:hypothesis}, the technical requirements and scope definition are defined.
 
 \subsubsection{Requirements}
 \begin{enumerate}
@@ -92,7 +96,7 @@ For the realization of the hypothesized solution presented in figure \ref{fig:hy
     This will be a smartphone application used by the entities being tracked(i.e the truckers).
     \begin{enumerate}
         \item Trucker identification control must be implemented to ensure that logs sent to the server correspond to a unique trucker. It must not be possible for multiple truckers to assume the same or no identity.
-        \item Every 2 minutes, sensor data consisting of \textbf{\ac{gps} coordinates, altitude, speed and acceleration} must be captured and stored internally on the android device. 
+        \item Every 2 minutes, sensor data consisting of \textbf{\ac{gps} coordinates, altitude, speed and acceleration} must be captured and stored internally on the smartphone. 
         Data capacity for one continuous week of storage must be possible, to account for connectivity issues.
         \item The application must be able to run in the background, allowing for multitasking.
         \item Sensor data must be uploaded to a central data store, either continuously or on request. This communication must be encrypted for security purposes.
@@ -110,7 +114,7 @@ The data store must be efficient, fast and capable of storing large volumes of d
 It should also be capable of adequately interfacing with the \ac{io} server and the web server.
 
 \item \textbf{Web Server and Web Application}\\
-The web server must implement back-end business logic driving the web application and serving pages to the browser.
+The web server must implement backend business logic driving the web application and serving pages to the browser.
 The front end of the web application acts as an interface for managers to index truckers and view tracking information about their fleets.
     \begin{enumerate}
         \item Multiple trucking managers must be able to log in and use the application.
@@ -122,7 +126,7 @@ The front end of the web application acts as an interface for managers to index 
 The scope of the problem considered will include
 \begin{enumerate}
 \item \textbf{Smartphone Application}\\
-The scope does not include the design of sensor circuitry meant to interface with the smartphone. 
+The defined scope does not include the use of external sensors.
 Other measurable variables such as temperature, fuel and pressure are not considered.
 
 The smartphone app is not concerned with displaying user reports and statistics. That is left to the web application.

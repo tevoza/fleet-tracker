@@ -1,5 +1,6 @@
 \section{Evaluation}
 Evaluation of the system is performed by testing the deployed \ac{io} server and web application with several Android devices which are available.
+The functionality of the system is evaluated to determine if trips are correctly divided and data captured is sound.
 
 \begin{table}[H]
 \caption{Android devices tested}
@@ -14,7 +15,7 @@ Huawei Nova 5T      & 7700     & 10                    & Yes                  \\
 \end{tabular}
 \end{table}
 
-\subsection{Location accuracy}
+\subsection{Logging accuracy}
 Generally, \ac{gps} accuracy is reasonable, within an approximately 20 meter range.
 Occasionally, a rogue data point occurs resulting in a random spike, as shown in figure \ref{fig:random_spike}.
 A small adjustment is made to algorithm \ref{algo_agg}, where the proceeding log is also compared with the current log in each iteration of the for loop.
@@ -39,27 +40,45 @@ The result of this correction is depicted in figure \ref{fig:random_spike_correc
 \label{fig:spike_correction}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}
 \centering
 \includegraphics[width=6in]{eval_location.png}
 \caption{Location Tracking}
 \label{fig:eval_location}
 \end{figure}
 
-The four devices are taken on the same trip, with the logging frequency set to 10 seconds.
+\begin{figure}
+\centering
+\includegraphics[width=5in]{eval_speed.png}
+\caption{Speed Capture}
+\label{fig:eval_speed}
+\end{figure}
+
+The four devices are taken on the same trip, with the logging interval set to 10 seconds.
 The first trip is performed more erratically, with more rapid acceleration and speed.
 Afterwards, the return trip is performed in a slower passive manner.
 
-All devices register near identical arrival and departure times, and sketch the same route on the map, as depicted in figure \ref{fig:eval_location}.
-With the speed limit set to 60km/h, portions of the trip were correctly logged above this speed.
-Other statistics all indicate similar trends.
+All devices register near-identical arrival and departure times, and sketch the same route on the map, as depicted above in figure \ref{fig:eval_location}.
+With the speed limit set to \SI{60}{\kilo\meter\per\hour}, portions of the trip were correctly logged above this speed.
+Data captured for all devices indicate similar trends.
+
+Figure \ref{fig:eval_speed} above depicts the time and percentile plots for the speed data collected on the first trip.
+This data accurately captures the speeds that were driven.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=5in]{eval_speed.png}
-\caption{Speed data}
-\label{fig:eval_speed}
+\includegraphics[width=5in]{eval_altitude.png}
+\caption{Altitude Data}
+\label{fig:eval_altitude}
 \end{figure}
+
+Altitude is also captured and displayed in figure \ref{fig:eval_altitude}.
+With the quoted altitude for the region at \SI{1340}{ \metre }, the measured altitude values are within error margins.
+
+Figure \ref{fig:accel} below details acceleration data for an erratic trip compared to a passive trip.
+The passive trip, in figure \ref{fig:eval_accel_slow} shows a smoother curve with less pronounced spikes. The spread of the logged acceleration stays below \SI{2}{\metre \per \square \second}.
+The erratic trip, in figure \ref{fig:eval_accel_fast} indicates more pronounced spikes in acceleration data, and greater acceleration above the 95th percentile.
+This acceleration data clearly distinguishes passive driving from erratic driving.
 
 \begin{figure}[H]
 \centering
@@ -79,12 +98,6 @@ Other statistics all indicate similar trends.
 \label{fig:accel}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=5in]{eval_altitude.png}
-\caption{Altitude Data}
-\label{fig:eval_altitude}
-\end{figure}
 
 \subsection{Android application}
 Four Android devices were readily available for testing purposes, which are highlighted in table \ref{tab:android_devices_tested}.
@@ -132,7 +145,7 @@ Figure \ref{fig:android_app_uptime} details the up-time of the application on th
 The application is seen achieving uninterrupted up-time of approximately 70 hours.
 
 \subsection{\Ac{io} server and web application}
-Due to proper exception handling, both the \ac{io} server and web application remain online indefinitely.
+Due to adequate exception handling, both the \ac{io} server and web application remain online indefinitely.
 Any exceptions that occur with parsing data are properly handled, without compromising data.
 
 \pagebreak

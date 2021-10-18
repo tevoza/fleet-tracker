@@ -7,7 +7,7 @@ Finally, potential downfalls are considered and future improvements are recommen
 \subsection{Meeting objectives, requirements and deliverables}
 The implemented solution meets the primary objective, by providing detailed reports about the truckers whereabouts.
 Managers can view (both visually on a map and in a tabulated form) where the truckers have been.
-Managers can also view speed data for trips executed by truckers with reasonable precision.
+Managers can also view acceleration, altitude and speed data for trips executed by truckers with reasonable precision.
 
 Technical requirements and deliverables are achieved.
 The android application runs in the background and logs data in the required interval.
@@ -20,7 +20,7 @@ An intuitive user interface is provided to managers for the purposes of managing
 In a deployment environment, managers will have to ensure that truckers using the android application do so diligently and restart the service if the device shuts down (or in the case of an occasional crash).
 
 The Android application appears to perform more reliably on newer Android versions.
-For minimal the Samsung Galaxy A01 offers a popular option.
+For minimal cost the Samsung Galaxy A01 offers a popular option.
 
 Battery life of Android devices is slightly reduced when running the application, although most devices should be able to adequately perform for 8 hours.
 It would be recommended that truckers make use of chargers while en route.
@@ -46,13 +46,20 @@ The current implementation opens and closes sockets with every connection.
 This is undesirable due to the significant data usage overhead associated with establishing encrypted \ac{ssl} connections.
 It would be desirable to rather keep socket connections open.
 
+\subsubsection{Sensor fusion}
+Speed in the implemented solution is determined by comparing consecutive \ac{gps} readings and comparing them with the time elapsed.
+While adequate for straight paths, speed accuracy for larger sampling intervals is reduced especially for curved paths.
+
+More intelligent use of on-board sensors (sensor fusion) has potential to more accurately infer speed and location.
+This would increase the logging accuracy.
+
 \subsubsection{Accelerometer data}
 Logging accelerometer data periodically offers limited insight into the driving behavior of truckers, as large time periods where truckers could be misbehaving, are neglected.
 A smoother mechanism would be required, making use of continuous polling.
 
 \subsection{Conclusion}
 The truck tracking system is realized to meet the primary objectives, goals and deliverables.
-Software engineering methods and good practices are utilized in the design, development and implementation of the system.
+Software engineering methods and practices are utilized in the design, development and implementation of the system.
 
 While the system developed offers insight into the whereabouts of truckers, there is potential for more driver-specific behavior to be inferred.
 
