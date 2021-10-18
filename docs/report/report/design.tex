@@ -94,14 +94,7 @@ The relationship between classes indicates the dependence of one subsystem on an
 The components of the design are clearly represented in the source code.
 
 \subsubsection{Android Application - lifecycle and software abstractions}
-\begin{figure}
-\centering
-\includegraphics[scale=0.4]{../diag/android_activity.png}
-\caption{Life-cycle - Android Application}
-\label{fig:android_activity}
-\end{figure}
-
-The life cycle of the Android application is depicted in figure \ref{fig:android_activity}.
+The life cycle of the Android application is depicted in figure \ref{fig:android_activity} below.
 Initially, a check is performed to confirm that the trucker \ac{id} is in the central database, and is not duplicated.
 If this \ac{id} is not valid, the trucker must request a valid \ac{id} from the fleet manager.
 
@@ -111,6 +104,13 @@ A connection is attempted with the \ac{io} server and the local database entries
 Upon successful transmission, the local database (running on the Android device) is cleared.
 However, if a connection fails, the local database is not cleared.
 This process loops continuously loops every two minutes.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.4]{../diag/android_activity.png}
+\caption{Life-cycle - Android Application}
+\label{fig:android_activity}
+\end{figure}
  
 \begin{figure}
 \centering
@@ -119,10 +119,12 @@ This process loops continuously loops every two minutes.
 \label{fig:android_component}
 \end{figure}
 
-The android application is designed with the \ac{mvvm} design pattern (detailed in figure \ref{fig:mvvm_layout}).
+The android application is designed with the \ac{mvvm} design pattern (researched in figure \ref{fig:mvvm_layout}).
 This is a design architecture often implemented in Android software.
 It allows for separating components in the application responsible for different concerns (following the \ac{soc} principle).
-Figure \ref{fig:android_component} details software components (classes) that are clearly represented in the source code.
+
+Figure \ref{fig:android_component} details the application of \ac{mvvm} software components (classes) applied to this design context.
+The source code will reflect this structure. 
 The application is targeted to support Android version 4.4 onward.
 This allows for the application to run on 99.6\% of Android devices.
 
@@ -150,6 +152,7 @@ This is provided by the Android \ac{api}.
 
 Devices without linear accelerometers provide limited accuracy, even when applying signal processing techniques to negate the effect of gravity.
 As such acceleration will only be logged in devices with linear accelerometers.
+The \textbf{resultant} acceleration vector as determined in (\ref{eq:acc}) will be polled every two minutes.
 \end{enumerate}
 
 \item \textbf{Main Repository}\\
@@ -175,8 +178,9 @@ This is used for storing user configuration, such as identity and upload prefere
 
 These components are necessary for realizing a modular, extendable application.
 
+\pagebreak
 \subsubsection{\Ac{io} Server}
-The typical life cycle view of the \ac{io} server is depicted in figure \ref{fig:IO_activity}.
+The typically-expected life cycle view of the \ac{io} server is depicted in figure \ref{fig:IO_activity}.
 
 \begin{figure}[H]
 \centering
@@ -213,12 +217,14 @@ Upon receiving a connection, a new session is instantiated to handle to communic
 \item \textbf{Session}\\
 The session performs the necessary encryption, decryption and three-way handshake required for the \ac{ssl} protocol.
 The session reads in and writes out the serialized payload on the socket.
+Methods are implemented here asynchronously.
 \item \textbf{Request Handler}\\
 The request handler performs serialization and deserialization.
 It processes the request and queries the database appropriately.
 \item \textbf{MySQL Connector}\\
-An interfacing object to the MySQL database.
+An interfacing object to the MySQL database. The MySQL++ library provides this functionality.
 \end{enumerate}
+The above classes conceptually offer all the necessary functionality.
 
 \pagebreak
 \subsubsection{\ac{json} protocol}
@@ -226,6 +232,7 @@ Figure \ref{fig:json_protocol} depicts the structure of the protocol used for co
 The communication follows a \ac{rest}ful structure, which is common for web communications.
 That is, communication requires no knowledge of intermediate state.
 One request is enough to complete the required transactions, after which an appropriate response is sent back to the client.
+The reliance of intermediate state is in networking transactions is prone to failure, in the case of weak connections.
 
 \begin{figure}[H]
 \centering
@@ -277,7 +284,7 @@ Identity also implements logic for restricting access to pages, ensuring manager
 \item \textbf{DB Context and MySQL database}\\
 Microsoft's \textit{Entity Framework} provides the abstraction of data as 'entites' to be represented by models (data classes in code).
 This makes for easier interaction with data in code.
-The back-end database in use is MySQL.
+The back-end database in use is MySQL.\\
 
 \item \textbf{Fleet Models}\\
 The Fleet Models are a set of data classes used for the abstraction of data entities in code.
@@ -321,8 +328,8 @@ This provides a neat visual representation of Trucker activities.
 The "View Trip" page allows for detailed statistical analysis of individual trips.
 It provides percentile analysis and graphs showcasing the trucker's speed, acceleration and altitude.
 \end{enumerate}
-
 \end{enumerate}
+These components follow typical flow of a \ac{mvc} design structure.
 
 \subsubsection{MySQL Database and Entity relationships}
 The central backend \ac{rdbms} used is MySQL.
@@ -347,6 +354,7 @@ The TruckerLog entity stores the entries of each log in the database.
 Unix timestamps are used for identifying the time of each log, which is convenient and saves on storage, as only 8 bytes are required.
 Additionally, single precision float precision provides location precision within 2.37 meters\cite{noauthor_required_nodate} in the worst case, making it adequate it for this application, while saving on storage. Double precision is more computationally expensive for little benefit.
 
+\pagebreak
 \subsection{Data Processing}
 The main focus and purpose of the system is to generate useful information for managers which can be used to optimize their fleets.
 The raw tracking data alone doesn't give the clearest indication of trucking behavior.

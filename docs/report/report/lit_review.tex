@@ -5,7 +5,7 @@ With the hardware preexisting, most of the design exists in the software domain.
 Various software tools and methodologies are considered.
 
 \subsection{Sensors}
-Effective data logging of acceleration, altitude, location and speed all begin with the quality of measurements being made.
+Effective data logging of acceleration, altitude, location and speed begin with the quality of measurements being made.
 Smartphones alone provide a wealth of options.
 However, external sensors available to the truck operators offer a variety of options.
 
@@ -98,7 +98,7 @@ It is wasteful to re-instantiate these objects especially if they are used by ot
 \Ac{di} provides a means to \textit{inject} an instance of a helper object into a class without explicitly recreating the dependency.
 \cite{kocsis2017dependency}
 
-Objects which exist for the lifetime of the application are known as singletons, and the use of singletons is often used with \ac{di}.
+Objects which exist for the lifetime of the application are known as singletons, and the use of singletons is often facilitated with \ac{di}.
 
 \subsection{Smartphone Application}
 The smartphone application is responsible for extracting the acceleration, altitude, location and speed data from the sensors and relaying this information to the data store.
@@ -142,7 +142,7 @@ It has support for common android components.
 \cite{noauthor_dependency_nodate}
 
 \subsubsection{Android - Running continuously in the background}
-Tracking \ac{app}s need to run continuosly, without forcing the user to keep the \ac{app} view components open.
+Tracking \ac{app}s need to run continuously, without forcing the user to keep the \ac{app} view components open.
 This can be achieved by implementing the tracking component as a \textit{foreground service}.
 In this way, the component runs continuously while allowing the user to use other applications.
 
@@ -167,7 +167,7 @@ Implementations for realizing such a server are possible in many programming lan
 Generally, for performance-critical applications, C and/or C++ are considered most appropriate. \cite{ogala2020comparative}
 
 \subsubsection{Asynchronous \Ac{io}}
-Servers (and many other application) are required to run relatively slow operations; that is communicating over networks and writing to disk.
+Servers (and many other application) are required to perform relatively slow operations; that is communicating over networks and writing to disk.
 Implementing such functionality synchronously (using blocking calls) leaves functions essentially waiting for data streams to be read, transmitted and written to disk.
 This is slow and incapable of handling multiple simultaneous connections.
 
@@ -209,6 +209,7 @@ The use of secure communication over the internet is a modern-day standard.
 And due to sensitive location data being transmitted, it is necessary to ensure that logs are adequately encrypted.
 
 The \ac{ssl} protocol is a de facto standard for encrypted communication on the internet.
+It makes use of cryptography as a means for clients to verify that communication is occurring with a trusted source.
 \Ac{ssl} itself is deprecated, and the current standard for encryption is \ac{tls}.
 However, it is common to refer to refer to these related technologies interchangeably, when \ac{tls} is the protocol actually in use. \cite{hickman1995ssl}
 
@@ -223,6 +224,8 @@ Regardless of this protocol, it is necessary for communication to be encrypted, 
 \cite{fielding1999hypertext}.
 
 \subsubsection{\Ac{json} and \Ac{xml}}
+Serialization offers a means of converting runtime software objects into a byte stream format which can be transferred over the network. This is necessary for most inter-device communication.
+
 \Ac{xml} is a strongly-typed text protocol which can be used for serialization.
 It follows a tight tagging schema.
 

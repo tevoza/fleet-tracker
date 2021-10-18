@@ -40,14 +40,14 @@ The result of this correction is depicted in figure \ref{fig:random_spike_correc
 \label{fig:spike_correction}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=6in]{eval_location.png}
 \caption{Location Tracking}
 \label{fig:eval_location}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \includegraphics[width=5in]{eval_speed.png}
 \caption{Speed Capture}
@@ -75,10 +75,11 @@ This data accurately captures the speeds that were driven.
 Altitude is also captured and displayed in figure \ref{fig:eval_altitude}.
 With the quoted altitude for the region at \SI{1340}{ \metre }, the measured altitude values are within error margins.
 
-Figure \ref{fig:accel} below details acceleration data for an erratic trip compared to a passive trip.
+Figure \ref{fig:accel} (next page) details acceleration data for an erratic trip compared to a passive trip.
+The erratic trip, in figure \ref{fig:eval_accel_fast} indicates more pronounced spikes in acceleration data, and greater acceleration (above \SI{2}{\metre \per \square \second}) above the 95th percentile.
 The passive trip, in figure \ref{fig:eval_accel_slow} shows a smoother curve with less pronounced spikes. The spread of the logged acceleration stays below \SI{2}{\metre \per \square \second}.
-The erratic trip, in figure \ref{fig:eval_accel_fast} indicates more pronounced spikes in acceleration data, and greater acceleration above the 95th percentile.
-This acceleration data clearly distinguishes passive driving from erratic driving.
+
+This acceleration data distinguishes passive driving from erratic driving.
 
 \begin{figure}[H]
 \centering
@@ -110,7 +111,7 @@ Checking Android debug logs revealed little as to the cause of this crash.
 All devices running Android 10 run indefinitely without issue.
 
 \subsubsection{Application Profiling}
-The application is profiled in the Android Studio, generating plots for \ac{cpu}, \ac{ram} and network usage as shown in figure \ref{fig:android_profiling}.
+The application is profiled in Android Studio, generating plots for \ac{cpu}, \ac{ram} and network usage as shown in figure \ref{fig:android_profiling}.
 \begin{figure}[H]
 \centering
 \includegraphics[width=6in]{android_profiling.png}
@@ -120,7 +121,7 @@ The application is profiled in the Android Studio, generating plots for \ac{cpu}
 It is noted that the application runs relatively lightly on the system, consuming minimal power and \ac{cpu}.
 Typically only 50MB of \ac{ram} is utilized by the application.
 
-\begin{figure}[H]
+\begin{figure}
 \centering
     \subfigure[Data Usage]
     {
@@ -138,12 +139,13 @@ Typically only 50MB of \ac{ram} is utilized by the application.
 \label{fig:performance}
 \end{figure}
 
-Figure \ref{fig:android_data_usage} details monthly data usage during development on the Huawei P8 Lite 2017, during which the application was logging at a 5 second interval.
+Figure \ref{fig:android_data_usage} (next page) details monthly data usage during development on the Huawei P8 Lite 2017, during which the application was logging at a 5 second interval.
 In this time, the application consumed approximately 100MB of data.
 
 Figure \ref{fig:android_app_uptime} details the up-time of the application on the Galaxy A3 Core.
 The application is seen achieving uninterrupted up-time of approximately 70 hours.
 
+\pagebreak
 \subsection{\Ac{io} server and web application}
 Due to adequate exception handling, both the \ac{io} server and web application remain online indefinitely.
 Any exceptions that occur with parsing data are properly handled, without compromising data.

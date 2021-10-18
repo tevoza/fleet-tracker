@@ -36,11 +36,21 @@
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {View Trip}}}{36}{figure.caption.26}%
 \contentsline {figure}{\numberline {21}{\ignorespaces Web application - Trip collection and information\relax }}{37}{figure.caption.26}%
 \contentsline {figure}{\numberline {22}{\ignorespaces Location spike correction\relax }}{39}{figure.caption.28}%
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Random spike}}}{39}{figure.caption.29}%
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Correction}}}{39}{figure.caption.29}%
 \contentsline {figure}{\numberline {23}{\ignorespaces Location Tracking\relax }}{40}{figure.caption.29}%
 \contentsline {figure}{\numberline {24}{\ignorespaces Speed Capture\relax }}{40}{figure.caption.30}%
 \contentsline {figure}{\numberline {25}{\ignorespaces Altitude Data\relax }}{41}{figure.caption.31}%
 \contentsline {figure}{\numberline {26}{\ignorespaces Acceleration comparison for different driving behavior\relax }}{42}{figure.caption.32}%
 \contentsline {figure}{\numberline {27}{\ignorespaces Android Profiling\relax }}{43}{figure.caption.33}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Random spike}}}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Correction}}}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Erratic}}}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Passive}}}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Data Usage}}}{43}{figure.caption.34}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Up Time}}}{43}{figure.caption.34}%
 \contentsline {figure}{\numberline {28}{\ignorespaces Android application - up time and data usage\relax }}{44}{figure.caption.34}%
+\contentsline {figure}{\numberline {29}{\ignorespaces Android Application - Abridged \ac {uml} diagram\relax }}{50}{figure.caption.37}%
+\contentsline {figure}{\numberline {30}{\ignorespaces \ac {io} Server - Classes\relax }}{51}{figure.caption.38}%
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Server}}}{51}{figure.caption.39}%
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Session}}}{51}{figure.caption.39}%
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Handler}}}{51}{figure.caption.39}%
+\contentsline {figure}{\numberline {31}{\ignorespaces \ac {io} Server - Functional Flow\relax }}{52}{figure.caption.39}%

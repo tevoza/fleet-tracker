@@ -3,6 +3,7 @@ This section considers the implementation and realization of the design.
 Upon completion, the system is deployed to a \Ac{vps}, allowing for the service to be accessed on the internet.
 
 \subsection{Android Application}
+Low level software implementation details are included in Appendix \ref{App:android}.
 Figure \ref{fig:android_app_implementation} depicts the functionality and layout of the implemented android application.
 Screenshots are taken of the application running in an Android emulator.
 
@@ -51,6 +52,7 @@ Depending on the upload frequency, an attempt is made to upload logs to the cent
 Otherwise logs are stashed in the SQLite database.
 
 \subsection{\Ac{io} Server}
+Low-level implementation details are included in appendix \ref{App:io_server}.
 Figure \ref{fig:io_output} depicts the output of the \ac{io} server, logging request information from multiple users to standard output.
 
 \begin{figure}[H]
@@ -178,7 +180,7 @@ They both make use of \ac{html} forms bound to the Manager and Trucker model.
 \caption{Web application - Trip collection and information}
 \label{fig:webapp_trucker_details}
 \end{figure}
-Figure \ref{fig:webapp_trucker_details} details the interface for viewing trucker activity.
+Figure \ref{fig:webapp_trucker_details} (next page) details the interface for viewing trucker activity.
 
 Figure \ref{fig:webapp_view_trucker} provides a time adjustable page which groups the logs into individual trips.
 A map is rendered (using the Google JavaScript \Ac{api}) with routes physically drawn in the map, using arrows.
@@ -192,6 +194,7 @@ Time plots indicate give speed, acceleration and altitude plots which vary with 
 A percentile plot is included to visualize the spread of speed and acceleration.
 This allows managers to visualize what portions of the trip was driven with specific behavior.
 
+\pagebreak
 \subsection{Deployment}
 The web application and \ac{io} server are deployed to a Linux \ac{vps} with access to a static \ac{ip} address and domain name.
 A non-profit \ac{ca} Lets Encrypt provides \ac{ssl} certificates, which are required for Android applications which make use \ac{ssl} communication.

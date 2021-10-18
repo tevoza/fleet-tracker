@@ -43,7 +43,7 @@ In addition, nation-wide continuous access to the internet allows for live track
 A tracking system must be implemented to be used by trucking companies for tracking and logging their truckers' \ac{gps} coordinates, altitude, speed and acceleration.
 Logging data should be collected locally by each trucker using an \ac{iot} device, with network capability.
 
-This data should be continuously (or periodically) made accessible to managers remotely.
+This data must be continuously (or periodically) made accessible to managers remotely.
 To this end, an system is required for storing, processing and displaying logged data pertaining to the truckers' locations and other logged data.
 This interface must allow managers to assess the truckers' whereabouts and driving behavior.
 
@@ -111,7 +111,7 @@ This server will facilitate the transfer of logged data from the Smartphone Appl
 
 \item \textbf{Data Store}\\
 The data store must be efficient, fast and capable of storing large volumes of data.
-It should also be capable of adequately interfacing with the \ac{io} server and the web server.
+It must also be capable of adequately interfacing with the \ac{io} server and the web server.
 
 \item \textbf{Web Server and Web Application}\\
 The web server must implement backend business logic driving the web application and serving pages to the browser.
@@ -141,7 +141,7 @@ Existing data storage systems will be considered.
 
 \subsection{Deliverables}
 The proposed deliverables will allow the entire project to function, from the smartphone logging implementation, to detailed reports available in the web application. 
-Each deliverable is a standalone component in the proposed solution.
+Each deliverable is a standalone (executable) component in the proposed solution.
 \begin{itemize}
 \item Smartphone Application will be created for data logging.
 \item \Ac{io} server which will handle requests and query data to the data store.
@@ -152,6 +152,6 @@ Each deliverable is a standalone component in the proposed solution.
 Basic contextualization of the problem has been performed.
 Low level details, however, have not been considered.
 Each aspect of the planned architecture may be realized in multiple ways on the low level.
-Further research and a feasibility analysis is necessary for adequate low level design.
+Further research and analysis is necessary for adequate low level design.
 
 \pagebreak
