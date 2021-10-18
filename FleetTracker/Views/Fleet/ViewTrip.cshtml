@@ -55,10 +55,45 @@ const data = {
   ]
 };
 
-const config = {
+var config = {
   type: 'line',
   data: data,
-  options: {}
+  options: {
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 20,
+            weight: 900
+          }
+        },
+        title: {
+          display: true,
+          text: 'Time',
+          font: {
+            size: 25,
+            weight: 900
+          }
+        }
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 20,
+            weight: 900
+          }
+        },
+        title: {
+          display: true,
+          text: 'Speed[km/h]/Accel[m/s^2]/Altitude[m]',
+          font: {
+            size: 15,
+            weight: 900
+          }
+        }
+      }
+    }
+  }
 };
 
 var myChart = new Chart(
@@ -99,7 +134,42 @@ const percentile_data = {
 const percentile_config = {
   type: 'line',
   data: percentile_data,
-  options: {}
+  options: {
+    scales: {
+      x: {
+        ticks: {
+          font: {
+            size: 20,
+            weight: 900
+          }
+        },
+        title: {
+          display: true,
+          text: 'Percentile [%]',
+          font: {
+            size: 25,
+            weight: 900
+          }
+        }
+      },
+      y: {
+        ticks: {
+          font: {
+            size: 20,
+            weight: 900
+          }
+        },
+        title: {
+          display: true,
+          text: 'Speed[km/h]/Accel[m/s^2]',
+          font: {
+            size: 15,
+            weight: 900
+          }
+        }
+      }
+    }
+  }
 };
 
 var percentile_plot = new Chart(
