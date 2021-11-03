@@ -67,12 +67,30 @@
 \end{titlepage}
 %regular prerequisites for a document, contents, tables, figures
 \begin{abstract}
-Trucking companies require a means to track their employees, ensuring they perform their work as expected, and do so in a safe, legal manner.
-Acceleration, altitude, location and speed are identified variables of interest to determine this.
-To this end, a software tracking solution is proposed making use of ubiquitous smartphone devices with built-in GPS and sensor capability.
-Using sensor data retrieved from smartphones, a solution is proposed which intends to generate detailed reports for employers of trucking companies.
-Software design principles are utilized in the design and implementation of an Android application, asynchronous input/output server in C++ and a web application in C\# using the ASP.NET web framework.
-Finally, the implemented solution is evaluated.
+\noindent Trucking companies require a means to track their employees, ensuring they perform their work as expected, and do so in a safe, legal manner.
+Acceleration, altitude, location and speed are identified variables of interest to adequately determine trucking behavior.
+This brings about the need for a real-time tracking system, logging these variables for each trucker in a fleet.\\
+
+\noindent Dedicated, single-purpose boards with GPS and sensor capability offer a common solution.
+Another solution is offered by making use of smartphones, for their multipurpose capabilities.
+Managers may require their truckers to make use of other smartphone applications, potentially including stock-tracking and communication systems.
+One smartphone could perform all of these activities if tracking was also handled by the device.
+To this end, a software tracking solution is proposed making use of smartphone devices with built-in GPS and sensor capability.
+The proposal entails the development of a smartphone application for continuous data logging, an input/output server for relaying data from the smartphones to a central data store, and a web application allowing managers to manage and view data from their truckers.
+The main identified objective is to provide managers an interface to monitor the movement of their truckers.\\
+
+\noindent Software design principles are utilized in the design and implementation of an Android application, asynchronous input/output server in C++ and a web application in C\# using the ASP.NET web framework.
+Common design paradigms which aim to improve the modularity and scalability of software are implemented in the solution.
+A simple algorithm is implemented for processing raw GPS data, determining the truckers activities which includes start/stop times and average acceleration, altitude, location and speed during trips.\\
+
+\noindent The resulting implemented solution allows Android users to operate the application in the background while doing other tasks.
+Managers using the web application are presented with a map interface highlighting trip paths, stopping points and times, and graphs showcasing percentile distributions of the logged variables.
+The solution is tested on several Android devices, with reports accessed for correctness.
+\\
+
+\noindent Reliability concerns are noted, with the Android application dependent on the user making proper use of it.
+Further software improvements are identified for improving the robustness of the solution up-time.
+The proposed solution presents an interesting alternative for budget conscious managers, who require extra functionality in addition to just tracking.
 \end{abstract}
 \keywords{Acceleration, Altitude, Android, Global Positioning System, Software Design, Speed, Tracking}
 
