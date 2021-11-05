@@ -105,6 +105,7 @@ class MainRepository @Inject constructor(
             with (sharedPreferences.edit()) {
                 putString(KEY_TRUCKER_NAME, result.trucker)
                 putString(KEY_TRUCKER_VEHICLE_NUMBER, result.veh)
+                putString(KEY_TRUCKER_MANAGER, result.manager)
                 putInt(KEY_TRUCKER_ID, id)
                 putString(KEY_TRUCKER_UUID, uuid)
                 putBoolean(KEY_TRUCKER_VERIFIED, true)
