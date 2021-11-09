@@ -14,6 +14,6 @@ namespace FleetTracker.Models
         [Display(Name="Minimum speed")]
         public int MinSpeed {get; set;} = 30;
         [Display(Name="Maximum Acceleration")]
-        public float MaxAccel {get; set;}
+        public float MaxAccel {get; set;} = 2.5f;
     }
 }

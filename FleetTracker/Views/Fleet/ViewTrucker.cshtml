@@ -39,7 +39,8 @@
                     <th>Logs recorded</th>
                     <th>Max Speed</th>
                     <th>Average Speed</th>
-                    <th>Speed limit broken</th>
+                    <th>Speed lim breaks</th>
+                    <th>Accel lim breaks</th>
                     <th>Details</th>
                 </tr>
 
@@ -54,6 +55,7 @@
                     <td>@Model.Segments[i].MaxSpeed</td>
                     <td>@Model.Segments[i].AvgSpeed</td>
                     <td>@Model.Segments[i].MaxSpeedBreaks</td>
+                    <td>@Model.Segments[i].MaxAccelBreaks</td>
                     <td>@Html.ActionLink("Info", "ViewTrip", "Fleet",@Model.Segments[i],null) </td>
                 </tr>
             }

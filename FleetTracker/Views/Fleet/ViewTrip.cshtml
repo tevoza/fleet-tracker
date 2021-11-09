@@ -4,6 +4,7 @@
 }
 
 <script src="~/lib/chartjs/dist/chart.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <div class = "page-content">
 
@@ -26,6 +27,7 @@
 </div>
 <script>
 var points = JSON.parse('@Json.Serialize(Model)');
+
 let time = points.map(a => new Date(a.timeStamp*1000).toTimeString().split(" ")[0]);
 let speed = points.map(a => a.speed);
 let accel = points.map(a => a.acceleration);
@@ -35,8 +37,8 @@ const data = {
   labels: time,
   datasets: [{
     label: 'Speed',
-    backgroundColor: 'rgb(255, 99, 132)',
-    borderColor: 'rgb(255, 99, 132)',
+    backgroundColor: 'rgb(52, 204, 235)',
+    borderColor: 'rgb(52, 204, 235)',
     data: speed
   },
   {
@@ -108,26 +110,40 @@ function linspace(start, stop, num, endpoint = true) {
     return Array.from({length: num}, (_, i) => start + step * i);
 }
 
-var speedSorted  = speed.sort(function(a, b){return a - b}); 
-var accelSorted  = accel.sort(function(a, b){return a - b}); 
+//deepcopies
+speed_c     = jQuery.extend(true, [], speed)
+accel_c     = jQuery.extend(true, [], accel)
+altitude_c  = jQuery.extend(true, [], altitude) 
+
+var speedSorted  = speed_c.sort(function(a, b){return a - b}); 
+var accelSorted  = accel_c.sort(function(a, b){return a - b}); 
+var altSorted  = altitude_c.sort(function(a, b){return a - b}); 
+
 var x = linspace(0, 100, speedSorted.length)
 x = x.map(x => x.toFixed(1))
+console.log(speed)
 
-console.log(speedSorted  , x)
 const percentile_data = {
   labels: x,
   datasets: [{
     label: 'Speed',
-    backgroundColor: 'rgb(255, 99, 132)',
-    borderColor: 'rgb(255, 99, 132)',
+    backgroundColor: 'rgb(52, 204, 235)',
+    borderColor: 'rgb(52, 204, 235)',
     data: speedSorted
   },
   {
     label: 'Acceleration',
-    backgroundColor: 'rgb(255, 99, 132)',
-    borderColor: 'rgb(255, 99, 132)',
+    backgroundColor: 'rgb(255, 0, 0)',
+    borderColor: 'rgb(255, 0, 0)',
     data: accelSorted
-  }  
+  },
+  {
+    label: 'Altitude',
+    backgroundColor: 'rgb(0, 255, 0)',
+    borderColor: 'rgb(0, 255, 0)',
+    data: altSorted,
+    hidden: true
+  }
   ]
 };
 
