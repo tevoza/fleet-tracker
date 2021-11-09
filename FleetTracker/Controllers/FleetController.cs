@@ -90,6 +90,7 @@ namespace FleetTracker.Controllers
                 var manager = await _userManager.GetUserAsync(User);
                 manager.MaxSpeed = m.MaxSpeed;
                 manager.MinSpeed = m.MinSpeed;
+                manager.MaxAccel = m.MaxAccel;
                 _db.Manager.Update(manager);
                 _db.SaveChanges();
             }
