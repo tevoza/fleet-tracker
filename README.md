@@ -1,34 +1,21 @@
-# **fleet-tracker - final year project (wip)**
+# **EERI 474 - 2021 Project**
+# **Adam Coetzee - 29982995**
+# **fleet-tracker**
 A fleet tracking solution which allows trucking fleet managers to manage and monitor their fleets.  
 
+**check /docs of for all main documents.**  
+All the code/commits used in the project is provided here.
 # **overview**
-![Project Description](docs/container.png)
+![Project Description](docs/report/diag/container.png)
 
-- Fleet managers can log in and monitor their employees' live location, speed etc. in a .NET mvc web app.
-- Location-logging is performed with android devices which truckers must use while driving their routes. This is implemented using Kotlin.
-- An asynchronous i/o server handles transactions between android devices and the central database using an encrypted ssl connection. Asynchronous functionality is achieved using the `asio` library in c++. A text protocol is designed using a json strucutre over ssl sockets.
- - (future expansion) provided CAN bus interface to log extra information from trucks. 
+## **android application (kotlin) - TruckLogger**
+![Project Description](docs/report/report/android_app_running.png)
 
-## **android application**
-### aspects
- - kotlin
- - power usage and running in the background
- - mvvm software design architecture
- - state persistence and cache database
- - permissions
- - ssl connection
+## **i/o server (c++) - fleet-io**
+![Project Description](docs/report/report/io_output.png)
 
-## **i/o server**
-### aspects
- - c++
- - asynchronous programming
- - singleton design pattern for data connector
-
-## **web app**
-### aspects
- - c# (back-end), html, css, javascript on the dotnet core framework.
- - mvc software design pattern for achieving clean separation of concerns from display and business logic, etc.
- - use of google maps javascript api to draw trucker routes on google map widget.
+## **web app (ASP.NET C#) - FleetTracker**
+![Project Description](docs/report/report/webapp_view_trucker.png)
 
 # **requirements**
 an extract from the initial project description is given below.  
